@@ -3,19 +3,30 @@
 # Copyright (C) 2017 Alexander Kuleshov <kuleshovmail at gmail dot com>
 # This file is released under the BSD license, see the COPYING file
 
-# Current operating system
-OS := $(shell uname)
+# General make(1) flags to build parts of tmail
+MAKE_FLAGS=-s -C
 
 # Name of main executable
 TMAIL_EXECUTABLE=tmail
+# Auxiliary sys lib
+TMAIL_SYS_LIB=libtmail-sys.so
+
 # Main target that will be used to clean everything after build
 CLEAN_TARGET=clean
 # A target to print a help to stdout
 HELP_TARGET=help
+
 # Match all object files
 OBJECT_FILES=*.o
+# Match all shared libraries files
+SHARED_LIBS_FILES=*.so
+
+# Main source directory
+SRC_DIR=src/
 # Directory with makefile auxiliary scripts
 MK_DIR=mk/
+# Directory with system library
+SYS_DIR_NAME=sys
 
 # use it for cleanups
 RM=rm -rf
@@ -31,4 +42,5 @@ ifndef V
 	QUIET_CC		= @echo '   ' CC $@;
 	QUIET_CLEAN_OBJECTS	= @echo '   ' RM $(OBJECT_FILES);
 	QUIET_CLEAN_EXECS	= @echo '   ' RM $(TMAIL_EXECUTABLE);
+	QUIET_CLEAN_SHARED_LIBS = @echo '   ' RM $(SHARED_LIBS_FILES);
 endif

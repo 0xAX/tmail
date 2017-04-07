@@ -9,20 +9,12 @@
 #
 # Define DEBUG=1 to build tmail with debug info.
 
-# General make(1) flags to build parts of tmail
-MAKE_FLAGS=-s -C
-# Main source directory
-SRC_DIR=src/
-# Directory with makefile auxiliary scripts
-MK_DIR=mk/
+default: all
 
 # Include auxiliary build scripts
-include $(MK_DIR)/Common.mk
-
+include ./mk/Common.mk
 # And include according build script
-include $(MK_DIR)$(OS).mk
-
-default: all
+include ./mk/Build.mk
 
 all:
 	@$(MAKE) $(MAKE_FLAGS) $(SRC_DIR)
