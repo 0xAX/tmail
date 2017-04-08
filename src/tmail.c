@@ -10,6 +10,10 @@
 #include <stdlib.h>
 #include <getopt.h>
 
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/ip.h>
+
 #include <at_exit.h>
 
 static void print_help(void) __attribute__((noreturn));
@@ -72,7 +76,16 @@ void exit_cb() { }
 
 int main(int argc, char *argv[])
 {
+	int sd;
+	struct sockaddr_in serveraddr;
+
 	register_exit_cb(exit_cb);
 	parse_argv(argc, argv);
+
+	if ((sd = socket(AF_INET, SOCK_STREAM, 0) < 0))
+	{
+	  exit(EXIT_FAILURE);
+	}
+
 	return EXIT_SUCCESS;
 }
