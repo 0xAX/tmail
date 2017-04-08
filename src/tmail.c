@@ -84,8 +84,11 @@ int main(int argc, char *argv[])
 
 	if ((sd = socket(AF_INET, SOCK_STREAM, 0) < 0))
 	{
-	  exit(EXIT_FAILURE);
+		perror("Error: cannot create socket\n");
+		exit(EXIT_FAILURE);
 	}
+
+	close(sd);
 
 	return EXIT_SUCCESS;
 }
