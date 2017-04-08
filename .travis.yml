@@ -49,5 +49,3 @@ git:
 script:
   - unset CC
   - make all
-  - ./tmail -v
-  - echo $?
