@@ -1,5 +1,12 @@
 language: c
 
+notifications:
+  email:
+    recipients:
+      - kuleshovmail@gmail.com
+    on_success: change
+    on_failure: always
+
 sudo: false
 
 cache:
@@ -17,6 +24,18 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - gcc-5
+      - clang-3.9
+
+env:
+  - TMAIL_CC=clang
+
+git:
+  depth: 3
 
 script:
-  make all
+  - clang --version
+  - echo $LD_LIBRARY_PATH
+  - LD_LIBRARY_PATH=/home/travis/build/0xAX/tmail/src/sys:$LD_LIBRARY_PATH
+  - export LD_LIBRARY_PATH
+  - echo $LD_LIBRARY_PATH
+  - make all

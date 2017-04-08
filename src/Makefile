@@ -13,7 +13,7 @@ TMAIL_OBJS = tmail.o
 INCLUDE_DIRS = sys/
 
 LIBS=-Lsys/ -ltmail-sys
-LINKER_OPTS=-Wl,-rpath=$(shell pwd)/sys
+LINKER_OPTS=-Wl,-rpath,$(shell pwd)/sys
 COMPILER_FLAGS= $(LINKER_OPTS) $(LIBS) $(CC_EXEC_FLAGS)
 
 tmail: $(TMAIL_SYS_LIB) $(TMAIL_OBJS)
