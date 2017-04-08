@@ -23,7 +23,7 @@ endif
 
 # Add compiler related warnings flags
 ifeq ($(TMAIL_CC), gcc)
-WARNINGS += -fmax-errors=2
+#WARNINGS += -fmax-errors=2
 else ifeq ($(TMAIL_CC), clang)
 WARNINGS += -ferror-limit=2
 endif
