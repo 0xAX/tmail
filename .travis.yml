@@ -1,0 +1,18 @@
+language: c
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/travis-cache
+
+os:
+  - linux
+  - osx
+
+compiler:
+  - gcc
+  - clang
+
+script:
+  make all
