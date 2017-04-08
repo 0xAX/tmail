@@ -13,22 +13,35 @@ cache:
   directories:
     - $HOME/travis-cache
 
-addons:
-  apt:
-    sources:
-      - llvm-toolchain-precise
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-4.8
-      - clang-3.9
-
 matrix:
   include:
     - os: linux
-      env: TMAIL_CC=gcc-4.8
-      compiler: gcc-4.8
+      env: TMAIL_CC=gcc-5
+      compiler: gcc-5
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['gcc-5']
+    - os: linux
+      env: TMAIL_CC=gcc-6
+      compiler: gcc-6
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['gcc-6']
+    - os: linux
+      env: TMAIL_CC=clang
+      compiler: clang
+      addons:
+        apt:
+          sources: ['llvm-toolchain-precise']
+          packages: ['clang-3.9']
     - os: osx
       env: TMAIL_CC=clang
+      compiler: clang
+    - os: osx
+      env: TMAIL_CC=gcc
+      compiler: gcc
 
 git:
   depth: 1
