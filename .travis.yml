@@ -13,29 +13,26 @@ cache:
   directories:
     - $HOME/travis-cache
 
-os:
-  - linux
-  - osx
-
 addons:
   apt:
     sources:
       - llvm-toolchain-precise
       - ubuntu-toolchain-r-test
     packages:
-      - gcc-5
+      - gcc-4.8
       - clang-3.9
 
-env:
-  - TMAIL_CC=clang
+matrix:
+  include:
+    - os: linux
+      env: TMAIL_CC=gcc-4.8
+      compiler: gcc-4.8
+    - os: osx
+      env: TMAIL_CC=clang
 
 git:
-  depth: 3
+  depth: 1
 
 script:
-  - clang --version
-  - echo $LD_LIBRARY_PATH
-  - LD_LIBRARY_PATH=/home/travis/build/0xAX/tmail/src/sys:$LD_LIBRARY_PATH
-  - export LD_LIBRARY_PATH
-  - echo $LD_LIBRARY_PATH
+  - unset CC
   - make all
