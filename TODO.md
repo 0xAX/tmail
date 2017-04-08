@@ -7,3 +7,7 @@
   * Add description about `mk` build scripts for other `OSes`.
   * Update core `Makefile` for at least BSD `OSes`.
   * strip libraries and executables if the `DEBUG` flag wasn't passed.
+
+## Misc
+
+  * Add CI badge.
