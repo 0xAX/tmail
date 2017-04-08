@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 	register_exit_cb(exit_cb);
 	parse_argv(argc, argv);
 
-	if ((sd = socket(AF_INET, SOCK_STREAM, 0) < 0))
+	if ((sd = socket(AF_INET, SOCK_STREAM, 0) == -1))
 	{
 		perror("Error: cannot create socket\n");
 		exit(EXIT_FAILURE);
