@@ -9,6 +9,7 @@
   * strip libraries and executables if the `DEBUG` flag wasn't passed.
   * check and fix verbose build.
   * fix -fmax-erros for osx gcc build.
+  * add `install` target.
 
 ## Misc
 
