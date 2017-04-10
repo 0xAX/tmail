@@ -1,4 +1,5 @@
-/* tmail.c - Main executable of tmail util.
+/*
+ * at_exit.c - at exit callback registration.
  *
  * Copyright (c) 2017, Alexander Kuleshov <kuleshovmail at gmail dot com>
  *

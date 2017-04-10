@@ -4,8 +4,7 @@
 # This file is released under the BSD license, see the COPYING file
 
 # Default standard that will be used to build tmail
-STANDARD=-std=c11
-
+STANDARD=-std=gnu11
 # an architecture flags
 ARCH=-march=native
 
