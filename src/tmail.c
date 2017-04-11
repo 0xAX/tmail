@@ -20,6 +20,7 @@
 #define BUF_SIZE 500
 
 static bool compose = false;
+static char *from = NULL;
 
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
@@ -58,15 +59,18 @@ static int parse_argv(int argc, char *argv[])
 		{ "compose",   no_argument,       NULL, 'c' },
 		{ "help",      no_argument,       NULL, 'h' },
 		{ "version",   no_argument,       NULL, 'v' },
+		{ "from",      required_argument, NULL, 'f' },
 	};
 
 	assert(argc >= 0);
 	assert(argv);
 
-	while ((c = getopt_long(argc, argv, "hvc", options, NULL)) >= 0)
+	while ((c = getopt_long(argc, argv, "hvcf:", options, NULL)) >= 0)
 	{
 		switch (c)
 		{
+		case 'f':
+			from = optarg;
 		case 'c':
 			compose = true;
 			break;
@@ -95,14 +99,16 @@ int main(int argc, char *argv[])
 
 	if (compose)
 	{
-		/* compose email */
+		/* TODO compose email */
 	}
 
 	conn = connect_to_service("smtp.gmail.com", "587");
 
-	read(conn.sd, buffer, 512);
-
-	printf("buffer %s\n", buffer);
+	if (conn.sd == -1)
+	{
+		fprintf(stderr, conn.error);
+		exit(EXIT_FAILURE);
+	}
 
 	exit(EXIT_FAILURE);
 }
