@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 
 	if (conn.sd == -1)
 	{
-		fprintf(stderr, conn.error);
+		fprintf(stderr, "%s", conn.error);
 		exit(EXIT_FAILURE);
 	}
 
