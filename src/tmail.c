@@ -50,22 +50,28 @@ static void print_version(void)
 	exit(EXIT_SUCCESS);
 }
 
+static void dump_configuration(void)
+{
+	exit(EXIT_SUCCESS);
+}
+
 static int parse_argv(int argc, char *argv[])
 {
 	int c;
 
 	static const struct option options[] =
 	{
-		{ "compose",   no_argument,       NULL, 'c' },
-		{ "help",      no_argument,       NULL, 'h' },
-		{ "version",   no_argument,       NULL, 'v' },
-		{ "from",      required_argument, NULL, 'f' },
+		{ "compose",     no_argument,       NULL, 'c' },
+		{ "dump-config", no_argument,       NULL, 'd' },
+		{ "help",        no_argument,       NULL, 'h' },
+		{ "version",     no_argument,       NULL, 'v' },
+		{ "from",        required_argument, NULL, 'f' },
 	};
 
 	assert(argc >= 0);
 	assert(argv);
 
-	while ((c = getopt_long(argc, argv, "hvcf:", options, NULL)) >= 0)
+	while ((c = getopt_long(argc, argv, "dhvcf:", options, NULL)) >= 0)
 	{
 		switch (c)
 		{
@@ -78,6 +84,8 @@ static int parse_argv(int argc, char *argv[])
 			print_help();
 		case 'v':
 			print_version();
+		case 'd':
+			dump_configuration();
 		default:
 			unknown_option();
 		}
