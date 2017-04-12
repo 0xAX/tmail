@@ -17,13 +17,13 @@ include ./mk/Common.mk
 include ./mk/Build.mk
 
 all:
-	@$(MAKE) $(MAKE_FLAGS) $(SRC_DIR)
+	@cd $(SRC_DIR) && $(MAKE) $(MAKE_FLAGS) tmail
 
 $(CLEAN_TARGET):
 	@echo "./"
 	$(QUIET_CLEAN_EXECS) $(RM) $(TMAIL_EXECUTABLE)
 	$(QUIET_CLEAN_OBJECTS) $(RM) $(OBJECT_FILES)
-	@$(MAKE) $(MAKE_FLAGS) $(SRC_DIR) $(CLEAN_TARGET)
+	@cd $(SRC_DIR) && $(MAKE) $(MAKE_FLAGS) $(CLEAN_TARGET)
 
 $(HELP_TARGET):
 	@echo  'Common targets:'

@@ -3,9 +3,6 @@
 # Copyright (C) 2017 Alexander Kuleshov <kuleshovmail at gmail dot com>
 # This file is released under the BSD license, see the COPYING file
 
-# General make(1) flags to build parts of tmail
-MAKE_FLAGS=-s -C
-
 # Name of main executable
 TMAIL_EXECUTABLE=tmail
 # Auxiliary sys lib
@@ -43,4 +40,16 @@ ifndef V
 	QUIET_CLEAN_OBJECTS	= @echo '   ' RM $(OBJECT_FILES);
 	QUIET_CLEAN_EXECS	= @echo '   ' RM $(TMAIL_EXECUTABLE);
 	QUIET_CLEAN_SHARED_LIBS = @echo '   ' RM $(SHARED_LIBS_FILES);
+	MAKE_FLAGS=-s
+else
+	QUIET_CCS=
+	QUIET_CLEAN_OBJECTS=
+	QUIET_CLEAN_EXECS=
+	QUIET_CLEAN_SHARED_LIBS=
+	MAKE_FLAGS=
 endif
+
+#
+# Tests
+#
+LIBCONF_TEST_EXEC=config_test
