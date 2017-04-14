@@ -1,5 +1,9 @@
 # TODO
 
+## tmail
+
+  * make `to` from main.c list or array of `char*`.
+
 ## Build
 
   * Add enumeration of what avaliable targets will be built with the

@@ -21,6 +21,7 @@
 
 static bool compose = false;
 static char *from = NULL;
+static char *to = NULL;
 
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
@@ -66,12 +67,13 @@ static int parse_argv(int argc, char *argv[])
 		{ "help",        no_argument,       NULL, 'h' },
 		{ "version",     no_argument,       NULL, 'v' },
 		{ "from",        required_argument, NULL, 'f' },
+		{ "to",          required_argument, NULL, 't' },
 	};
 
 	assert(argc >= 0);
 	assert(argv);
 
-	while ((c = getopt_long(argc, argv, "dhvcf:", options, NULL)) >= 0)
+	while ((c = getopt_long(argc, argv, "dhvcf:t:", options, NULL)) >= 0)
 	{
 		switch (c)
 		{
@@ -84,6 +86,8 @@ static int parse_argv(int argc, char *argv[])
 			print_help();
 		case 'v':
 			print_version();
+		case 't':
+			to = optarg;
 		case 'd':
 			dump_configuration();
 		default:
