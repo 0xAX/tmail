@@ -63,18 +63,11 @@ while ($status =~ /([^\n]+)\n?/g) {
 
         my $file = $line =~ / /;
         print $file, "\n"
-#        print $line, "\n"
     }
 }
 
-# git diff --exit-code -s
-# git diff --cached --exit-code -s
-# git log --format=%B -n 1
-# git --no-pager diff --unified=0 --no-color HEAD^
-# $line =~ /^.*\.c/
 
 # Go to the directory where we came from before exit
 chdir $curr_dir;
 
 exit 0;
-# TODO check new empty file (and not only new)
