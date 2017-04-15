@@ -1,0 +1,8 @@
+Language: Cpp
+# BasedOnStyle
+
+TabWidth:          8
+UseTab:            Always
+IndentWidth:       8
+ColumnLimit:       80
+BreakBeforeBraces: Allman
