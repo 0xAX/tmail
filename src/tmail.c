@@ -12,6 +12,7 @@
 #include <getopt.h>
 #include <unistd.h>
 #include <locale.h>
+#include <string.h>
 #include <stdbool.h>
 
 #include <connect.h>
@@ -21,7 +22,15 @@
 
 static bool compose = false;
 static char *from = NULL;
-static char *to = NULL;
+static char *subject = NULL;
+
+struct recipients
+{
+	char **to;
+	unsigned int cnt;
+};
+
+static struct recipients *rcps = NULL;
 
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
@@ -43,6 +52,17 @@ static void print_help(void)
         printf("\n");
 
 	exit(EXIT_SUCCESS);
+}
+
+static void free_recipients(void)
+{
+	while (rcps->cnt)
+	{
+		free(rcps->to[rcps->cnt-1]);
+		rcps->cnt--;
+	}
+	free(rcps->to);
+	rcps->to = NULL;
 }
 
 static void print_version(void)
@@ -68,12 +88,13 @@ static int parse_argv(int argc, char *argv[])
 		{ "version",     no_argument,       NULL, 'v' },
 		{ "from",        required_argument, NULL, 'f' },
 		{ "to",          required_argument, NULL, 't' },
+		{ "subject",     required_argument, NULL, 's' },
 	};
 
 	assert(argc >= 0);
 	assert(argv);
 
-	while ((c = getopt_long(argc, argv, "dhvcf:t:", options, NULL)) >= 0)
+	while ((c = getopt_long(argc, argv, "dhvcf:t:s:", options, NULL)) >= 0)
 	{
 		switch (c)
 		{
@@ -86,19 +107,68 @@ static int parse_argv(int argc, char *argv[])
 			print_help();
 		case 'v':
 			print_version();
-		case 't':
-			to = optarg;
+		case 't': ;
+			if (!rcps)
+			{
+				rcps = (struct recipients*)malloc(sizeof(struct recipients));
+				if (!rcps)
+				{
+					perror("Error: cannot set allocate recipents\n");
+					exit(EXIT_FAILURE);
+				}
+
+				memset(rcps, 0, sizeof(struct recipients));
+
+				rcps->to = (char **)malloc(sizeof(char*));
+				if (!rcps->to)
+				{
+					perror("Error: cannot allocate memory for a recipent\n");
+					goto recipent_alloc_failed;
+				}
+			}
+			else
+			{
+				rcps->to = (char **)realloc(rcps->to, (rcps->cnt + 1) * sizeof(char*));
+				if (!rcps->to)
+				{
+					perror("Error: cannot allocate memory for a recipent\n");
+					goto recipent_alloc_failed;
+				}
+			}
+
+			rcps->to[rcps->cnt] = strdup(optarg);
+			rcps->cnt++;
+			break;
+		case 's':
+			subject = optarg;
+			break;
 		case 'd':
 			dump_configuration();
+			break;
 		default:
 			unknown_option();
 		}
 	}
 
 	return 0;
+
+recipents_alloc_failed:
+	free_recipients();
+recipent_alloc_failed:
+	free(rcps);
+	rcps = NULL;
+	exit(EXIT_FAILURE);
 }
 
-void exit_cb() { }
+void exit_cb()
+{
+	if (rcps)
+	{
+		free_recipients();
+		free(rcps);
+		rcps = NULL;
+	}
+}
 
 int main(int argc, char *argv[])
 {
