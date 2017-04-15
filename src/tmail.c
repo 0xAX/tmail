@@ -6,17 +6,17 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include <stdio.h>
 #include <assert.h>
-#include <stdlib.h>
 #include <getopt.h>
-#include <unistd.h>
 #include <locale.h>
-#include <string.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
-#include <connect.h>
 #include <at_exit.h>
+#include <connect.h>
 
 #define BUF_SIZE 500
 
@@ -36,20 +36,17 @@ static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
 static void unknown_option(void) __attribute__((noreturn));
 
-static void unknown_option(void)
-{
-	exit(EXIT_SUCCESS);
-}
+static void unknown_option(void) { exit(EXIT_SUCCESS); }
 
 static void print_help(void)
 {
-        printf("\nUsage:\n tmail [options...]\n\n");
-        printf("Simple, lightweight terminal based email client.\n\n");
+	printf("\nUsage:\n tmail [options...]\n\n");
+	printf("Simple, lightweight terminal based email client.\n\n");
 
-        printf("-h, --help      display this test and exit\n");
-        printf("-v, --version   output version and exit\n");
+	printf("-h, --help      display this test and exit\n");
+	printf("-v, --version   output version and exit\n");
 	printf("-c, --compose   compose an email\n");
-        printf("\n");
+	printf("\n");
 
 	exit(EXIT_SUCCESS);
 }
@@ -58,7 +55,7 @@ static void free_recipients(void)
 {
 	while (rcps->cnt)
 	{
-		free(rcps->to[rcps->cnt-1]);
+		free(rcps->to[rcps->cnt - 1]);
 		rcps->cnt--;
 	}
 	free(rcps->to);
@@ -71,24 +68,20 @@ static void print_version(void)
 	exit(EXIT_SUCCESS);
 }
 
-static void dump_configuration(void)
-{
-	exit(EXIT_SUCCESS);
-}
+static void dump_configuration(void) { exit(EXIT_SUCCESS); }
 
 static int parse_argv(int argc, char *argv[])
 {
 	int c;
 
-	static const struct option options[] =
-	{
-		{ "compose",     no_argument,       NULL, 'c' },
-		{ "dump-config", no_argument,       NULL, 'd' },
-		{ "help",        no_argument,       NULL, 'h' },
-		{ "version",     no_argument,       NULL, 'v' },
-		{ "from",        required_argument, NULL, 'f' },
-		{ "to",          required_argument, NULL, 't' },
-		{ "subject",     required_argument, NULL, 's' },
+	static const struct option options[] = {
+	    {"compose", no_argument, NULL, 'c'},
+	    {"dump-config", no_argument, NULL, 'd'},
+	    {"help", no_argument, NULL, 'h'},
+	    {"version", no_argument, NULL, 'v'},
+	    {"from", required_argument, NULL, 'f'},
+	    {"to", required_argument, NULL, 't'},
+	    {"subject", required_argument, NULL, 's'},
 	};
 
 	assert(argc >= 0);
@@ -107,31 +100,36 @@ static int parse_argv(int argc, char *argv[])
 			print_help();
 		case 'v':
 			print_version();
-		case 't': ;
+		case 't':;
 			if (!rcps)
 			{
-				rcps = (struct recipients*)malloc(sizeof(struct recipients));
+				rcps = (struct recipients *)malloc(
+				    sizeof(struct recipients));
 				if (!rcps)
 				{
-					perror("Error: cannot set allocate recipents\n");
+					perror("Error: cannot set allocate "
+					       "recipents\n");
 					exit(EXIT_FAILURE);
 				}
 
 				memset(rcps, 0, sizeof(struct recipients));
 
-				rcps->to = (char **)malloc(sizeof(char*));
+				rcps->to = (char **)malloc(sizeof(char *));
 				if (!rcps->to)
 				{
-					perror("Error: cannot allocate memory for a recipent\n");
+					perror("Error: cannot allocate memory "
+					       "for a recipent\n");
 					goto recipent_alloc_failed;
 				}
 			}
 			else
 			{
-				rcps->to = (char **)realloc(rcps->to, (rcps->cnt + 1) * sizeof(char*));
+				rcps->to = (char **)realloc(
+				    rcps->to, (rcps->cnt + 1) * sizeof(char *));
 				if (!rcps->to)
 				{
-					perror("Error: cannot allocate memory for a recipent\n");
+					perror("Error: cannot allocate memory "
+					       "for a recipent\n");
 					goto recipent_alloc_failed;
 				}
 			}

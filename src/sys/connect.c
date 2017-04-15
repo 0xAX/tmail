@@ -6,14 +6,14 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include <stdlib.h>
-#include <netdb.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdio.h>
 #include <errno.h>
-#include <sys/types.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include "connect.h"
 
@@ -39,9 +39,11 @@ connection_t connect_to_service(const char *addr, const char *service)
 	if (ret != 0)
 	{
 		if (ret == EAI_SYSTEM)
-			sprintf((char *)conn.error, "Error: getaddrinfo %s\n", strerror(errno));			
+			sprintf((char *)conn.error, "Error: getaddrinfo %s\n",
+				strerror(errno));
 		else
-			sprintf((char *)conn.error, "Error: getaddrinfo %s\n", gai_strerror(ret));
+			sprintf((char *)conn.error, "Error: getaddrinfo %s\n",
+				gai_strerror(ret));
 	}
 
 	for (rp = serv_info; rp != NULL; rp = rp->ai_next)
@@ -55,7 +57,8 @@ connection_t connect_to_service(const char *addr, const char *service)
 	}
 
 	if (!rp)
-		sprintf((char *)conn.error, "Error: cannot connect %s\n", strerror(errno));
+		sprintf((char *)conn.error, "Error: cannot connect %s\n",
+			strerror(errno));
 
 	freeaddrinfo(serv_info);
 

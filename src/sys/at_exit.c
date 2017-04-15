@@ -6,8 +6,8 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #include <sys/param.h>
@@ -24,7 +24,7 @@ int register_exit_cb(void (*cb)(void))
 		exit(EXIT_FAILURE);
 #elif defined(BSD)
 		perror("Error: cannot set atexit() function\n");
-		exit(EXIT_FAILURE);		
+		exit(EXIT_FAILURE);
 #endif
 	}
 
