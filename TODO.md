@@ -13,6 +13,7 @@
 ## Misc
 
   * Add CI badge.
+  * Don't use pragma once, use ifdef(s) isntead.
 
 ## Platforms related
 
