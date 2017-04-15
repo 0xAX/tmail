@@ -1,4 +1,9 @@
 #!/usr/bin/env perl
+#
+# Copyright (c) 2017, Alexander Kuleshov <kuleshovmail at gmail dot com>
+#
+# This file is part of tmail application and released under the BSD license, 
+# see the COPYING file
 
 use strict;
 use warnings;
