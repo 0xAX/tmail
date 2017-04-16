@@ -44,13 +44,15 @@ static void print_help(void)
 	printf(" tmail --dump-config\n\n");
 	printf("Simple, lightweight terminal based email client.\n\n");
 
-	printf("  -h, --help            display this test and exit\n");
-	printf("  -v, --version         output version and exit\n");
-	printf("  -c, --compose         compose an email\n");
-	printf("  -t, --to=<address>    specify the primary recipent of an\n"
-	       "                        email. Multiply options are allowed\n");
-	printf("  -f, --from=<address>  specify author of an email\n");
-	printf("  -d, --dump-config     explore tmail's configuration\n");
+	printf("  -h, --help               display this test and exit\n");
+	printf("  -v, --version            output version and exit\n");
+	printf("  -c, --compose            compose an email\n");
+	printf(
+	    "  -t, --to=<address>       specify the primary recipent of an\n"
+	    "                           email. Multiply options are allowed\n");
+	printf("  -f, --from=<address>     specify author of an email\n");
+	printf("  -a, --attachment=<file>  add attachment to an email\n");
+	printf("  -d, --dump-config        explore tmail's configuration\n");
 	printf("\n");
 
 	exit(EXIT_SUCCESS);
@@ -80,6 +82,7 @@ static int parse_argv(int argc, char *argv[])
 	int c;
 
 	static const struct option options[] = {
+            {"attachment", no_argument, NULL, 'a'},
 	    {"compose", no_argument, NULL, 'c'},
 	    {"dump-config", no_argument, NULL, 'd'},
 	    {"help", no_argument, NULL, 'h'},
@@ -92,10 +95,12 @@ static int parse_argv(int argc, char *argv[])
 	assert(argc >= 0);
 	assert(argv);
 
-	while ((c = getopt_long(argc, argv, "dhvcf:t:s:", options, NULL)) >= 0)
+	while ((c = getopt_long(argc, argv, "a:dhvcf:t:s:", options, NULL)) >= 0)
 	{
 		switch (c)
 		{
+                case 'a':
+                        /* TODO */
 		case 'f':
 			from = optarg;
 		case 'c':
