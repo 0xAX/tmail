@@ -29,9 +29,3 @@ Maybe it would be good to replace it for all platforms for safety.
   * Check Sign-Off-By signature in a commit message.
   * Check header and empty line after it in a commit message.
   * Check that there are no one line comments.
-
-### apply-clang-format
-
-  * Add some checks to `apply-clang-format.sh` script. At least check
-that the given source code path contains `tmail.c` source code file or
-something like this.
