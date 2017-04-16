@@ -48,7 +48,7 @@ static void print_help(void)
 	printf("  -v, --version         output version and exit\n");
 	printf("  -c, --compose         compose an email\n");
 	printf("  -t, --to=<address>    specify the primary recipent of an\n"
-"                        email. Multiply options are allowed\n");
+	       "                        email. Multiply options are allowed\n");
 	printf("  -f, --from=<address>  specify author of an email\n");
 	printf("  -d, --dump-config     explore tmail's configuration\n");
 	printf("\n");
@@ -183,6 +183,11 @@ int main(int argc, char *argv[])
 	{
 		fprintf(stderr, "%s", "Run tmail with non-root user");
 		exit(EXIT_FAILURE);
+	}
+
+	if (argc <= 1)
+	{
+		print_help();
 	}
 
 	register_exit_cb(exit_cb);
