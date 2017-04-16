@@ -40,12 +40,17 @@ static void unknown_option(void) { exit(EXIT_SUCCESS); }
 
 static void print_help(void)
 {
-	printf("\nUsage:\n tmail [options...]\n\n");
+	printf("\nUsage:\n tmail [options...]\n");
+	printf(" tmail --dump-config\n\n");
 	printf("Simple, lightweight terminal based email client.\n\n");
 
-	printf("-h, --help      display this test and exit\n");
-	printf("-v, --version   output version and exit\n");
-	printf("-c, --compose   compose an email\n");
+	printf("  -h, --help            display this test and exit\n");
+	printf("  -v, --version         output version and exit\n");
+	printf("  -c, --compose         compose an email\n");
+	printf("  -t, --to=<address>    specify the primary recipent of an\n"
+	       "                        email. Multiply options are allowed\n");
+	printf("  -f, --from=<address>  specify author of an email\n");
+	printf("  -d, --dump-config     explore tmail's configuration\n");
 	printf("\n");
 
 	exit(EXIT_SUCCESS);
@@ -172,6 +177,18 @@ int main(int argc, char *argv[])
 {
 	connection_t conn;
 	char buffer[512];
+
+	/* it is not good idea to run tmail via root */
+	if (!getuid())
+	{
+		fprintf(stderr, "%s", "Run tmail with non-root user");
+		exit(EXIT_FAILURE);
+	}
+
+	if (argc <= 1)
+	{
+		print_help();
+	}
 
 	register_exit_cb(exit_cb);
 	setlocale(LC_ALL, "en_US.utf8");
