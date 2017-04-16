@@ -40,12 +40,17 @@ static void unknown_option(void) { exit(EXIT_SUCCESS); }
 
 static void print_help(void)
 {
-	printf("\nUsage:\n tmail [options...]\n\n");
+	printf("\nUsage:\n tmail [options...]\n");
+	printf(" tmail --dump-config\n\n");
 	printf("Simple, lightweight terminal based email client.\n\n");
 
-	printf("-h, --help      display this test and exit\n");
-	printf("-v, --version   output version and exit\n");
-	printf("-c, --compose   compose an email\n");
+	printf("  -h, --help            display this test and exit\n");
+	printf("  -v, --version         output version and exit\n");
+	printf("  -c, --compose         compose an email\n");
+	printf("  -t, --to=<address>    specify the primary recipent of an\n"
+"                        email. Multiply options are allowed\n");
+	printf("  -f, --from=<address>  specify author of an email\n");
+	printf("  -d, --dump-config     explore tmail's configuration\n");
 	printf("\n");
 
 	exit(EXIT_SUCCESS);
