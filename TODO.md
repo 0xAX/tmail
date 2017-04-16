@@ -10,6 +10,10 @@
   * Fix -fmax-erros for osx gcc build.
   * Add `install` target.
 
+## tmail
+
+  * use `strarr` instead of recipients in `src/tmail.c`.
+
 ## Platforms related
 
   * `OpenBSD`: use `snprintf` instead of `sprintf` because of a warn.
@@ -24,3 +28,7 @@ Maybe it would be good to replace it for all platforms for safety.
   * Check Sign-Off-By signature in a commit message.
   * Check header and empty line after it in a commit message.
   * Check that there are no one line comments.
+
+## Scripts (misc)
+
+  * Add valgrind script.

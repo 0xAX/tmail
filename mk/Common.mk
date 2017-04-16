@@ -5,8 +5,10 @@
 
 # Name of main executable
 TMAIL_EXECUTABLE=tmail
-# Auxiliary sys lib
+# Auxiliary sys library
 TMAIL_SYS_LIB=libtmail-sys.so
+# Auxiliary library with C utils
+TMAIL_UTILS_LIB=libtmail-utils.so
 
 # Main target that will be used to clean everything after build
 CLEAN_TARGET=clean
@@ -24,6 +26,8 @@ SRC_DIR=src/
 MK_DIR=mk/
 # Directory with system library
 SYS_DIR_NAME=sys
+# Directory with utils library
+UTILS_DIR_NAME=libutils
 
 # use it for cleanups
 RM=rm -rf
