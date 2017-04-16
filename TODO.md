@@ -9,10 +9,6 @@
   * Strip libraries and executables if the `DEBUG` flag wasn't passed.
   * Fix -fmax-erros for osx gcc build.
   * Add `install` target.
-  
-## Misc
-
-  * Don't use pragma once, use ifdef(s) isntead.
 
 ## Platforms related
 

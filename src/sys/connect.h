@@ -6,7 +6,8 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#pragma once
+#ifndef __SYS_CONNECT_H__
+#define __SYS_CONNECT_H__
 
 #define TCP_PROTO 6
 
@@ -35,3 +36,5 @@ struct connection
 typedef struct connection connection_t;
 
 connection_t connect_to_service(const char *addr, const char *service);
+
+#endif /* __SYS_CONNECT_H__ */
