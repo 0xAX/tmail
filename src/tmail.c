@@ -178,6 +178,13 @@ int main(int argc, char *argv[])
 	connection_t conn;
 	char buffer[512];
 
+	/* it is not good idea to run tmail via root */
+	if (!getuid())
+	{
+		fprintf(stderr, "%s", "Run tmail with non-root user");
+		exit(EXIT_FAILURE);
+	}
+
 	register_exit_cb(exit_cb);
 	setlocale(LC_ALL, "en_US.utf8");
 	parse_argv(argc, argv);
