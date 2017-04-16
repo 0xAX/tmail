@@ -8,7 +8,4 @@
 
 #include <unistd.h>
 
-void *new_strarr(size_t size)
-{
-        return NULL;
-}
+void *new_strarr(size_t size) { return NULL; }

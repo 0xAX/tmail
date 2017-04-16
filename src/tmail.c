@@ -83,7 +83,7 @@ static int parse_argv(int argc, char *argv[])
 	int c;
 
 	static const struct option options[] = {
-            {"attachment", no_argument, NULL, 'a'},
+	    {"attachment", no_argument, NULL, 'a'},
 	    {"compose", no_argument, NULL, 'c'},
 	    {"dump-config", no_argument, NULL, 'd'},
 	    {"help", no_argument, NULL, 'h'},
@@ -96,12 +96,13 @@ static int parse_argv(int argc, char *argv[])
 	assert(argc >= 0);
 	assert(argv);
 
-	while ((c = getopt_long(argc, argv, "a:dhvcf:t:s:", options, NULL)) >= 0)
+	while ((c = getopt_long(argc, argv, "a:dhvcf:t:s:", options, NULL)) >=
+	       0)
 	{
 		switch (c)
 		{
-                case 'a':
-                        /* TODO */
+		case 'a':
+		/* TODO */
 		case 'f':
 			from = optarg;
 		case 'c':
