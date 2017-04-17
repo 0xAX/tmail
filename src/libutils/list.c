@@ -7,6 +7,7 @@
  */
 
 #include "list.h"
+#include "basic.h"
 
 /**
  * list_new - allocates new list.
@@ -82,16 +83,35 @@ fail:
  */
 int list_prepend(list_t *list, void *item)
 {
-/* TODO */
+        UNUSED(list);
+        UNUSED(item);
 fail:
 	return 1;
 }
 
-void list_remove(list_t *list, void *item) { /* TODO */}
+/* TODO */
+void list_remove(list_t *list, void *item)
+{
+        UNUSED(list);
+        UNUSED(item);
+}
 
-void *list_lookup(list_t *list, void *item) { /* TODO */}
+/* TODO */
+void *list_lookup(list_t *list, void *item)
+{
+        UNUSED(list);
+        UNUSED(item);
 
-void *list_nth(list_t *list) { /* TODO */}
+        return NULL;
+}
+
+/* TODO */
+void *list_nth(list_t *list)
+{
+        UNUSED(list);
+
+        return NULL;
+}
 
 /**
  * list_free - release memory under given list.
