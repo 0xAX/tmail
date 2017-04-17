@@ -10,6 +10,8 @@
   * Fix -fmax-erros for osx gcc build.
   * Add `install` target.
   * Disable `asserts` from `assert.h` for non-debug builds.
+  * Add tests specific targets (like libtmail-sys.so and etc.) for `make test`.
+  * Add common name for `%.o: %.c` targets.
 
 ## tmail
 
@@ -23,6 +25,7 @@
   * Implement `list_lookup()`.
   * Implement `list_remove()`.
   * Implement `list_prepend()`.
+  * Implement `list_insert_after()`.
   * Add `test` + valgrind tests.
   * Add `list_lookup()`.
   * Add documentation for each public function.

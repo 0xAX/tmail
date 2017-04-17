@@ -21,7 +21,9 @@ list_t *list_new(void)
 	{
 		return NULL;
 	}
+
 	memset(new_list, 0, sizeof(list_t));
+
 	return new_list;
 }
 
@@ -43,19 +45,25 @@ int list_append(list_t *list, void *item)
 		list->item = item;
 	else
 	{
-		list_t *last_item = list->next;
-		list_t *new_item = (list_t *)malloc(sizeof(list_t));
+		list_t *current = list;
 
-		if (!new_item)
-			goto fail;
+		while (true)
+		{
+			if (current->next == NULL)
+			{
+				list_t *new_item =
+				    (list_t *)malloc(sizeof(list_t));
 
-		new_item = item;
-		new_item->next = NULL;
+				if (!new_item)
+					goto fail;
 
-		while (last_item != NULL)
-			last_item = list->next;
-
-		last_item->next = new_item;
+				new_item->item = item;
+				new_item->next = NULL;
+				current->next = new_item;
+				break;
+			}
+			current = current->next;
+		};
 	}
 	return 0;
 fail:
@@ -74,6 +82,7 @@ fail:
  */
 int list_prepend(list_t *list, void *item)
 {
+/* TODO */
 fail:
 	return 1;
 }
@@ -85,21 +94,24 @@ void *list_lookup(list_t *list, void *item) { /* TODO */}
 void *list_nth(list_t *list) { /* TODO */}
 
 /**
- * list_free - release list.
+ * list_free - release memory under given list.
  */
 void list_free(list_t *list)
 {
 	if (list)
 	{
-		list_t *item = list;
+		list_t *tmp = list;
 
-		while (item != NULL)
+		do
 		{
-			list_t *tmp = item;
-			item = list->next;
-			free(tmp->item);
-			free(tmp);
-		}
+			list_t *curr = tmp;
+			if (tmp->item == NULL)
+				break;
+			tmp = list->next;
+			list = tmp;
+			free(curr);
+		} while (tmp->next != NULL);
+
 		free(list);
 		list = NULL;
 	}

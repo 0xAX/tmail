@@ -10,15 +10,25 @@ include ../../mk/Build.mk
 
 OBJS = list.o
 
+# test options
+LINKER_TEST_FLAGS=-Wl,-rpath,$(shell pwd)
+LIST_TEST_COMPILE=-g list_test.c -o list_test -ltmail-utils
+TEST_EXECUTABLES=list_test
+
 $(TMAIL_UTILS_LIB): $(OBJS)
 	$(QUIET_CC) $(TMAIL_CC) $(CC_SHLIB_FLAGS) $(TMAIL_UTILS_LIB) $(OBJS)
 
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(CFLAGS_LIBS) $(BUILD_LIB_FLAGS) $<
 
+$(TEST_TARGET):
+	@V=1
+	$(TMAIL_CC) $(LIST_TEST_COMPILE) $(LINKER_TEST_FLAGS)
+
 $(CLEAN_TARGET):
 	@echo "./src/libutils"
 	$(QUIET_CLEAN_OBJECTS) $(RM) $(OBJS)
 	$(QUIET_CLEAN_SHARED_LIBS) $(RM) $(TMAIL_SYS_LIB)
+	@rm -rf $(TEST_EXECUTABLES)
 
 .PHONY: $(CLEAN_TARGET)

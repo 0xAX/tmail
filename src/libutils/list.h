@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -22,6 +23,8 @@ typedef struct list
 	void *item;
 } list_t;
 
+typedef void *list_item;
+
 list_t *list_new(void);
 void list_free(list_t *arr);
 int list_append(list_t *list, void *item);
@@ -30,8 +33,9 @@ void *list_lookup(list_t *list, void *item);
 void list_remove(list_t *list, void *item);
 int list_prepend(list_t *list, void *item);
 
-#define for_each_list_item(list, item)                                         \
-	for (item = list; item != NULL; item = list->next)
+#define for_each_list_item(list)                                               \
+	list_t *l;                                                             \
+	for (l = list; l != NULL; l = l->next)
 
 static inline bool list_empty(list_t *list)
 {
@@ -47,7 +51,7 @@ static inline int list_length(list_t *list)
 
 	assert(list);
 
-	for_each_list_item(list, item) cnt++;
+	for_each_list_item(list) cnt++;
 
 	return cnt;
 }

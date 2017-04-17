@@ -14,6 +14,8 @@ TMAIL_UTILS_LIB=libtmail-utils.so
 CLEAN_TARGET=clean
 # A target to print a help to stdout
 HELP_TARGET=help
+# A target to run tests
+TEST_TARGET=test
 
 # Match all object files
 OBJECT_FILES=*.o
@@ -44,12 +46,13 @@ ifndef V
 	QUIET_CLEAN_OBJECTS	= @echo '   ' RM $(OBJECT_FILES);
 	QUIET_CLEAN_EXECS	= @echo '   ' RM $(TMAIL_EXECUTABLE);
 	QUIET_CLEAN_SHARED_LIBS = @echo '   ' RM $(SHARED_LIBS_FILES);
-	MAKE_FLAGS=-s
+        MAKE_FLAGS=-s
 else
 	QUIET_CCS=
 	QUIET_CLEAN_OBJECTS=
 	QUIET_CLEAN_EXECS=
 	QUIET_CLEAN_SHARED_LIBS=
+        QUIET_CC_TESTS=
 	MAKE_FLAGS=
 endif
 

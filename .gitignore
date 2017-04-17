@@ -55,3 +55,6 @@ tmail
 
 # valgrind core files
 vgcore.*
+
+# tests
+list_test
