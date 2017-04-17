@@ -8,7 +8,7 @@ default: $(TMAIL_UTILS_LIB)
 include ../../mk/Common.mk
 include ../../mk/Build.mk
 
-OBJS = strarr.o
+OBJS = list.o
 
 $(TMAIL_UTILS_LIB): $(OBJS)
 	$(QUIET_CC) $(TMAIL_CC) $(CC_SHLIB_FLAGS) $(TMAIL_UTILS_LIB) $(OBJS)

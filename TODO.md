@@ -9,10 +9,23 @@
   * Strip libraries and executables if the `DEBUG` flag wasn't passed.
   * Fix -fmax-erros for osx gcc build.
   * Add `install` target.
+  * Disable `asserts` from `assert.h` for non-debug builds.
 
 ## tmail
 
-  * use `strarr` instead of recipients in `src/tmail.c`.
+  * use `list_t` instead of recipients in `src/tmail.c`.
+
+## libutils
+
+### strarr
+
+  * Implement `list_nth()`.
+  * Implement `list_lookup()`.
+  * Implement `list_remove()`.
+  * Implement `list_prepend()`.
+  * Add `test` + valgrind tests.
+  * Add `list_lookup()`.
+  * Add documentation for each public function.
 
 ## Platforms related
 

@@ -17,7 +17,6 @@
 
 #include <at_exit.h>
 #include <connect.h>
-#include <strarr.h>
 
 #define BUF_SIZE 500
 
