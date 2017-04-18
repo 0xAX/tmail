@@ -16,11 +16,12 @@
 
 ## libutils
 
-### strarr
+### list_t
 
   * Implement `list_insert_after()`.
+  * Implement `list_insert_before()`.
   * Add `test` + valgrind tests.
-  * Add documentation for each public function.
+  * Describe `list_t` usage in a header of the source code file.
 
 ## Platforms related
 
