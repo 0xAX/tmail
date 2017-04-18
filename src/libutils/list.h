@@ -25,18 +25,21 @@ typedef struct list
 
 typedef void *list_item;
 
-list_t *list_new(void);
-void list_free(list_t *arr);
-int list_append(list_t *list, void *item);
-void *list_nth(list_t *list);
-void *list_lookup(list_t *list, void *item);
-void list_remove(list_t *list, void *item);
-int list_prepend(list_t *list, void *item);
+/**
+ * for_each_list_item - go through all elements of the given list.
+ *
+ * @list - list to traverse.
+ * @entry - list entry where to start the list traversing.
+ */
+#define for_each_list_item(list, entry)                                        \
+	for (entry = list; entry != NULL; entry = entry->next)
 
-#define for_each_list_item(list)                                               \
-	list_t *l;                                                             \
-	for (l = list; l != NULL; l = l->next)
-
+/**
+ * list_empty - go through all elements of the given list.
+ *
+ * Return true in a case of empty list and return false
+ * in other cases.
+ */
 static inline bool list_empty(list_t *list)
 {
 	assert(list);
@@ -44,16 +47,28 @@ static inline bool list_empty(list_t *list)
 	return list->next == NULL;
 }
 
-static inline int list_length(list_t *list)
+/**
+ * list_length - return amount of elements in the given
+ * list.
+ */
+static inline unsigned long list_length(list_t *list)
 {
-	list_t *item;
-	int cnt;
+	int cnt = 0;
+	list_t *entry = NULL;
 
 	assert(list);
 
-	for_each_list_item(list) cnt++;
+	for_each_list_item(list, entry)++ cnt;
 
 	return cnt;
 }
+
+list_t *list_new(void);
+void list_free(list_t *arr);
+void *list_lookup(list_t *list, void *item);
+list_t *list_append(list_t *list, void *item);
+void *list_nth(list_t *list, unsigned long n);
+list_t *list_prepend(list_t *list, void *item);
+list_t *list_remove(list_t *list, void *item, bool release_item);
 
 #endif /* __LIB_UTILS_LIST_H__ */

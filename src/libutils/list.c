@@ -12,7 +12,7 @@
 /**
  * list_new - allocates new list.
  *
- * Returns `0` on success, errno on failure.
+ * Return non-null value on success, NULL + errno on failure.
  */
 list_t *list_new(void)
 {
@@ -33,14 +33,14 @@ list_t *list_new(void)
  * list.
  *
  * @list - list where the given item will be insterted.
- * @item - item to push to list. The give `@item` should
- * be allocated on the heap.
+ * @item - item to push to list.
  *
- * Returns `0` on success, `1` + errno on failure.
+ * Return list on success, NULL + errno on failure.
  */
-int list_append(list_t *list, void *item)
+list_t *list_append(list_t *list, void *item)
 {
 	assert(list);
+	assert(item != NULL);
 
 	if (!list->item)
 		list->item = item;
@@ -66,9 +66,9 @@ int list_append(list_t *list, void *item)
 			current = current->next;
 		};
 	}
-	return 0;
+	return list;
 fail:
-	return 1;
+	return NULL;
 }
 
 /**
@@ -79,38 +79,123 @@ fail:
  * @item - item to push to list. The give `@item` should
  * be allocated on the heap.
  *
- * Returns `0` on success, `1` + errno on failure.
+ * Return new list on success, NULL + errno on failure.
  */
-int list_prepend(list_t *list, void *item)
+list_t *list_prepend(list_t *list, void *item)
 {
-        UNUSED(list);
-        UNUSED(item);
+	if (!list->item)
+	{
+		list->item = item;
+		return list;
+	}
+	else
+	{
+		list_t *new_item = (list_t *)malloc(sizeof(list_t));
+
+		if (!new_item)
+			goto fail;
+
+		new_item->item = item;
+		new_item->next = list;
+
+		return new_item;
+	}
 fail:
-	return 1;
+	return NULL;
 }
 
-/* TODO */
-void list_remove(list_t *list, void *item)
+/**
+ * list_remove - removes the given item from the the given list.
+ *
+ * @list - list where from the given item will be removed.
+ * @item - item to remove from list.
+ * @release_item - boolean value that shows do we need to release
+ * memory under list item or not.
+ */
+list_t *list_remove(list_t *list, void *item, bool release_item)
 {
-        UNUSED(list);
-        UNUSED(item);
+	list_t *prev = NULL;
+	list_t *entry = NULL;
+
+	assert(list);
+	assert(item);
+
+	for (entry = list; entry != NULL; entry = entry->next)
+	{
+		if (entry->item == item)
+		{
+			if (prev)
+			{
+				prev->next = entry->next;
+				if (release_item)
+					free(entry->item);
+				free(entry);
+				entry = NULL;
+			}
+			else
+			{
+				/*
+				 * we have no prev, seems we are at the head
+				 * of a list.
+				 */
+				list_t *new_head = list->next;
+				if (release_item)
+					free(entry->item);
+				free(entry);
+				list = new_head;
+			}
+			return list;
+		}
+		prev = entry;
+	}
+
+	return NULL;
 }
 
-/* TODO */
+/**
+ * list_lookup - execute lookup in the given list.
+ *
+ * @list - list where lookup will be executed.
+ * @item - item to search in the list.
+ */
 void *list_lookup(list_t *list, void *item)
 {
-        UNUSED(list);
-        UNUSED(item);
+	list_t *entry = NULL;
 
-        return NULL;
+	assert(list);
+	assert(item);
+
+	for_each_list_item(list, entry)
+	{
+		if (entry->item == item)
+			return item;
+	}
+
+	return NULL;
 }
 
-/* TODO */
-void *list_nth(list_t *list)
+/**
+ * list_nth - returns the element from the given position in
+ * the given list.
+ *
+ * @list - list where lookup will be executed.
+ * @n - the position number in the list.
+ */
+void *list_nth(list_t *list, unsigned long n)
 {
-        UNUSED(list);
+	list_t *entry = NULL;
+	unsigned long i = 0;
 
-        return NULL;
+	assert(list);
+
+	for_each_list_item(list, entry)
+	{
+		if (n == i)
+			return entry->item;
+		i++;
+	}
+
+	return NULL;
 }
 
 /**
@@ -127,9 +212,12 @@ void list_free(list_t *list)
 			list_t *curr = tmp;
 			if (tmp->item == NULL)
 				break;
-			tmp = list->next;
-			list = tmp;
-			free(curr);
+			if (list->next)
+			{
+				tmp = list->next;
+				list = tmp;
+				free(curr);
+			}
 		} while (tmp->next != NULL);
 
 		free(list);

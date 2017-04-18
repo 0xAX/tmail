@@ -17,20 +17,14 @@
 
 #include <at_exit.h>
 #include <connect.h>
+#include <list.h>
 
 #define BUF_SIZE 500
 
 static bool compose = false;
 static char *from = NULL;
 static char *subject = NULL;
-
-struct recipients
-{
-	char **to;
-	unsigned int cnt;
-};
-
-static struct recipients *rcps = NULL;
+static list_t *rcps = NULL;
 
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
@@ -60,13 +54,10 @@ static void print_help(void)
 
 static void free_recipients(void)
 {
-	while (rcps->cnt)
-	{
-		free(rcps->to[rcps->cnt - 1]);
-		rcps->cnt--;
-	}
-	free(rcps->to);
-	rcps->to = NULL;
+	list_t *entry;
+
+	for_each_list_item(rcps, entry) free(entry->item);
+	list_free(rcps);
 }
 
 static void print_version(void)
@@ -111,42 +102,19 @@ static int parse_argv(int argc, char *argv[])
 			print_help();
 		case 'v':
 			print_version();
-		case 't':;
+		case 't':
+			if (!rcps)
+				rcps = list_new();
+
 			if (!rcps)
 			{
-				rcps = (struct recipients *)malloc(
-				    sizeof(struct recipients));
-				if (!rcps)
-				{
-					perror("Error: cannot set allocate "
-					       "recipents\n");
-					exit(EXIT_FAILURE);
-				}
-
-				memset(rcps, 0, sizeof(struct recipients));
-
-				rcps->to = (char **)malloc(sizeof(char *));
-				if (!rcps->to)
-				{
-					perror("Error: cannot allocate memory "
-					       "for a recipent\n");
-					goto recipent_alloc_failed;
-				}
-			}
-			else
-			{
-				rcps->to = (char **)realloc(
-				    rcps->to, (rcps->cnt + 1) * sizeof(char *));
-				if (!rcps->to)
-				{
-					perror("Error: cannot allocate memory "
-					       "for a recipent\n");
-					goto recipent_alloc_failed;
-				}
+				fprintf(stderr, "%s",
+					"recepients list can't be allocated\n");
+				goto recipent_alloc_failed;
 			}
 
-			rcps->to[rcps->cnt] = strdup(optarg);
-			rcps->cnt++;
+			if (!list_append(rcps, strdup(optarg)))
+				goto recipent_alloc_failed;
 			break;
 		case 's':
 			subject = optarg;
@@ -161,23 +129,12 @@ static int parse_argv(int argc, char *argv[])
 
 	return 0;
 
-recipents_alloc_failed:
-	free_recipients();
 recipent_alloc_failed:
-	free(rcps);
-	rcps = NULL;
+	free_recipients();
 	exit(EXIT_FAILURE);
 }
 
-void exit_cb()
-{
-	if (rcps)
-	{
-		free_recipients();
-		free(rcps);
-		rcps = NULL;
-	}
-}
+void exit_cb() { free_recipients(); }
 
 int main(int argc, char *argv[])
 {

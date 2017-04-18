@@ -12,22 +12,14 @@
   * Disable `asserts` from `assert.h` for non-debug builds.
   * Add tests specific targets (like libtmail-sys.so and etc.) for `make test`.
   * Add common name for `%.o: %.c` targets.
-
-## tmail
-
-  * use `list_t` instead of recipients in `src/tmail.c`.
+  * Docker container.
 
 ## libutils
 
 ### strarr
 
-  * Implement `list_nth()`.
-  * Implement `list_lookup()`.
-  * Implement `list_remove()`.
-  * Implement `list_prepend()`.
   * Implement `list_insert_after()`.
   * Add `test` + valgrind tests.
-  * Add `list_lookup()`.
   * Add documentation for each public function.
 
 ## Platforms related
