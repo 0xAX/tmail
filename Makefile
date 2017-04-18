@@ -26,7 +26,6 @@ $(CLEAN_TARGET):
 	@cd $(SRC_DIR) && $(MAKE) $(MAKE_FLAGS) $(CLEAN_TARGET)
 
 $(TEST_TARGET):
-	@echo "test: libutils"
 	@cd $(SRC_DIR)/$(UTILS_DIR_NAME) && $(MAKE) $(MAKE_FLAGS) $(TEST_TARGET)
 
 $(HELP_TARGET):
