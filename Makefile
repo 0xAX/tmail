@@ -9,15 +9,15 @@
 #
 # Define DEBUG=1 to build tmail with debug info.
 
-default: all
+.DEFAULT_GOAL: $(DEFAULT_TARGET)
 
 # Include auxiliary build scripts
 include ./mk/Common.mk
 # And include according build script
 include ./mk/Build.mk
 
-all:
-	@cd $(SRC_DIR) && $(MAKE) $(MAKE_FLAGS) tmail
+$(DEFAULT_TARGET):
+	@cd $(SRC_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_EXECUTABLE)
 
 $(CLEAN_TARGET):
 	@echo "./"
@@ -28,13 +28,33 @@ $(CLEAN_TARGET):
 $(TEST_TARGET):
 	@cd $(SRC_DIR)/$(UTILS_DIR_NAME) && $(MAKE) $(MAKE_FLAGS) $(TEST_TARGET)
 
+$(INSTALL_TARGET): all
+	@$(INSTALL) $(TMAIL_EXECUTABLE) $(BIN_DIR)
+	@$(INSTALL) $(SRC_DIR)$(UTILS_DIR_NAME)/$(TMAIL_UTILS_LIB) $(LIB_DIR)
+	@$(INSTALL) $(SRC_DIR)$(SYS_DIR_NAME)/$(TMAIL_SYS_LIB) $(LIB_DIR)
+
+$(UNINSTALL_TARGET):
+	rm -rf $(BIN_DIR)/$(TMAIL_EXECUTABLE)
+ifdef TMAIL_UTILS_LIB
+	rm -rf $(LIB_DIR)/$(TMAIL_UTILS_LIB)
+else
+	$(warning "WARN: libtmail-utils.so is not installed")
+endif
+ifdef TMAIL_SYS_LIB
+	rm -rf $(LIB_DIR)/$(TMAIL_SYS_LIB)
+else
+	$(warning "WARN: libtmail-sys.so is not installed")
+endif
+
 $(HELP_TARGET):
 	@echo  'Common targets:'
-	@echo  '  * all - Build everything.'
-	@echo  '  * test - Run all tests.'
+	@echo  '  * all       - Build everything.'
+	@echo  '  * test      - Run all tests.'
+	@echo  '  * install   - Install tmail with tools and libraries.'
+	@echo  '  * uninstall - Uninstall tmail with tools and libraries.'
 	@echo  'Cleaning targets:'
-	@echo  '  * clean - Remove most generated files like object files, executables and etc.'
+	@echo  '  * clean     - Remove most generated files like object files, executables and etc.'
 	@echo  'Miscellaneous targets'
-	@echo  '  * help - print this output.'
+	@echo  '  * help      - print this output.'
 
 .PHONY: $(CLEAN_TARGET) $(HELP_TARGET)

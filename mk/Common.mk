@@ -10,12 +10,18 @@ TMAIL_SYS_LIB=libtmail-sys.so
 # Auxiliary library with C utils
 TMAIL_UTILS_LIB=libtmail-utils.so
 
+# Default target to build tmail fully
+DEFAULT_TARGET=all
 # Main target that will be used to clean everything after build
 CLEAN_TARGET=clean
 # A target to print a help to stdout
 HELP_TARGET=help
 # A target to run tests
 TEST_TARGET=test
+# A target to intall tmail with tools & libs
+INSTALL_TARGET=install
+# A target to remove tmail from the system
+UNINSTALL_TARGET=uninstall
 
 # Match all object files
 OBJECT_FILES=*.o
@@ -30,6 +36,10 @@ MK_DIR=mk/
 SYS_DIR_NAME=sys
 # Directory with utils library
 UTILS_DIR_NAME=libutils
+# Directory to install tmail(s) executables
+BIN_DIR=/usr/local/bin
+# Directory to install tmail(s) libraries
+LIB_DIR=/usr/lib
 
 # use it for cleanups
 RM=rm -rf
@@ -39,6 +49,8 @@ AR=ar
 LD ?= ld
 # default assembler
 AS ?= as
+# use this one for installing tmail and libraries
+INSTALL ?= install
 
 # set verbosity
 ifndef V
