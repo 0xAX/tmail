@@ -4,6 +4,9 @@
  * Copyright (c) 2017, Alexander Kuleshov <kuleshovmail at gmail dot com>
  *
  * This file is released under the BSD license, see the COPYING file
+ *
+ * Implementation of the singly-linked list - linked lists that can be
+ * iterated in one direction.
  */
 
 #include "list.h"

@@ -8,7 +8,6 @@
   * Update core `Makefile` for at least BSD `OSes`.
   * Strip libraries and executables if the `DEBUG` flag wasn't passed.
   * Fix -fmax-erros for osx gcc build.
-  * Add `install` target.
   * Disable `asserts` from `assert.h` for non-debug builds.
   * Add tests specific targets (like libtmail-sys.so and etc.) for `make test`.
   * Add common name for `%.o: %.c` targets.

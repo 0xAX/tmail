@@ -25,6 +25,7 @@ static bool compose = false;
 static char *from = NULL;
 static char *subject = NULL;
 static list_t *rcps = NULL;
+static list_t *attachments = NULL;
 
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
@@ -50,14 +51,6 @@ static void print_help(void)
 	printf("\n");
 
 	exit(EXIT_SUCCESS);
-}
-
-static void free_recipients(void)
-{
-	list_t *entry;
-
-	for_each_list_item(rcps, entry) free(entry->item);
-	list_free(rcps);
 }
 
 static void print_version(void)
@@ -92,7 +85,17 @@ static int parse_argv(int argc, char *argv[])
 		switch (c)
 		{
 		case 'a':
-		/* TODO */
+			if (!attachments)
+				attachments = list_new();
+			if (!attachments)
+			{
+				fprintf(stderr, "%s",
+					"attachment list can't be allocated\n");
+				goto allocation_failed;
+			}
+			if (!list_append(attachments, strdup(optarg)))
+				goto allocation_failed;
+			break;
 		case 'f':
 			from = optarg;
 		case 'c':
@@ -105,16 +108,14 @@ static int parse_argv(int argc, char *argv[])
 		case 't':
 			if (!rcps)
 				rcps = list_new();
-
 			if (!rcps)
 			{
 				fprintf(stderr, "%s",
-					"recepients list can't be allocated\n");
-				goto recipent_alloc_failed;
+					"recepient list can't be allocated\n");
+				goto allocation_failed;
 			}
-
 			if (!list_append(rcps, strdup(optarg)))
-				goto recipent_alloc_failed;
+				goto allocation_failed;
 			break;
 		case 's':
 			subject = optarg;
@@ -129,12 +130,17 @@ static int parse_argv(int argc, char *argv[])
 
 	return 0;
 
-recipent_alloc_failed:
-	free_recipients();
+allocation_failed:
+	list_free_full(rcps);
+	list_free_full(attachments);
 	exit(EXIT_FAILURE);
 }
 
-void exit_cb() { free_recipients(); }
+void exit_cb()
+{
+	list_free_full(rcps);
+	list_free_full(attachments);
+}
 
 int main(int argc, char *argv[])
 {

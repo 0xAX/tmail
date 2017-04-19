@@ -34,6 +34,14 @@ typedef void *list_item;
 #define for_each_list_item(list, entry)                                        \
 	for (entry = list; entry != NULL; entry = entry->next)
 
+list_t *list_new(void);
+void list_free(list_t *arr);
+void *list_lookup(list_t *list, void *item);
+list_t *list_append(list_t *list, void *item);
+void *list_nth(list_t *list, unsigned long n);
+list_t *list_prepend(list_t *list, void *item);
+list_t *list_remove(list_t *list, void *item, bool release_item);
+
 /**
  * list_empty - go through all elements of the given list.
  *
@@ -63,12 +71,16 @@ static inline unsigned long list_length(list_t *list)
 	return cnt;
 }
 
-list_t *list_new(void);
-void list_free(list_t *arr);
-void *list_lookup(list_t *list, void *item);
-list_t *list_append(list_t *list, void *item);
-void *list_nth(list_t *list, unsigned long n);
-list_t *list_prepend(list_t *list, void *item);
-list_t *list_remove(list_t *list, void *item, bool release_item);
+/**
+ * list_free_full - the same that `list_free`, but also
+ * releases memory allocated for items.
+ */
+static inline void list_free_full(list_t *list)
+{
+	list_t *entry;
+
+	for_each_list_item(list, entry) free(entry->item);
+	list_free(list);
+}
 
 #endif /* __LIB_UTILS_LIST_H__ */

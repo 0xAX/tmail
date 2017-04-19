@@ -22,8 +22,8 @@ $(TMAIL_UTILS_LIB): $(OBJS)
 	$(QUIET_CC) $(TMAIL_CC) $(CFLAGS_LIBS) $(BUILD_LIB_FLAGS) $<
 
 $(TEST_TARGET):
-	@V=1
 	$(TMAIL_CC) $(LIST_TEST_COMPILE) $(LINKER_TEST_FLAGS)
+	@exec ./run_tests.pl
 
 $(CLEAN_TARGET):
 	@echo "./src/libutils"
