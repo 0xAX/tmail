@@ -49,3 +49,4 @@ git:
 script:
   - unset CC
   - make all
+  - make test
