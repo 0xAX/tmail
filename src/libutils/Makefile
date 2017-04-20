@@ -11,7 +11,7 @@ include ../../mk/Build.mk
 OBJS = list.o
 
 # test options
-LINKER_TEST_FLAGS=-Wl,-rpath,$(shell pwd)
+LINKER_TEST_FLAGS=-Wl,-rpath,$(shell pwd) -L.
 LIST_TEST_COMPILE=-g list_test.c -o list_test -ltmail-utils
 TEST_EXECUTABLES=list_test
 
