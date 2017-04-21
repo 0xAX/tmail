@@ -52,13 +52,21 @@ AS ?= as
 # use this one for installing tmail and libraries
 INSTALL ?= install
 
+# Make flags
+# Supress Entering/Leaving messages
+SILENT=-s
+# Eliminate use of the built-in variables.
+ELIMINATE_BUILTIN_VARS=-R
+# Eliminate use of the built-in implicit rules.
+ELIMINATE_BUILTIN_RULES=-r
+
 # set verbosity
 ifndef V
 	QUIET_CC		= @echo '   ' CC $@;
 	QUIET_CLEAN_OBJECTS	= @echo '   ' RM $(OBJECT_FILES);
 	QUIET_CLEAN_EXECS	= @echo '   ' RM $(TMAIL_EXECUTABLE);
 	QUIET_CLEAN_SHARED_LIBS = @echo '   ' RM $(SHARED_LIBS_FILES);
-	MAKE_FLAGS=-s
+	MAKE_FLAGS=$(SILENT) $(ELIMINATE_BUILTINS) $(ELIMINATE_BUILTIN_RULES)
 else
 	QUIET_CCS=
 	QUIET_CLEAN_OBJECTS=

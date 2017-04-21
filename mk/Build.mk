@@ -27,8 +27,8 @@ else ifeq ($(TMAIL_CC), clang)
 WARNINGS += -ferror-limit=2
 endif
 
-
-# Compile with debug info or optimization stuff depends on `DEBUG` flags
+# Compile with debug info or optimization stuff
+# depends on `DEBUG` flags
 ifndef DEBUG
 MISC_FLAGS=$(OPTIMIZATION)
 else
