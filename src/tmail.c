@@ -132,8 +132,6 @@ static int parse_argv(int argc, char *argv[])
 	return 0;
 
 allocation_failed:
-	list_free_full(rcps);
-	list_free_full(attachments);
 	exit(EXIT_FAILURE);
 }
 
