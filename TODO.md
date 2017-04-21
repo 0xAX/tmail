@@ -12,6 +12,10 @@
   * Add common name for `%.o: %.c` targets.
   * Docker container.
 
+## tmail
+
+  * add `-i/--interactive` instead of `-c/--compose`.
+
 ## libutils
 
 ### list_t
