@@ -62,7 +62,7 @@ static void print_version(void)
 
 static void dump_configuration(void) { exit(EXIT_SUCCESS); }
 
-static int parse_argv(int argc, char *argv[])
+static void parse_argv(int argc, char *argv[])
 {
 	int c;
 
@@ -128,9 +128,6 @@ static int parse_argv(int argc, char *argv[])
 			unknown_option();
 		}
 	}
-
-	return 0;
-
 allocation_failed:
 	exit(EXIT_FAILURE);
 }
