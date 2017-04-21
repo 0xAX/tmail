@@ -47,6 +47,7 @@ static void print_help(void)
 	    "                           email. Multiply options are allowed\n");
 	printf("  -f, --from=<address>     specify author of an email\n");
 	printf("  -a, --attachment=<file>  add attachment to an email\n");
+	printf("  -s, --subject=<subj>     specify subject of an email\n");
 	printf("  -d, --dump-config        explore tmail's configuration\n");
 	printf("\n");
 
