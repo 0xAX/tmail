@@ -43,10 +43,13 @@ matrix:
       env: TMAIL_CC=gcc
       compiler: gcc
 
+before_install:
+  - test -n $CC && unset CC
+  - 'if [[ "$TRAVIS_OS_NAME" == "osx" && "$TMAIL_CC" == "gcc" ]]; then TMAIL_CC=$(ls -t /usr/local/bin/gcc-?.*); fi'
+
 git:
   depth: 1
 
 script:
-  - unset CC
-  - make all
-  - make test
+  - make TMAIL_CC=$TMAIL_CC V=1 all
+  - make TMAIL_CC=$TMAIL_CC V=1 test

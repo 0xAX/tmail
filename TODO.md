@@ -2,6 +2,7 @@
 
 ## Build
 
+  * Add ` -Weverything` for clang build.
   * Add enumeration of what avaliable targets will be built with the
 `make all`.
   * Strip libraries and executables if the `DEBUG` flag wasn't passed.
