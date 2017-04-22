@@ -25,11 +25,6 @@
   * Add `test` + valgrind tests.
   * Describe `list_t` usage in a header of the source code file.
 
-## Platforms related
-
-  * `OpenBSD`: use `snprintf` instead of `sprintf` because of a warn.
-Maybe it would be good to replace it for all platforms for safety.
-
 ## Scripts
 
 ### check_coding_style
