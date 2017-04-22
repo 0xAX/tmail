@@ -128,6 +128,7 @@ static void parse_argv(int argc, char *argv[])
 			unknown_option();
 		}
 	}
+	return;
 allocation_failed:
 	exit(EXIT_FAILURE);
 }
@@ -140,7 +141,7 @@ void exit_cb()
 
 int main(int argc, char *argv[])
 {
-	connection_t conn;
+	connection_t *conn;
 	char buffer[512];
 
 	/* it is not good idea to run tmail via root */
@@ -164,11 +165,18 @@ int main(int argc, char *argv[])
 		/* TODO compose email */
 	}
 
-	conn = connect_to_service("smtp.gmail.com", "587");
+	conn = connect_to_service("smtp.gmail2.com", "587");
 
-	if (conn.sd == -1)
+	if (!conn)
 	{
-		fprintf(stderr, "%s", conn.error);
+		fprintf(stderr, "%s", "Error: connection_t can't be allocated");
+		exit(EXIT_FAILURE);
+	}
+
+	if (conn->sd == -1)
+	{
+		fprintf(stderr, "%s", conn->error);
+		free(conn);
 		exit(EXIT_FAILURE);
 	}
 

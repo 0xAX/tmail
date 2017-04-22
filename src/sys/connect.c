@@ -17,12 +17,38 @@
 
 #include "connect.h"
 
-connection_t connect_to_service(const char *addr, const char *service)
+/**
+ * connect_to_service - connect to the given service with
+ * with the given address.
+ *
+ * @addr - network address of the service.
+ * @service - a port number reserved for a service.
+ *
+ * Return:
+ *
+ *  1. `NULL` in the case of ENOMEM
+ *
+ *  2. `connection_t->sd = -1` and error message in the
+ *  `connection_t->error` in a case of getaddrinfo(3) or
+ *  connect(3) error. connect_to_service() allocates
+ *  memory for the `connect_t->error`, so it should be
+ *  released by the caller.
+ *
+ *  3. `connection_t` on success. Memory should be released
+ *  after use.
+ */
+connection_t *connect_to_service(const char *addr, const char *service)
 {
 	int ret;
-	connection_t conn = {-1, ""};
 	struct addrinfo hints;
 	struct addrinfo *rp, *serv_info;
+	connection_t *conn = (connection_t *)malloc(sizeof(connection_t));
+
+	if (!conn)
+		return NULL;
+
+	conn->sd = -1;
+	conn->error = NULL;
 
 	memset(&hints, 0, sizeof hints);
 
@@ -39,26 +65,43 @@ connection_t connect_to_service(const char *addr, const char *service)
 	if (ret != 0)
 	{
 		if (ret == EAI_SYSTEM)
-			sprintf((char *)conn.error, "Error: getaddrinfo %s\n",
-				strerror(errno));
+		{
+			char *err = strerror(errno);
+			int err_len = strlen(err) + 1;
+
+			conn->error = (char *)malloc(err_len);
+			snprintf((char *)conn->error, err_len, "%s", err);
+		}
 		else
-			sprintf((char *)conn.error, "Error: getaddrinfo %s\n",
-				gai_strerror(ret));
+		{
+			const char *err = gai_strerror(ret);
+			int err_len = strlen(err) + 1;
+
+			conn->error = (char *)malloc(err_len);
+			snprintf((char *)conn->error, err_len, "%s", err);
+		}
+
+		return conn;
 	}
 
 	for (rp = serv_info; rp != NULL; rp = rp->ai_next)
 	{
-		if ((conn.sd = socket(AF_INET, SOCK_STREAM, 0) == -1))
+		if ((conn->sd = socket(AF_INET, SOCK_STREAM, 0) == -1))
 			continue;
 
-		if (connect(conn.sd, rp->ai_addr, rp->ai_addrlen) != -1)
+		if (connect(conn->sd, rp->ai_addr, rp->ai_addrlen) != -1)
 			break;
-		close(conn.sd);
+		close(conn->sd);
 	}
 
 	if (!rp)
-		sprintf((char *)conn.error, "Error: cannot connect %s\n",
-			strerror(errno));
+	{
+		char *err = strerror(errno);
+		int err_len = strlen(err) + 1;
+
+		conn->error = (char *)malloc(err_len);
+		snprintf((char *)conn->error, err_len, "%s", err);
+	}
 
 	freeaddrinfo(serv_info);
 

@@ -35,6 +35,6 @@ struct connection
 
 typedef struct connection connection_t;
 
-connection_t connect_to_service(const char *addr, const char *service);
+connection_t *connect_to_service(const char *addr, const char *service);
 
 #endif /* __SYS_CONNECT_H__ */
