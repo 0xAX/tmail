@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
 		/* TODO compose email */
 	}
 
-	conn = connect_to_service("smtp.gmail2.com", "587");
+	conn = connect_to_service("smtp.gmail.com", "587");
 
 	if (!conn)
 	{
