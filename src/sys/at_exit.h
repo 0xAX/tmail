@@ -9,6 +9,6 @@
 #ifndef __SYS_AT_EXIT_H__
 #define __SYS_AT_EXIT_H__
 
-int register_exit_cb(void (*cb)(void));
+void register_exit_cb(void (*cb)(void));
 
 #endif /* __SYS_AT_EXIT_H__ */

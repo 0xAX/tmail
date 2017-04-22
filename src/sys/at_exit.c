@@ -13,7 +13,10 @@
 #include <sys/param.h>
 #endif
 
-int register_exit_cb(void (*cb)(void))
+/**
+ * register_exit_cb - register `atext(3)` callback.
+ */
+void register_exit_cb(void (*cb)(void))
 {
 	int res = atexit(cb);
 
@@ -27,6 +30,4 @@ int register_exit_cb(void (*cb)(void))
 		exit(EXIT_FAILURE);
 #endif
 	}
-
-	return 0;
 }
