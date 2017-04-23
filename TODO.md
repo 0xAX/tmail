@@ -15,6 +15,8 @@
 ## tmail
 
   * add `-i/--interactive` instead of `-c/--compose`.
+  * add `collect_list_args()` to tmail.c to gather list of
+string args.
 
 ## libutils
 
