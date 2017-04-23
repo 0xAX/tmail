@@ -35,6 +35,10 @@
   * Check header and empty line after it in a commit message.
   * Check that there are no one line comments.
 
+### apply-clang-format.sh
+
+  * add `-f` option to pass file to the script.
+
 ## Scripts (misc)
 
   * Add valgrind script.
