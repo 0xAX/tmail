@@ -67,6 +67,19 @@ static void print_version(void)
 
 static void dump_configuration(void) { exit(EXIT_SUCCESS); }
 
+static int collect_list_args(list_t **list, char *arg)
+{
+	assert(arg);
+
+	if (!*list)
+		*list = list_new();
+
+	if (!*list || !list_append(*list, arg))
+		return 0;
+
+	return 1;
+}
+
 static void parse_argv(int argc, char *argv[])
 {
 	int c;
@@ -92,28 +105,20 @@ static void parse_argv(int argc, char *argv[])
 		switch (c)
 		{
 		case 'a':
-			if (!attachments)
-				attachments = list_new();
-			if (!attachments)
+			if (!collect_list_args(&attachments, strdup(optarg)))
 			{
 				fprintf(stderr, "%s",
 					"attachment list can't be allocated\n");
 				goto allocation_failed;
 			}
-			if (!list_append(attachments, strdup(optarg)))
-				goto allocation_failed;
 			break;
 		case 'c':
-			if (!ccs)
-				ccs = list_new();
-			if (!ccs)
+			if (!collect_list_args(&ccs, strdup(optarg)))
 			{
 				fprintf(stderr, "%s",
 					"cc list can't be allocated\n");
 				goto allocation_failed;
 			}
-			if (!list_append(ccs, strdup(optarg)))
-				goto allocation_failed;
 			break;
 		case 'f':
 			from = optarg;
@@ -125,16 +130,12 @@ static void parse_argv(int argc, char *argv[])
 		case 'v':
 			print_version();
 		case 't':
-			if (!rcps)
-				rcps = list_new();
-			if (!rcps)
+			if (!collect_list_args(&rcps, strdup(optarg)))
 			{
 				fprintf(stderr, "%s",
 					"recepient list can't be allocated\n");
 				goto allocation_failed;
 			}
-			if (!list_append(rcps, strdup(optarg)))
-				goto allocation_failed;
 			break;
 		case 's':
 			subject = optarg;

@@ -14,8 +14,7 @@
 
 ## tmail
 
-  * add `collect_list_args()` to tmail.c to gather list of
-string args.
+  * add `-b` or `--bcc` for blind copy.
 
 ## libutils
 
