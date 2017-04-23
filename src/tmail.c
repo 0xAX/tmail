@@ -21,11 +21,12 @@
 
 #define BUF_SIZE 500
 
-static bool compose = false;
+static bool interactive = false;
 static char *from = NULL;
 static char *subject = NULL;
 static list_t *rcps = NULL;
 static list_t *attachments = NULL;
+static list_t *ccs = NULL;
 
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
@@ -41,9 +42,13 @@ static void print_help(void)
 
 	printf("  -h, --help               display this test and exit\n");
 	printf("  -v, --version            output version and exit\n");
-	printf("  -c, --compose            compose an email\n");
+	printf("  -i, --interactive        compose an email in interactive "
+	       "mode\n");
 	printf(
-	    "  -t, --to=<address>       specify the primary recipent of an\n"
+	    "  -t, --to=<address>       specify the primary recipient of an\n"
+	    "                           email. Multiply options are allowed\n");
+	printf(
+	    "  -c, --cc=<address>       specify the secondary recipient of an\n"
 	    "                           email. Multiply options are allowed\n");
 	printf("  -f, --from=<address>     specify author of an email\n");
 	printf("  -a, --attachment=<file>  add attachment to an email\n");
@@ -68,19 +73,20 @@ static void parse_argv(int argc, char *argv[])
 
 	static const struct option options[] = {
 	    {"attachment", no_argument, NULL, 'a'},
-	    {"compose", no_argument, NULL, 'c'},
+	    {"interactive", no_argument, NULL, 'i'},
 	    {"dump-config", no_argument, NULL, 'd'},
 	    {"help", no_argument, NULL, 'h'},
 	    {"version", no_argument, NULL, 'v'},
 	    {"from", required_argument, NULL, 'f'},
 	    {"to", required_argument, NULL, 't'},
+	    {"cc", required_argument, NULL, 'c'},
 	    {"subject", required_argument, NULL, 's'},
 	};
 
 	assert(argc >= 0);
 	assert(argv);
 
-	while ((c = getopt_long(argc, argv, "a:dhvcf:t:s:", options, NULL)) >=
+	while ((c = getopt_long(argc, argv, "a:dhvif:t:s:c:", options, NULL)) >=
 	       0)
 	{
 		switch (c)
@@ -97,10 +103,22 @@ static void parse_argv(int argc, char *argv[])
 			if (!list_append(attachments, strdup(optarg)))
 				goto allocation_failed;
 			break;
+		case 'c':
+			if (!ccs)
+				ccs = list_new();
+			if (!ccs)
+			{
+				fprintf(stderr, "%s",
+					"cc list can't be allocated\n");
+				goto allocation_failed;
+			}
+			if (!list_append(ccs, strdup(optarg)))
+				goto allocation_failed;
+			break;
 		case 'f':
 			from = optarg;
-		case 'c':
-			compose = true;
+		case 'i':
+			interactive = true;
 			break;
 		case 'h':
 			print_help();
@@ -137,6 +155,7 @@ void exit_cb()
 {
 	list_free_full(rcps);
 	list_free_full(attachments);
+	list_free_full(ccs);
 }
 
 int main(int argc, char *argv[])
@@ -160,9 +179,9 @@ int main(int argc, char *argv[])
 	setlocale(LC_ALL, "en_US.utf8");
 	parse_argv(argc, argv);
 
-	if (compose)
+	if (interactive)
 	{
-		/* TODO compose email */
+		/* TODO compose email interactively */
 	}
 
 	conn = connect_to_service("smtp.gmail.com", "587");
@@ -179,6 +198,9 @@ int main(int argc, char *argv[])
 		free(conn);
 		exit(EXIT_FAILURE);
 	}
+
+	/* TODO remove this when we will use the `conn` */
+	free(conn);
 
 	exit(EXIT_SUCCESS);
 }
