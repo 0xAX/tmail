@@ -3,7 +3,7 @@
 # Copyright (C) 2017 Alexander Kuleshov <kuleshovmail at gmail dot com>
 # This file is released under the BSD license, see the COPYING file
 
-default: tmail
+.DEFAULT_GOAL: $(TMAIL_EXECUTABLE)
 
 include ../mk/Common.mk
 include ../mk/Build.mk
@@ -17,7 +17,7 @@ LINKER_OPTS=-Wl,-rpath,$(shell pwd)/sys \
             -Wl,-rpath,$(shell pwd)/libutils
 COMPILER_FLAGS= $(LINKER_OPTS) $(CC_EXEC_FLAGS)
 
-tmail: $(TMAIL_SYS_LIB) $(TMAIL_UTILS_LIB) $(TMAIL_OBJS)
+$(TMAIL_EXECUTABLE): $(TMAIL_SYS_LIB) $(TMAIL_UTILS_LIB) $(TMAIL_OBJS)
 	$(QUIET_CC) $(TMAIL_CC) $(LIBS_PATH) $(INCLUDES) \
 	$(COMPILER_FLAGS) ../$(TMAIL_EXECUTABLE) $(TMAIL_OBJS) $(LIBS)
 
