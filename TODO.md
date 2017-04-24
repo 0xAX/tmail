@@ -15,6 +15,8 @@
 ## tmail
 
   * add `-b` or `--bcc` for blind copy.
+  * add `isatty()` check to prevent raw-mode enabling from scripts
+for example.
 
 ## libsmtp
 
