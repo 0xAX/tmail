@@ -27,6 +27,12 @@ for example.
   * add get_hostname.
   * move sys to libsys.
 
+## libmail
+
+  * Add initial `libmail` template.
+  * Add `mail` structure which should contain prepared email
+to send.
+
 ## libutils
 
 ### list_t
