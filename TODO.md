@@ -53,3 +53,5 @@ for example.
 ## Scripts (misc)
 
   * Add valgrind script.
+  * Add `version.sh` to generate version.
+  * Add bash completion.
