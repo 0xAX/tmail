@@ -16,8 +16,11 @@ include ./mk/Common.mk
 # And include according build script
 include ./mk/Build.mk
 
-$(DEFAULT_TARGET):
+$(DEFAULT_TARGET): $(TMAIL_SMTP_LIB)
 	@cd $(SRC_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_EXECUTABLE)
+
+$(TMAIL_SMTP_LIB):
+	@cd $(SRC_DIR)/$(TMAIL_SMTP_DIR) && $(MAKE) $(MAKE_FLAGS) $@
 
 $(CLEAN_TARGET):
 	@echo "./"
