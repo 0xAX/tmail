@@ -14,18 +14,18 @@
 
 ## tmail
 
-  * add `-b` or `--bcc` for blind copy.
-  * add `isatty()` check to prevent raw-mode enabling from scripts
+  * Add `-b` or `--bcc` for blind copy.
+  * Add `isatty()` check to prevent raw-mode enabling from scripts
 for example.
 
 ## libsmtp
 
-  * add send message in the separate thread.
+  * Add send message in the separate thread.
 
 ## libsys
 
-  * add get_hostname.
-  * move sys to libsys.
+  * Add get_hostname.
+  * Move sys to libsys.
 
 ## libmail
 
@@ -54,7 +54,7 @@ to send.
 
 ### apply-clang-format.sh
 
-  * add `-f` option to pass file to the script.
+  * Add `-f` option to pass file to the script.
 
 ## Scripts (misc)
 
