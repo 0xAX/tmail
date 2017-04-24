@@ -17,6 +17,7 @@
 
 #include <at_exit.h>
 #include <connect.h>
+#include <gethostname.h>
 #include <list.h>
 #include <smtp.h>
 

@@ -24,7 +24,6 @@ for example.
 
 ## libsys
 
-  * Add get_hostname.
   * Move sys to libsys.
 
 ## libmail
