@@ -18,6 +18,7 @@
 #include <at_exit.h>
 #include <connect.h>
 #include <list.h>
+#include <smtp.h>
 
 #define BUF_SIZE 500
 
@@ -199,6 +200,8 @@ int main(int argc, char *argv[])
 		free(conn);
 		exit(EXIT_FAILURE);
 	}
+
+	send_email(conn->sd);
 
 	/* TODO remove this when we will use the `conn` */
 	free(conn);

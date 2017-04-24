@@ -10,11 +10,19 @@ include ../mk/Build.mk
 
 TMAIL_OBJS = tmail.o
 
-INCLUDES=-Isys/ -Ilibutils/
-LIBS_PATH=-L$(shell pwd)/sys -L$(shell pwd)/libutils
-LIBS=-ltmail-sys -lpthread -ltmail-utils
-LINKER_OPTS=-Wl,-rpath,$(shell pwd)/sys \
-            -Wl,-rpath,$(shell pwd)/libutils
+INCLUDES=-Isys/                              \
+         -Ilibutils/                         \
+         -Ilibsmtp/
+LIBS=-ltmail-sys                             \
+     -ltmail-utils                           \
+     -ltmail-smtp
+LIBS_PATH=-L$(shell pwd)/sys                 \
+          -L$(shell pwd)/libutils            \
+          -L$(shell pwd)/libsmtp
+LINKER_OPTS=-Wl,-rpath,$(shell pwd)/sys      \
+            -Wl,-rpath,$(shell pwd)/libutils \
+            -Wl,-rpath,$(shell pwd)/libsmtp
+
 COMPILER_FLAGS= $(LINKER_OPTS) $(CC_EXEC_FLAGS)
 
 $(TMAIL_EXECUTABLE): $(TMAIL_SYS_LIB) $(TMAIL_UTILS_LIB) $(TMAIL_OBJS)

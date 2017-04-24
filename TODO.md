@@ -16,6 +16,15 @@
 
   * add `-b` or `--bcc` for blind copy.
 
+## libsmtp
+
+  * add send message in the separate thread.
+
+## libsys
+
+  * add get_hostname.
+  * move sys to libsys.
+
 ## libutils
 
 ### list_t
