@@ -6,11 +6,11 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
+#include "gethostname.h"
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "gethostname.h"
 
 /**
  * hostname - gets hostname of the system.
@@ -24,14 +24,12 @@
  */
 char *hostname(void)
 {
-        char hostname[HOST_NAME_MAX];
+	char hostname[HOST_NAME_MAX];
 
-        memset(hostname, 0, HOST_NAME_MAX);
-	
-        if (gethostname(hostname, HOST_NAME_MAX) != 0)
-        {
-                return NULL;
-        }
+	memset(hostname, 0, HOST_NAME_MAX);
 
-        return strdup(hostname);
+	if (gethostname(hostname, HOST_NAME_MAX) != 0)
+		return NULL;
+
+	return strdup(hostname);
 }
