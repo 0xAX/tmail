@@ -24,7 +24,7 @@
  */
 char *hostname(void)
 {
-	char hostname[HOST_NAME_MAX];
+	char hostname[HOST_NAME_MAX] = {0};
 
 	memset(&hostname, 0, (size_t)HOST_NAME_MAX);
 
