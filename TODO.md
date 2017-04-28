@@ -11,6 +11,7 @@
   * Add tests specific targets (like libtmail-sys.so and etc.) for `make test`.
   * Add common name for `%.o: %.c` targets.
   * Docker container.
+  * Add stackprotector.
 
 ## tmail
 
