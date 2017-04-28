@@ -12,12 +12,15 @@
   * Add common name for `%.o: %.c` targets.
   * Docker container.
   * Add stackprotector.
+  * Build deb package.
+  * Build rpm package.
 
 ## tmail
 
   * Add `-b` or `--bcc` for blind copy.
   * Add `isatty()` check to prevent raw-mode enabling from scripts
 for example.
+  * Move `options` outside of `parse_argv()`.
 
 ## libsmtp
 
