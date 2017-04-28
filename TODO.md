@@ -6,7 +6,6 @@
   * Add enumeration of what avaliable targets will be built with the
 `make all`.
   * Strip libraries and executables if the `DEBUG` flag wasn't passed.
-  * Fix -fmax-erros for osx gcc build.
   * Disable `asserts` from `assert.h` for non-debug builds.
   * Add tests specific targets (like libtmail-sys.so and etc.) for `make test`.
   * Add common name for `%.o: %.c` targets.
