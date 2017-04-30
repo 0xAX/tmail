@@ -21,8 +21,6 @@
 #include <list.h>
 #include <smtp.h>
 
-#define BUF_SIZE 500
-
 static bool show_ui = false;
 static bool interactive = false;
 static char *from = NULL;
