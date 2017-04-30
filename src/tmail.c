@@ -21,6 +21,7 @@
 #include <list.h>
 #include <smtp.h>
 
+static bool use_editor = false;
 static bool show_ui = false;
 static bool interactive = false;
 static char *from = NULL;
@@ -43,6 +44,7 @@ static void print_help(void)
 
 	printf("  -h, --help               display this test and exit\n");
 	printf("  -v, --version            output version and exit\n");
+	printf("  -e, --edit-in-editor     use editor to compose a message\n");
 	printf("  -i, --interactive        compose an email in interactive "
 	       "mode\n");
 	printf(
@@ -94,6 +96,7 @@ static void parse_argv(int argc, char *argv[])
 	    {"from", required_argument, NULL, 'f'},
 	    {"to", required_argument, NULL, 't'},
 	    {"cc", required_argument, NULL, 'c'},
+	    {"edit-in-editor", no_argument, NULL, 'e'},
 	    {"subject", required_argument, NULL, 's'},
 	};
 
@@ -121,6 +124,8 @@ static void parse_argv(int argc, char *argv[])
 				goto allocation_failed;
 			}
 			break;
+		case 'e':
+			use_editor = true;
 		case 'f':
 			from = optarg;
 		case 'i':
@@ -184,6 +189,17 @@ int main(int argc, char *argv[])
 	if (interactive)
 	{
 		/* TODO compose email interactively */
+	}
+
+	if (use_editor)
+	{
+		/*
+		 * TODO open edito that is specified by:
+		 *
+		 *  1. $EDITOR env
+		 *  2. $TMAIL_EDITOR env
+		 *  3. from configuration
+		 */
 	}
 
 	conn = connect_to_service("smtp.gmail.com", "587");
