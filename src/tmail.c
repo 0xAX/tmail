@@ -23,6 +23,7 @@
 
 #define BUF_SIZE 500
 
+static bool show_ui = false;
 static bool interactive = false;
 static char *from = NULL;
 static char *subject = NULL;
@@ -202,7 +203,8 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	send_email(conn->sd);
+	if (!show_ui)
+		send_email(conn->sd);
 
 	/* TODO remove this when we will use the `conn` */
 	free(conn);
