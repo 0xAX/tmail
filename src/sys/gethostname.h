@@ -10,7 +10,7 @@
 #define __SYS_GET_HOST_NAME_H__
 
 #ifndef HOST_NAME_MAX
-#define HOST_NAME_MAX	255
+#define HOST_NAME_MAX 255
 #endif
 
 char *hostname(void);
