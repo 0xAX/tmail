@@ -8,7 +8,10 @@ default: $(TMAIL_SYS_LIB)
 include ../../mk/Common.mk
 include ../../mk/Build.mk
 
-OBJS = at_exit.o gethostname.o connect.o
+OBJS =  at_exit.o	\
+	gethostname.o	\
+	connect.o	\
+	term.o
 
 $(TMAIL_SYS_LIB): $(OBJS)
 	$(QUIET_CC) $(TMAIL_CC) $(CC_SHLIB_FLAGS) $(TMAIL_SYS_LIB) $(OBJS)
