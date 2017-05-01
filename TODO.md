@@ -19,13 +19,17 @@ like this.
   * Add `install/uninstall` for `mailed`.
   * Add `WITH_MAILED` option to disable/enable building/installing of
 the `mailed` during build.
-  
+
 ## tmail
 
   * Add `-b` or `--bcc` for blind copy.
   * Move `options` outside of `parse_argv()`.
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
-  
+
+## mailed
+
+  * Move `maileditor` to `mailed`.
+
 ## libconfig
 
   * Add initial version and think about configuration syntax.
