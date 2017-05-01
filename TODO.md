@@ -19,6 +19,10 @@
   * Add `-b` or `--bcc` for blind copy.
   * Move `options` outside of `parse_argv()`.
 
+## libconfig
+
+  * Add initial version and think about configuration syntax.
+
 ## libsmtp
 
   * Add send message in the separate thread.
