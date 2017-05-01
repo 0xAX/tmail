@@ -21,7 +21,8 @@ like this.
   * Add `install/uninstall` for `mailed`.
   * Add `WITH_MAILED` option to disable/enable building/installing of
 the `mailed` during build.
-
+  * Use `@placeholder` in `make uninstall` instead of plain `rm -rf`.
+  
 ## tmail
 
   * Add `-b` or `--bcc` for blind copy.
