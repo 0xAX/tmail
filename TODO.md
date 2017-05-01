@@ -16,12 +16,16 @@
   * Add new macro to expand to source code dirs, like
 `$(SRC_DIR)/$(TMAIL_SMTP_DIR)` -> `$(TMAIL_SMPT_SRC_DIR)` or something
 like this.
-
+  * Add `install/uninstall` for `mailed`.
+  * Add `WITH_MAILED` option to disable/enable building/installing of
+the `mailed` during build.
+  
 ## tmail
 
   * Add `-b` or `--bcc` for blind copy.
   * Move `options` outside of `parse_argv()`.
-
+  * Move compiler attributes to the `src/libutils/basic.h` as macros.
+  
 ## libconfig
 
   * Add initial version and think about configuration syntax.

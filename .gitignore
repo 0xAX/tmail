@@ -52,6 +52,7 @@ dkms.conf
 
 # tmail executables
 tmail
+mailed
 
 # valgrind core files
 vgcore.*

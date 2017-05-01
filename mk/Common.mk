@@ -11,6 +11,8 @@ TMAIL_SYS_LIB=libtmail-sys.so
 TMAIL_UTILS_LIB=libtmail-utils.so
 # SMTP library
 TMAIL_SMTP_LIB=libtmail-smtp.so
+# maileditor executable
+MAIL_EDITOR_EXECUTABLE=mailed
 
 # Default target to build tmail fully
 DEFAULT_TARGET=all
@@ -40,6 +42,8 @@ SYS_DIR_NAME=sys
 UTILS_DIR_NAME=libutils
 # Directory with smtp library
 TMAIL_SMTP_DIR=libsmtp
+# Directory with maileditor source code
+MAIL_EDITOR_DIR=maileditor
 
 # Directory to install tmail(s) executables
 BIN_DIR=/usr/local/bin
