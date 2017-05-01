@@ -13,6 +13,9 @@
   * Add stackprotector.
   * Build deb package.
   * Build rpm package.
+  * Add new macro to expand to source code dirs, like
+`$(SRC_DIR)/$(TMAIL_SMTP_DIR)` -> `$(TMAIL_SMPT_SRC_DIR)` or something
+like this.
 
 ## tmail
 
