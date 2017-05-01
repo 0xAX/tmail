@@ -16,9 +16,7 @@ OPTIMIZATION=-O2
 DEBUG_FLAGS=-g
 
 # Set the default C compiler to use
-ifndef TMAIL_CC
-TMAIL_CC = gcc
-endif
+TMAIL_CC ?= gcc
 
 # Add compiler related warnings flags
 ifeq ($(TMAIL_CC), gcc)
