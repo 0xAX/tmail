@@ -21,6 +21,7 @@
 #include <list.h>
 #include <smtp.h>
 
+static bool istty = true;
 static bool use_editor = false;
 static bool show_ui = false;
 static bool interactive = false;
@@ -186,9 +187,15 @@ int main(int argc, char *argv[])
 	setlocale(LC_ALL, "en_US.utf8");
 	parse_argv(argc, argv);
 
+	if (!isatty(STDIN_FILENO))
+	{
+		istty = false;
+	}
+
 	if (interactive)
 	{
 		/* TODO compose email interactively */
+		goto finish;
 	}
 
 	if (use_editor)
@@ -200,6 +207,7 @@ int main(int argc, char *argv[])
 		 *  2. $TMAIL_EDITOR env
 		 *  3. from configuration
 		 */
+		goto finish;
 	}
 
 	conn = connect_to_service("smtp.gmail.com", "587");
@@ -222,6 +230,6 @@ int main(int argc, char *argv[])
 
 	/* TODO remove this when we will use the `conn` */
 	free(conn);
-
+finish:
 	exit(EXIT_SUCCESS);
 }
