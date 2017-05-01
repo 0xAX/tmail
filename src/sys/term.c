@@ -6,6 +6,4 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-void enable_raw_mode(void)
-{
-}
+void enable_raw_mode(void) {}

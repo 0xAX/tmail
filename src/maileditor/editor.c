@@ -8,11 +8,9 @@
 
 #include <basic.h>
 
-void open_editor(void)
-{}
+void open_editor(void) {}
 
-void close_editor(void)
-{}
+void close_editor(void) {}
 
 int main(int argc, char *argv[])
 {

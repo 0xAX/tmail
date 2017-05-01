@@ -13,7 +13,6 @@
 #define DEFAULT_EDITOR "mailedit"
 #endif
 
-
 void open_editor(void);
 void close_editor(void);
 
