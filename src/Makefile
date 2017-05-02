@@ -11,32 +11,37 @@ include ../mk/Build.mk
 TMAIL_OBJS = tmail.o
 
 # set of directories with C headers needed for tmail
-INCLUDES=-Isys/                              \
-         -Ilibutils/                         \
-         -Ilibsmtp/
+INCLUDES+=-Isys/
+INCLUDES+=-Ilibutils/                    
+INCLUDES+=-Ilibsmtp/
+
 # libraries which are required by tmail
-LIBS=-ltmail-sys                             \
-     -ltmail-utils                           \
-     -ltmail-smtp
+LIBS+=-ltmail-sys
+LIBS+=-ltmail-utils
+LIBS+=-ltmail-smtp
+
 # paths to these libraries
 # (we should add this at least to compile tmail
 #  without installation of libraries to system)
-LIBS_PATH=-L$(shell pwd)/sys                 \
-          -L$(shell pwd)/libutils            \
-          -L$(shell pwd)/libsmtp
+LIBS_PATH+=-L$(shell pwd)/sys
+LIBS_PATH+=-L$(shell pwd)/libutils
+LIBS_PATH+=-L$(shell pwd)/libsmtp
+
 # Tell to linker where libraries are
-LINKER_OPTS=-Wl,-rpath,$(shell pwd)/sys      \
-            -Wl,-rpath,$(shell pwd)/libutils \
-            -Wl,-rpath,$(shell pwd)/libsmtp
+LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/sys
+LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/libutils
+LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/libsmtp
 
-COMPILER_FLAGS = $(LINKER_OPTS) $(CC_EXEC_FLAGS)
+COMPILER_FLAGS = $(LIBS_PATH) $(INCLUDES) $(LINKER_OPTS) $(CC_EXEC_FLAGS)
 
-$(TMAIL_EXECUTABLE):	$(TMAIL_SYS_LIB)	\
-			$(TMAIL_UTILS_LIB)	\
-			$(TMAIL_OBJS)		\
-			$(TMAIL_SMTP_LIB)
-	$(QUIET_CC) $(TMAIL_CC) $(LIBS_PATH) $(INCLUDES) \
-	$(COMPILER_FLAGS) ../$(TMAIL_EXECUTABLE) $(TMAIL_OBJS) $(LIBS)
+TMAIL_EXECUTABLE_DEPS+=$(TMAIL_SYS_LIB)
+TMAIL_EXECUTABLE_DEPS+=$(TMAIL_UTILS_LIB)
+TMAIL_EXECUTABLE_DEPS+=$(TMAIL_SMTP_LIB)
+TMAIL_EXECUTABLE_DEPS+=$(TMAIL_OBJS)
+
+$(TMAIL_EXECUTABLE): $(TMAIL_EXECUTABLE_DEPS)
+	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$(TMAIL_EXECUTABLE) \
+	$(TMAIL_OBJS) $(LIBS)
 
 $(TMAIL_SMTP_LIB):
 	@cd $(TMAIL_SMTP_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_SMTP_LIB)

@@ -2,8 +2,6 @@
 
 ## Build
 
-  * Use `+=` instead of multilines
-(see https://www.gnu.org/software/make/manual/make.html).
   * Add ` -Weverything` for clang build.
   * Add enumeration of what avaliable targets will be built with the
 `make all`.

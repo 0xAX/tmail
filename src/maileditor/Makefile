@@ -10,24 +10,25 @@ include ../../mk/Build.mk
 
 .DEFAULT_GOAL: $(MAIL_EDITOR_EXECUTABLE)
 
-LIBS_PATH=-L$(shell pwd)/../sys		\
-	  -L$(shell pwd)/../libutils
+LIBS_PATH+=-L$(shell pwd)/../sys
+LIBS_PATH+=-L$(shell pwd)/../libutils
 
-LIBS=-ltmail-sys	\
-     -ltmail-utils
+LIBS+=-ltmail-sys
+LIBS+=-ltmail-utils
 
-LINKER_OPTS=-Wl,-rpath,$(shell pwd)/../sys/	\
-	    -Wl,-rpath,$(shell pwd)/../libutils
+LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/../sys/
+LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/../libutils
 
 MAIL_EDITOR_OBJS = editor.o
 
-INCLUDES=-I../sys/	\
-	 -I../libutils/
+INCLUDES=-I../sys/
+INCLUDES+=-I../libutils/
 
-COMPILER_FLAGS= $(LINKER_OPTS) $(CC_EXEC_FLAGS)
+COMPILER_FLAGS =  $(LIBS_PATH) $(INCLUDES) $(LINKER_OPTS) $(CC_EXEC_FLAGS)
 
 $(MAIL_EDITOR_EXECUTABLE): $(MAIL_EDITOR_OBJS)
-	$(QUIET_CC) $(TMAIL_CC) $(LIBS_PATH) $(INCLUDES) $(COMPILER_FLAGS) ../../$(MAIL_EDITOR_EXECUTABLE) $(MAIL_EDITOR_OBJS) $(LIBS)
+	$(QUIET_CC) $(TMAIL_CC) $(COMPILER_FLAGS) \
+	../../$(MAIL_EDITOR_EXECUTABLE) $(MAIL_EDITOR_OBJS) $(LIBS)
 
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_OBJS) $@ $<
