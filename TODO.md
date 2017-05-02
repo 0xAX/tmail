@@ -25,7 +25,6 @@ the `mailed` during build.
   
 ## tmail
 
-  * Add `-b` or `--bcc` for blind copy.
   * Move `options` outside of `parse_argv()`.
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
 
@@ -79,3 +78,10 @@ to send.
   * Add valgrind script.
   * Add `version.sh` to generate version.
   * Add bash completion.
+  * Add scripts to do auto-commit of:
+
+`git commit -S -s -v -m "general: apply-clang-format"`
+
+and
+
+`git commit -S -s -v -m "general: update TODO.md"`

@@ -30,6 +30,7 @@ static char *subject = NULL;
 static list_t *rcps = NULL;
 static list_t *attachments = NULL;
 static list_t *ccs = NULL;
+static list_t *bcc = NULL;
 
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
@@ -54,6 +55,8 @@ static void print_help(void)
 	printf(
 	    "  -c, --cc=<address>       specify the secondary recipient of an\n"
 	    "                           email. Multiply options are allowed\n");
+	printf("  -b, --bcc=<address>      specify the blind copy of an email\n"
+	       "                           Multiply options are allowed\n");
 	printf("  -f, --from=<address>     specify author of an email\n");
 	printf("  -a, --attachment=<file>  add attachment to an email\n");
 	printf("  -s, --subject=<subj>     specify subject of an email\n");
@@ -97,6 +100,7 @@ static void parse_argv(int argc, char *argv[])
 	    {"from", required_argument, NULL, 'f'},
 	    {"to", required_argument, NULL, 't'},
 	    {"cc", required_argument, NULL, 'c'},
+	    {"bcc", required_argument, NULL, 'b'},
 	    {"edit-in-editor", no_argument, NULL, 'e'},
 	    {"subject", required_argument, NULL, 's'},
 	};
@@ -104,8 +108,8 @@ static void parse_argv(int argc, char *argv[])
 	assert(argc >= 0);
 	assert(argv);
 
-	while ((c = getopt_long(argc, argv, "a:dhvif:t:s:c:", options, NULL)) >=
-	       0)
+	while ((c = getopt_long(argc, argv, "a:b:dhvif:t:s:c:", options,
+				NULL)) >= 0)
 	{
 		switch (c)
 		{
@@ -117,6 +121,13 @@ static void parse_argv(int argc, char *argv[])
 				goto allocation_failed;
 			}
 			break;
+		case 'b':
+			if (!collect_list_args(&bcc, strdup(optarg)))
+			{
+				fprintf(stderr, "%s",
+					"bcc list can't be allocated\n");
+				goto allocation_failed;
+			}
 		case 'c':
 			if (!collect_list_args(&ccs, strdup(optarg)))
 			{
@@ -164,6 +175,7 @@ void exit_cb()
 	list_free_full(rcps);
 	list_free_full(attachments);
 	list_free_full(ccs);
+	list_free_full(bcc);
 }
 
 int main(int argc, char *argv[])
