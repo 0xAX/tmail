@@ -12,4 +12,7 @@
 /* Help us to suppress unused errors/warnings during compilation */
 #define UNUSED(x) (void)(x)
 
+/* type synonyms that can be usefule everywhere */
+typedef int fd_t;
+
 #endif /* __LIB_UTILS_BASIC_H__ */

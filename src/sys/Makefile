@@ -8,16 +8,19 @@ default: $(TMAIL_SYS_LIB)
 include ../../mk/Common.mk
 include ../../mk/Build.mk
 
+INCLUDES+=-I../libutils/
+
 OBJS += at_exit.o
-OBJS += gethostname.o
 OBJS += connect.o
+OBJS += fcntl.o
+OBJS += gethostname.o
 OBJS += term.o
 
 $(TMAIL_SYS_LIB): $(OBJS)
-	$(QUIET_CC) $(TMAIL_CC) $(CC_SHLIB_FLAGS) $(TMAIL_SYS_LIB) $(OBJS)
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CC_SHLIB_FLAGS) $(TMAIL_SYS_LIB) $(OBJS)
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(CFLAGS_LIBS) $(BUILD_LIB_FLAGS) $<
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_LIBS) $(BUILD_LIB_FLAGS) $<
 
 $(CLEAN_TARGET):
 	@echo "./src/sys"
