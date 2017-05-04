@@ -170,7 +170,7 @@ allocation_failed:
 	exit(EXIT_FAILURE);
 }
 
-void exit_cb()
+void exit_cb(void)
 {
 	list_free_full(rcps);
 	list_free_full(attachments);
