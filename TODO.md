@@ -72,7 +72,9 @@ to send.
 ### apply-clang-format.sh
 
   * Add `-f` option to pass file to the script.
-
+  * If there are no given parameters, try to execute script on the
+current dir.
+  
 ## Scripts (misc)
 
   * Add valgrind script.
