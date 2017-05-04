@@ -20,7 +20,8 @@ like this.
   * Add `WITH_MAILED` option to disable/enable building/installing of
 the `mailed` during build.
   * Use `@placeholder` in `make uninstall` instead of plain `rm -rf`.
-  
+  * Use sanitizers during build.
+
 ## tmail
 
   * Move `options` outside of `parse_argv()`.
@@ -29,6 +30,7 @@ the `mailed` during build.
 ## mailed
 
   * Move `maileditor` to `mailed`.
+  * Enable raw mode in `mailed` during startup.
 
 ## libconfig
 
