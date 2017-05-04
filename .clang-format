@@ -1,5 +1,4 @@
 Language: Cpp
-# BasedOnStyle
 
 TabWidth:          8
 UseTab:            Always
