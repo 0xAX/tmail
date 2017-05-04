@@ -12,6 +12,9 @@
 /* Help us to suppress unused errors/warnings during compilation */
 #define UNUSED(x) (void)(x)
 
+/* Old classic ARRAY_SIZE */
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
 /* type synonyms that can be usefule everywhere */
 typedef int fd_t;
 
