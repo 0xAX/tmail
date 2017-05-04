@@ -181,7 +181,6 @@ void exit_cb()
 int main(int argc, char *argv[])
 {
 	connection_t *conn;
-	char buffer[512];
 
 	/* it is not good idea to run tmail via root */
 	if (!getuid())

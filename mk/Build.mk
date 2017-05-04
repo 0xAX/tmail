@@ -9,11 +9,11 @@ STANDARD=-std=gnu11
 ARCH=-march=native
 
 # Default set of compiler warnings related flags
-WARNINGS=-Wextra -Werror -pedantic-errors -Wshadow
+WARNINGS=-Wall -Wextra -Werror -Wfatal-errors -pedantic-errors -Wshadow
 # Optimization flags
 OPTIMIZATION=-O2
 # Debug flags
-DEBUG_FLAGS=-g
+DEBUG_FLAGS=-g3
 
 # Set the default C compiler to use
 TMAIL_CC ?= gcc
