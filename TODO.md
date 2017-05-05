@@ -31,6 +31,7 @@ the `mailed` during build.
 ## mailed
 
   * Enable raw mode in `mailed` during startup.
+  * Handle SIGINT properly.
 
 ## libconfig
 
