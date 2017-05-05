@@ -30,7 +30,6 @@ the `mailed` during build.
 
 ## mailed
 
-  * Move `maileditor` to `mailed`.
   * Enable raw mode in `mailed` during startup.
 
 ## libconfig

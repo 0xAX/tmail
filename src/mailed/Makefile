@@ -33,7 +33,7 @@ $(MAIL_EDITOR_EXECUTABLE): $(MAIL_EDITOR_OBJS)
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_OBJS) $@ $<
 
 $(CLEAN_TARGET):
-	@echo "./src/maileditor"
+	@echo "./src/mailed"
 	$(QUIET_CLEAN_OBJECTS) $(RM) $(OBJECT_FILES)
 
 .PHONY: $(CLEAN_TARGET)
