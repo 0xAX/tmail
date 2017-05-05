@@ -30,12 +30,14 @@ typedef struct term
  * In a failure case NULL value will be returned
  * and appropriate errno will be set.
  */
-static inline term_t *init_term(void)
+static inline term_t *init_term(fd_t fd)
 {
 	term_t *term = (term_t *)malloc(sizeof(term_t));
 
 	if (!term)
 		return NULL;
+
+	term->term_fd = fd;
 
 	return term;
 }

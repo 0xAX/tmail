@@ -30,12 +30,12 @@ int enable_raw_mode(term_t *term)
 
 	term->termios = term->orig;
 	cfmakeraw(&term->termios);
-	term->termios.c_cc[VMIN]  = 0;
+	term->termios.c_cc[VMIN] = 0;
 	term->termios.c_cc[VTIME] = 2;
 
 	ret = tcsetattr(term->term_fd, TCSAFLUSH, &term->termios);
 
-	return (ret == 0) ? 1 : 0;;
+	return (ret == 0) ? 1 : 0;
 }
 
 /**
@@ -46,7 +46,8 @@ int enable_raw_mode(term_t *term)
  *
  * Return 1 on success, 0 errno on failure.
  */
-int disable_raw_mode(term_t *term) {
+int disable_raw_mode(term_t *term)
+{
 	int ret;
 
 	assert(term != NULL);
