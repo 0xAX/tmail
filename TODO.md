@@ -21,6 +21,7 @@ like this.
 the `mailed` during build.
   * Use `@placeholder` in `make uninstall` instead of plain `rm -rf`.
   * Use sanitizers during build.
+  * Add `release` target.
 
 ## tmail
 
