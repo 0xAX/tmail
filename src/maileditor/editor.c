@@ -44,6 +44,9 @@ int main(int argc, char *argv[])
 
 	ret = enable_raw_mode(term);
 
+	if (!ret)
+		goto exit;
+
 	return ret;
 exit:
 	exit(EXIT_SUCCESS);
