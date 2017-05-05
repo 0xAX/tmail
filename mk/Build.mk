@@ -6,14 +6,27 @@
 # Default standard that will be used to build tmail
 STANDARD=-std=gnu11
 # an architecture flags
-ARCH=-march=native
+ARCH=-march=native -mtune=native -ftree-vectorize
 
 # Default set of compiler warnings related flags
-WARNINGS=-Wall -Wextra -Werror -Wfatal-errors -pedantic-errors -Wshadow
+WARNINGS+=-Wall
+WARNINGS+=-Werror
+WARNINGS+=-Wextra
+WARNINGS+=-Wshadow
+WARNINGS+=-Wfatal-errors
+WARNINGS+=-pedantic-errors
+WARNINGS+=-Wformat
+WARNINGS+=-Wformat-security
+WARNINGS+=-Werror=format-security
+
 # Optimization flags
-OPTIMIZATION=-O2
+OPTIMIZATION+=-O2
+OPTIMIZATION+=-D_FORTIFY_SOURCE=2
+
 # Debug flags
-DEBUG_FLAGS=-g3
+DEBUG_FLAGS+=-O
+DEBUG_FLAGS+=-g3
+DEBUG_FLAGS+=-fstack-protector
 
 # Set the default C compiler to use
 TMAIL_CC ?= gcc
