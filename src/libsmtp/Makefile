@@ -8,17 +8,17 @@ default: $(TMAIL_SMTP_LIB)
 include ../../mk/Common.mk
 include ../../mk/Build.mk
 
-OBJS = smtp.o
+LIB_SMTP_OBJS = smtp.o
 
-$(TMAIL_SMTP_LIB): $(OBJS)
-	$(QUIET_CC) $(TMAIL_CC) $(CC_SHLIB_FLAGS) $(TMAIL_SMTP_LIB) $(OBJS)
+$(TMAIL_SMTP_LIB): $(LIB_SMTP_OBJS)
+	$(QUIET_CC) $(TMAIL_CC) $(CC_SHLIB_FLAGS) $@ $<
 
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(CFLAGS_LIBS) $(BUILD_LIB_FLAGS) $<
 
 $(CLEAN_TARGET):
 	@echo "./src/libsmtp"
-	$(QUIET_CLEAN_OBJECTS) $(RM) $(OBJS)
-	$(QUIET_CLEAN_SHARED_LIBS) $(RM) $(TMAIL_SYS_LIB)
+	$(QUIET_CLEAN_OBJECTS) $(RM) $(LIB_SMTP_OBJS)
+	$(QUIET_CLEAN_SHARED_LIBS) $(RM) $(TMAIL_SMTP_LIB)
 
 .PHONY: $(CLEAN_TARGET)
