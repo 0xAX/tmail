@@ -11,6 +11,7 @@ use Term::ANSIColor 2.00 qw(:pushpop);
 
 my @libutils_tests = qw(
     ./list_test
+    ./stack_test
 );
 
 my $list_test_result = <<EOF;
@@ -23,9 +24,17 @@ list remove test: 1 2 3 4 5 1 3 4 5
 list length after remove test: 4
 EOF
 
-for my $test (@libutils_tests) {
-        print "Running: libutils tests:\n";
+my $stack_test_result = <<EOF;
+stack size test: 5
+stack pop test #1: string5
+stack pop test #2: string4
+stack push `string4` and pop again test #3: string4
+stack size test: 3
+EOF
 
+print "Running: libutils tests:\n";
+
+for my $test (@libutils_tests) {
         my $result=`$test`;
 
         if ("$?" != 0) {
@@ -41,6 +50,17 @@ for my $test (@libutils_tests) {
 
                print PUSHCOLOR GREEN "ok\n";
                print POPCOLOR;
+        }
+
+	if ($test eq "./stack_test") {
+               print "stack_test...............";
+               
+               if ($result ne $stack_test_result) {
+                      print_diff($result, $stack_test_result);
+               }
+
+               print PUSHCOLOR GREEN "ok\n";
+               print POPCOLOR;	    
         }
 }
 

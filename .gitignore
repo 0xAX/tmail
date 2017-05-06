@@ -59,4 +59,7 @@ vgcore.*
 
 # tests
 list_test
+stack_test
+
+# log files
 log.*

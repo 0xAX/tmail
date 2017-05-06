@@ -8,12 +8,17 @@ default: $(TMAIL_UTILS_LIB)
 include ../../mk/Common.mk
 include ../../mk/Build.mk
 
-OBJS = list.o
+OBJS+= list.o
+OBJS+= stack.o
 
 # test options
 LINKER_TEST_FLAGS=-Wl,-rpath,$(shell pwd) -L.
+
 LIST_TEST_COMPILE=-g list_test.c -o list_test -ltmail-utils
+STACK_TEST_COMPILE=-g stack_test.c -o stack_test -ltmail-utils
+
 TEST_EXECUTABLES=list_test
+TEST_EXECUTABLES=stack_test
 
 $(TMAIL_UTILS_LIB): $(OBJS)
 	$(QUIET_CC) $(TMAIL_CC) $(CC_SHLIB_FLAGS) $(TMAIL_UTILS_LIB) $(OBJS)
@@ -23,6 +28,7 @@ $(TMAIL_UTILS_LIB): $(OBJS)
 
 $(TEST_TARGET):
 	$(TMAIL_CC) $(LIST_TEST_COMPILE) $(LINKER_TEST_FLAGS)
+	$(TMAIL_CC) $(STACK_TEST_COMPILE) $(LINKER_TEST_FLAGS)
 	@exec ./run_tests.pl
 
 $(CLEAN_TARGET):

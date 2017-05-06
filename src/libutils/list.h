@@ -43,7 +43,7 @@ list_t *list_prepend(list_t *list, void *item);
 list_t *list_remove(list_t *list, void *item, bool release_item);
 
 /**
- * list_empty - go through all elements of the given list.
+ * list_empty - check is ther an empty list or not.
  *
  * Return true in a case of empty list and return false
  * in other cases.
