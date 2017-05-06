@@ -11,12 +11,12 @@
 
 #include <at_exit.h>
 #include <basic.h>
-#include <stdlib.h>
-#include <term.h>
-#include <unistd.h>
 #include <stdio.h>
-#include <termcap.h>
+#include <stdlib.h>
 #include <string.h>
+#include <term.h>
+#include <termcap.h>
+#include <unistd.h>
 
 static term_t *term = NULL;
 
@@ -36,7 +36,8 @@ static void process_key_press(void)
 	int n;
 	char c[1];
 
-	while(read(STDIN_FILENO, c, sizeof(c)) == 1) {
+	while (read(STDIN_FILENO, c, sizeof(c)) == 1)
+	{
 		n = write(STDOUT_FILENO, c, sizeof(c));
 
 		if (n == 1)
