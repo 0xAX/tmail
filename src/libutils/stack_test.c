@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	push(stack, "string5");
 
 	printf("stack size test: ");
-	printf("%d", stack_size(stack));
+	printf("%lu", stack_size(stack));
 	printf("\n");
 
 	printf("stack pop test #1: ");
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 	printf("%s\n", string2);
 
 	printf("stack size test: ");
-	printf("%d", stack_size(stack));
+	printf("%lu", stack_size(stack));
 	printf("\n");
 
 	stack_free(stack);
