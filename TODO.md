@@ -2,6 +2,8 @@
 
 ## Build
 
+  * Remove double underscores from `ifdef(s)`, to not get problems
+in C++ code.
   * Add ` -Weverything` for clang build.
   * Add enumeration of what avaliable targets will be built with the
 `make all`.
@@ -59,6 +61,10 @@ to send.
   * Implement `list_insert_before()`.
   * Add `test` + valgrind tests.
   * Describe `list_t` usage in a header of the source code file.
+
+### bitmap_t
+
+  * Add initial implementation.
 
 ## Scripts
 
