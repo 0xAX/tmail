@@ -9,6 +9,8 @@
 #ifndef __LIB_UTILS_BASIC_H__
 #define __LIB_UTILS_BASIC_H__
 
+#include <stdbool.h>
+
 /* Help us to suppress unused errors/warnings during compilation */
 #define UNUSED(x) (void)(x)
 
@@ -17,5 +19,7 @@
 
 /* type synonyms that can be usefule everywhere */
 typedef int fd_t;
+
+static inline bool isempty(const char *s) { return !s || !s[0]; }
 
 #endif /* __LIB_UTILS_BASIC_H__ */
