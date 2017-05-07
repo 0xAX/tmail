@@ -11,6 +11,16 @@
 
 #include "list.h"
 
+/*
+ * Darwin already provides stack_t type, so here
+ * is simple hack to avoid this.
+ */
+#if defined(__APPLE__) && defined(__MACH__)
+# define stack_t stack
+#else
+# define stack_t stack_t
+#endif
+
 typedef struct stack
 {
 	list_t *l;
