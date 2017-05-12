@@ -2,6 +2,8 @@
 
 ## Build
 
+  * Introduce BINARY=1, to compile tmail without `-march=native`,
+as it may cause problems for binary distribution.
   * Remove double underscores from `ifdef(s)`, to not get problems
 in C++ code.
   * Add ` -Weverything` for clang build.
