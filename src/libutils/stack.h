@@ -16,9 +16,9 @@
  * is simple hack to avoid this.
  */
 #if defined(__APPLE__) && defined(__MACH__)
-# define stack_t lifo_t
+#define stack_t lifo_t
 #else
-# define stack_t stack_t
+#define stack_t stack_t
 #endif
 
 typedef struct stack
