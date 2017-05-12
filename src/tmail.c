@@ -44,11 +44,9 @@ static void print_help(void)
 	printf(" tmail --dump-config\n\n");
 	printf("Simple, lightweight terminal based email client.\n\n");
 
-	printf("  -h, --help               display this test and exit\n");
-	printf("  -v, --version            output version and exit\n");
-	printf("  -e, --edit-in-editor     use editor to compose a message\n");
-	printf("  -i, --interactive        compose an email in interactive "
-	       "mode\n");
+	printf("Sender/Receiver options:\n");
+	printf("  -f, --from=<address>     specify author of an email\n");
+        printf("  -s, --subject=<subj>     specify subject of an email\n");
 	printf(
 	    "  -t, --to=<address>       specify the primary recipient of an\n"
 	    "                           email. Multiply options are allowed\n");
@@ -57,11 +55,20 @@ static void print_help(void)
 	    "                           email. Multiply options are allowed\n");
 	printf("  -b, --bcc=<address>      specify the blind copy of an email\n"
 	       "                           Multiply options are allowed\n");
-	printf("  -f, --from=<address>     specify author of an email\n");
-	printf("  -a, --attachment=<file>  add attachment to an email\n");
-	printf("  -s, --subject=<subj>     specify subject of an email\n");
+	printf("  -a, --attachment=<file>  add attachment to an email\n"
+	       "                           Multiply options are allowed\n");
+	printf("\n");
+	printf("Composing email mode:\n");
+	printf("  -e, --edit-in-editor     use editor to compose a message\n");
+	printf("  -i, --interactive        compose an email in interactive "
+	       "mode\n");
+	printf("\n");
+	printf("Configuration options:\n");
 	printf("  -d, --dump-config        explore tmail's configuration\n");
 	printf("\n");
+	printf("Miscellaneous options:\n");
+	printf("  -h, --help               display this test and exit\n");
+	printf("  -v, --version            output version and exit\n");
 
 	exit(EXIT_SUCCESS);
 }
