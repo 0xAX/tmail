@@ -202,7 +202,10 @@ int main(int argc, char *argv[])
 	}
 
 	register_exit_cb(exit_cb);
-	setlocale(LC_ALL, "en_US.utf8");
+
+	if (!setlocale(LC_ALL, "en_US.utf8"))
+		setlocale(LC_ALL, "");
+
 	parse_argv(argc, argv);
 
 	if (!isatty(STDIN_FILENO))
