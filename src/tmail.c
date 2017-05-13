@@ -46,7 +46,7 @@ static void print_help(void)
 
 	printf("Sender/Receiver options:\n");
 	printf("  -f, --from=<address>     specify author of an email\n");
-        printf("  -s, --subject=<subj>     specify subject of an email\n");
+	printf("  -s, --subject=<subj>     specify subject of an email\n");
 	printf(
 	    "  -t, --to=<address>       specify the primary recipient of an\n"
 	    "                           email. Multiply options are allowed\n");

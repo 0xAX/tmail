@@ -10,8 +10,8 @@
 #define __LIB_UTILS_BASIC_H__
 
 #include <stdbool.h>
-#include <stdlib.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 /* Help us to suppress unused errors/warnings during compilation */
 #define UNUSED(x) (void)(x)
@@ -20,7 +20,7 @@
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
 #ifndef NULL
-#define NULL (void*)0
+#define NULL (void *)0
 #endif
 
 /* type synonyms that can be usefule everywhere */
