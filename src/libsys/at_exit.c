@@ -23,10 +23,10 @@ void register_exit_cb(void (*cb)(void))
 	if (res != 0)
 	{
 #if defined(__linux__) || defined(__CYGWIN__)
-		fprintf(stderr, "Error: cannot set atexit() function\n");
+		fprintf(stderr, "Error: cannot set atexit() function - \n");
 		exit(EXIT_FAILURE);
 #elif defined(BSD)
-		perror("Error: cannot set atexit() function\n");
+		perror("Error: cannot set atexit() function - \n");
 		exit(EXIT_FAILURE);
 #endif
 	}
