@@ -35,7 +35,7 @@ the `mailed` during build.
 ## mailed
 
   * Enable raw mode in `mailed` during startup.
-  * Handle SIGINT properly.
+  * Handle PG_UP/PG_DOWN properly in the handle_escape_sequence().
 
 ## libconfig
 
