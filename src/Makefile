@@ -11,7 +11,7 @@ include ../mk/Build.mk
 TMAIL_OBJS = tmail.o
 
 # set of directories with C headers needed for tmail
-INCLUDES+=-Isys/
+INCLUDES+=-Ilibsys/
 INCLUDES+=-Ilibutils/                    
 INCLUDES+=-Ilibsmtp/
 
@@ -23,12 +23,12 @@ LIBS+=-ltmail-smtp
 # paths to these libraries
 # (we should add this at least to compile tmail
 #  without installation of libraries to system)
-LIBS_PATH+=-L$(shell pwd)/sys
+LIBS_PATH+=-L$(shell pwd)/libsys
 LIBS_PATH+=-L$(shell pwd)/libutils
 LIBS_PATH+=-L$(shell pwd)/libsmtp
 
 # Tell to linker where libraries are
-LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/sys
+LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/libsys
 LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/libutils
 LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/libsmtp
 

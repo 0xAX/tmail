@@ -45,10 +45,6 @@ the `mailed` during build.
 
   * Add send message in the separate thread.
 
-## libsys
-
-  * Move sys to libsys.
-
 ## libmail
 
   * Add initial `libmail` template.

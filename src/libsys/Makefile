@@ -24,7 +24,7 @@ $(TMAIL_SYS_LIB): $(OBJS)
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_LIBS) $(BUILD_LIB_FLAGS) $<
 
 $(CLEAN_TARGET):
-	@echo "./src/sys"
+	@echo "./src/libsys"
 	$(QUIET_CLEAN_OBJECTS) $(RM) $(OBJS)
 	$(QUIET_CLEAN_SHARED_LIBS) $(RM) $(TMAIL_SYS_LIB)
 

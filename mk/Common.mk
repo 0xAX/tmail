@@ -37,7 +37,7 @@ SRC_DIR=src/
 # Directory with makefile auxiliary scripts
 MK_DIR=mk/
 # Directory with system library
-SYS_DIR_NAME=sys
+SYS_DIR_NAME=libsys
 # Directory with utils library
 UTILS_DIR_NAME=libutils
 # Directory with smtp library
@@ -60,6 +60,8 @@ LD ?= ld
 AS ?= as
 # use this one for installing tmail and libraries
 INSTALL ?= install
+# use this one to strip binaries and libraries
+STRIP ?= strip
 
 # Make flags
 # Supress Entering/Leaving messages

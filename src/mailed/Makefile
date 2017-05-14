@@ -10,18 +10,18 @@ include ../../mk/Build.mk
 
 .DEFAULT_GOAL: $(MAIL_EDITOR_EXECUTABLE)
 
-LIBS_PATH+=-L$(shell pwd)/../sys
+LIBS_PATH+=-L$(shell pwd)/../libsys
 LIBS_PATH+=-L$(shell pwd)/../libutils
 
 LIBS+=-ltmail-sys
 LIBS+=-ltmail-utils
 
-LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/../sys/
+LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/../libsys/
 LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/../libutils
 
 MAIL_EDITOR_OBJS = editor.o
 
-INCLUDES=-I../sys/
+INCLUDES=-I../libsys/
 INCLUDES+=-I../libutils/
 
 COMPILER_FLAGS = $(LIBS_PATH) $(INCLUDES) $(LINKER_OPTS) $(CC_EXEC_FLAGS)

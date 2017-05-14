@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
 	if (use_editor)
 	{
 		/*
-		 * TODO open edito that is specified by:
+		 * TODO open editor that is specified by:
 		 *
 		 *  1. $EDITOR env
 		 *  2. $TMAIL_EDITOR env
