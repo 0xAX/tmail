@@ -9,6 +9,8 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
+#include "editor.h"
+
 #include <at_exit.h>
 #include <basic.h>
 #include <stdio.h>
@@ -17,8 +19,10 @@
 #include <term.h>
 #include <termcap.h>
 #include <unistd.h>
+#include <signal.h>
 
 static term_t *term = NULL;
+static const fd_t fd;
 
 void open_editor(void) {}
 
@@ -29,21 +33,62 @@ void exit_cb(void)
 	if (term)
 		disable_raw_mode(term);
 	free(term);
+
+	if (fd_valid(fd))
+		close(fd);
+}
+
+static void handle_escape_sequence(char *c)
+{
+	if (read(STDIN_FILENO, c, sizeof(*c)) == 1)
+	{
+		switch (*c)
+		{
+		case CURSOR_UP:
+			return;
+		case CURSOR_DOWN:
+			return;
+		case CURSOR_LEFT:
+			return;
+		case CURSOR_RIGHT:
+			return;
+		}
+	}
+}
+
+static void handle_key_press(char *c)
+{
+	switch (*c)
+	{
+	case ESCAPE:
+		/*
+		 * Ok, it maybe just an escape button,
+		 * but also an escape sequence
+		 */
+		if (read(STDIN_FILENO, c, sizeof(*c)) == 1 && *c == '[')
+		{
+			handle_escape_sequence(c);
+			break;
+		}
+	case CTRL_C:
+		exit(EXIT_SUCCESS);
+	case 'q':
+		exit(EXIT_SUCCESS);
+	}
 }
 
 static void process_key_press(void)
 {
-	int n;
+	int n = 0;
 	char c[1];
 
 	while (read(STDIN_FILENO, c, sizeof(c)) == 1)
 	{
-		n = write(STDOUT_FILENO, c, sizeof(c));
-
 		if (n == 1)
 		{
 			/* TODO handle write error */
 		}
+		handle_key_press(c);
 	}
 }
 
@@ -51,7 +96,7 @@ int main(int argc, char *argv[])
 {
 	int ret = 0;
 
-	UNUSED(argc);
+	assert(argc != 1);
 	UNUSED(argv);
 
 	register_exit_cb(exit_cb);
