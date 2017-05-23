@@ -5,8 +5,13 @@
 
 # Default standard that will be used to build tmail
 STANDARD=-std=gnu11
+
 # an architecture flags
+ifndef NON_NATIVE_BINARY
 ARCH=-march=native -mtune=native -ftree-vectorize
+else
+ARCH=-ftree-vectorize
+endif
 
 # Default set of compiler warnings related flags
 WARNINGS+=-Wall

@@ -8,6 +8,9 @@
 # Define V=1 for a more verbose build
 #
 # Define DEBUG=1 to build tmail with debug info.
+#
+# Define NON_NATIVE_BINARY to disable -march=native
+#
 
 .DEFAULT_GOAL: $(DEFAULT_TARGET)
 
