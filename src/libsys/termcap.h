@@ -12,6 +12,11 @@
 #include <assert.h>
 #include <basic.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #ifndef BOOLCOUNT
 #define BOOLCOUNT 44

@@ -18,16 +18,27 @@
 termcap_t *parse_terminfo_db(const char *termname)
 {
 	termcap_t *tc = NULL;
+	fd_t fd;
 
 	assert(termname);
 
 	if (isempty(termname))
 		return NULL;
 
+	fd = open(termname, O_RDONLY);
+
+	if (fd == -1) {
+		perror("Error:\n");
+		return NULL;
+	}
+
 	tc = malloc(sizeof(termname));
 
 	if (!tc)
-		return NULL;
+		goto failure;
 
 	return tc;
+failure:
+	close(fd);
+	return NULL;
 }
