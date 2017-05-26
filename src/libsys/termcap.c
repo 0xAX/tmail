@@ -17,8 +17,10 @@
  */
 termcap_t *parse_terminfo_db(const char *termname)
 {
+	int ret;
 	termcap_t *tc = NULL;
 	fd_t fd;
+	struct stat stat_buf;
 
 	assert(termname);
 
@@ -35,10 +37,19 @@ termcap_t *parse_terminfo_db(const char *termname)
 	tc = malloc(sizeof(termname));
 
 	if (!tc)
-		goto failure;
+		goto failure_close;
+
+	ret = stat(termname, &stat_buf);
+
+	if (!ret)
+		goto failure_free;
 
 	return tc;
-failure:
+
+failure_free:
+	free(tc);
+failure_close:
 	close(fd);
+
 	return NULL;
 }
