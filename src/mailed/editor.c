@@ -13,13 +13,13 @@
 
 #include <at_exit.h>
 #include <basic.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <term.h>
 #include <termcap.h>
 #include <unistd.h>
-#include <signal.h>
 
 static term_t *term = NULL;
 static const fd_t fd;

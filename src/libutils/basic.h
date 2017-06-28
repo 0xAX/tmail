@@ -19,13 +19,18 @@
 /* Old classic ARRAY_SIZE */
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
+/* size of a pointer, should be portable */
+#define PTR_SIZE sizeof(ptr_t)
+
 #ifndef NULL
 #define NULL (void *)0
 #endif
 
 /* type synonyms that can be usefule everywhere */
 typedef int fd_t;
+typedef void *ptr_t;
 typedef uint8_t byte_t;
+typedef uint32_t file_size_t;
 
 static inline bool isempty(const char *s) { return !s || !s[0]; }
 

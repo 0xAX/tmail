@@ -20,6 +20,7 @@
 #include <gethostname.h>
 #include <list.h>
 #include <smtp.h>
+#include <termcap.h>
 
 static bool istty = true;
 static bool use_editor = false;
@@ -215,6 +216,7 @@ int main(int argc, char *argv[])
 
 	if (interactive)
 	{
+		parse_terminfo_db("/usr/share/terminfo/g/gnome-256color");
 		/* TODO compose email interactively */
 		goto finish;
 	}

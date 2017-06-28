@@ -11,12 +11,13 @@
 
 #include <assert.h>
 #include <basic.h>
-#include <stdlib.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include <unistd.h>
-#include <sys/types.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #ifndef BOOLCOUNT
 #define BOOLCOUNT 44
@@ -35,8 +36,9 @@
 typedef struct terminfo_db
 {
 	const char *termname;
+	file_size_t terminfo_db_size;
 } termcap_t;
 
-termcap_t *parse(const char *termname);
+termcap_t *parse_terminfo_db(const char *termname);
 
 #endif

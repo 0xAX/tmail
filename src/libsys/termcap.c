@@ -17,39 +17,45 @@
  */
 termcap_t *parse_terminfo_db(const char *termname)
 {
-	int ret;
 	termcap_t *tc = NULL;
-	fd_t fd;
+	fd_t terminfo_db_fd;
 	struct stat stat_buf;
+	char *buf;
 
 	assert(termname);
 
 	if (isempty(termname))
 		return NULL;
 
-	fd = open(termname, O_RDONLY);
+	terminfo_db_fd = open(termname, O_RDONLY);
 
-	if (fd == -1) {
-		perror("Error:\n");
+	if (terminfo_db_fd == -1)
 		return NULL;
-	}
 
-	tc = malloc(sizeof(termname));
-
+	tc = malloc(PTR_SIZE);
 	if (!tc)
-		goto failure_close;
+		goto close;
 
-	ret = stat(termname, &stat_buf);
+	tc->termname = (const char *)malloc(strlen(termname) + 1);
+	if (!tc->termname)
+		goto free;
+	memcpy((char *)tc->termname, termname, strlen(termname) + 1);
 
-	if (!ret)
-		goto failure_free;
+	if (fstat(terminfo_db_fd, &stat_buf) == -1)
+		goto free_tc;
+	tc->terminfo_db_size = stat_buf.st_size;
+
+	if (tc->terminfo_db_size !=
+	    read(terminfo_db_fd, buf, tc->terminfo_db_size))
+		return NULL;
 
 	return tc;
-
-failure_free:
+free_tc:
+	free((char *)tc->termname);
+free:
 	free(tc);
-failure_close:
-	close(fd);
+close:
+	close(terminfo_db_fd);
 
 	return NULL;
 }
