@@ -45,11 +45,17 @@ termcap_t *parse_terminfo_db(const char *termname)
 		goto free_tc;
 	tc->terminfo_db_size = stat_buf.st_size;
 
+	buf = malloc(tc->terminfo_db_size);
+	if (!buf)
+		goto free_buf;
+
 	if (tc->terminfo_db_size !=
 	    read(terminfo_db_fd, buf, tc->terminfo_db_size))
 		return NULL;
 
 	return tc;
+free_buf:
+	free(buf);
 free_tc:
 	free((char *)tc->termname);
 free:
