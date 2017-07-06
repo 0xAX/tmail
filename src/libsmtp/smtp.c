@@ -32,7 +32,8 @@ void send_email(int socket)
 	if (smtp_eof(response, n))
 	{
 		/* parse SMTP code */
-		if (!(response[0] == '2' && response[1] == '2' && response[2] == '0'))
+		if (!(response[0] == '2' && response[1] == '2' &&
+		      response[2] == '0'))
 		{
 			/* TODO: We got something wrong. Return error */
 		}
