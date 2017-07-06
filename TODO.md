@@ -34,7 +34,8 @@ like this.
 ## libsmtp
 
   * Add send message in the separate thread.
-
+  * Get correct argument for `EHLO` command.
+  
 ## libmail
 
   * Add initial `libmail` template.
