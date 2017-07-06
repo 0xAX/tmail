@@ -19,7 +19,7 @@ static unsigned long parse_smtp_caps(const char *r)
 {
 	/* bitmap of a SMTP server capabilities */
 	unsigned long smtp_caps = 0;
-	
+
 	/* skip greetings and parse SMTP capabilites */
 	while (*r != '\r')
 		r++;
@@ -29,12 +29,13 @@ static unsigned long parse_smtp_caps(const char *r)
 	while (r[0] != 0)
 	{
 		if (r[0] == ' ' || r[0] == '\r' || r[0] == '\n')
-	        {
+		{
 			r++;
 			continue;
 		}
 		/*
-		 * skip first 4 bytes for code as described in rfc5321 (4.1.1.1.)
+		 * skip first 4 bytes for code as described in rfc5321
+		 * (4.1.1.1.)
 		 */
 		r += 4;
 
@@ -43,7 +44,10 @@ static unsigned long parse_smtp_caps(const char *r)
 		{
 			/* skip SIZE and SPACE */
 			r += 5;
-			/* skip SIZE, we need to store it in struct or somewhere else than */
+			/*
+			 * skip SIZE, we need to store it in struct or somewhere
+			 * else.
+			 */
 			while (*r != '\r')
 				r++;
 			/* skip \r\n */

@@ -18,8 +18,8 @@
 #define CRLF 0x0D0A
 
 /* SMTP capabilties */
-#define SIZE		2
-#define EIGHT_BITMIME	2
+#define SIZE 2
+#define EIGHT_BITMIME 2
 
 static inline bool smtp_eof(char *msg, int length)
 {
