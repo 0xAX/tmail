@@ -18,9 +18,6 @@ in C++ code.
   * Add new macro to expand to source code dirs, like
 `$(SRC_DIR)/$(TMAIL_SMTP_DIR)` -> `$(TMAIL_SMPT_SRC_DIR)` or something
 like this.
-  * Add `install/uninstall` for `mailed`.
-  * Add `WITH_MAILED` option to disable/enable building/installing of
-the `mailed` during build.
   * Use `@placeholder` in `make uninstall` instead of plain `rm -rf`.
   * Use sanitizers during build.
   * Add `release` target.
@@ -29,11 +26,6 @@ the `mailed` during build.
 
   * Move `options` outside of `parse_argv()`.
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
-
-## mailed
-
-  * Enable raw mode in `mailed` during startup.
-  * Handle PG_UP/PG_DOWN properly in the handle_escape_sequence().
 
 ## libconfig
 
@@ -90,3 +82,7 @@ current dir.
 and
 
 `git commit -S -s -v -m "general: update TODO.md"`
+
+## contrib
+
+  * Add systemd file to run tmail as a daemon.

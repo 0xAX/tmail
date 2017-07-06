@@ -20,11 +20,9 @@
 #include <gethostname.h>
 #include <list.h>
 #include <smtp.h>
-#include <termcap.h>
 
 static bool istty = true;
 static bool use_editor = false;
-static bool show_ui = false;
 static bool interactive = false;
 static char *from = NULL;
 static char *subject = NULL;
@@ -146,8 +144,10 @@ static void parse_argv(int argc, char *argv[])
 			break;
 		case 'e':
 			use_editor = true;
+			break;
 		case 'f':
 			from = optarg;
+			break;
 		case 'i':
 			interactive = true;
 			break;
@@ -216,7 +216,6 @@ int main(int argc, char *argv[])
 
 	if (interactive)
 	{
-		parse_terminfo_db("/usr/share/terminfo/g/gnome-256color");
 		/* TODO compose email interactively */
 		goto finish;
 	}
@@ -248,8 +247,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	if (!show_ui)
-		send_email(conn->sd);
+	send_email(conn->sd);
 
 	/* TODO remove this when we will use the `conn` */
 	free(conn);

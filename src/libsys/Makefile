@@ -14,8 +14,6 @@ OBJS += at_exit.o
 OBJS += connect.o
 OBJS += fcntl.o
 OBJS += gethostname.o
-OBJS += term.o
-OBJS += termcap.o
 
 $(TMAIL_SYS_LIB): $(OBJS)
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CC_SHLIB_FLAGS) $(TMAIL_SYS_LIB) $(OBJS)

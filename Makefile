@@ -21,23 +21,14 @@ include ./mk/Build.mk
 
 $(DEFAULT_TARGET):
 	@cd $(SRC_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_EXECUTABLE)
-	@cd $(SRC_DIR)/$(MAIL_EDITOR_DIR) && $(MAKE) $(MAKE_FLAGS)
 
 $(TMAIL_EXECUTABLE):
 	@cd $(SRC_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_EXECUTABLE)
 
-$(MAIL_EDITOR_EXECUTABLE):
-	@cd $(SRC_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_UTILS_LIB)
-	@cd $(SRC_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_SYS_LIB)
-	@cd $(SRC_DIR)/$(MAIL_EDITOR_DIR) && $(MAKE) $(MAKE_FLAGS)
-
 $(CLEAN_TARGET):
 	@echo "./"
 	$(QUIET_CLEAN_TMAIL_EXEC) $(RM) $(TMAIL_EXECUTABLE)
-	$(QUIET_CLEAN_MAILED_EXEC) $(RM) $(MAIL_EDITOR_EXECUTABLE)
 	@cd $(SRC_DIR) && $(MAKE) $(MAKE_FLAGS) $(CLEAN_TARGET)
-	@cd $(SRC_DIR)/$(MAIL_EDITOR_DIR) && $(MAKE) $(MAKE_FLAGS) \
-	$(CLEAN_TARGET)
 
 $(TEST_TARGET):
 	@cd $(SRC_DIR)/$(UTILS_DIR_NAME) && $(MAKE) $(MAKE_FLAGS) $(TEST_TARGET)
@@ -66,9 +57,6 @@ $(HELP_TARGET):
 	@echo  '  * test      - Run all tests.'
 	@echo  '  * install   - Install tmail with tools and libraries.'
 	@echo  '  * uninstall - Uninstall tmail with tools and libraries.'
-	@echo  ''
-	@echo  'Build and install mail tools:'
-	@echo  '  * mailed - build mailed email editor executable.'
 	@echo  ''
 	@echo  'Cleaning targets:'
 	@echo  '  * clean     - Remove most generated files like object files, executables and etc.'
