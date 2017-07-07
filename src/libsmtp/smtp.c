@@ -28,7 +28,7 @@ static unsigned long parse_smtp_caps(char *r)
 
 	/* skip greetings and parse SMTP capabilites */
 	skip_cl_rl(r);
-	
+
 	while (r[0] != 0)
 	{
 		if (r[0] == ' ' || r[0] == '\r' || r[0] == '\n')
@@ -53,56 +53,17 @@ static unsigned long parse_smtp_caps(char *r)
 			smtp_caps |= SIZE;
 			continue;
 		}
-		else if (strncmp(r, "HELP", 4) == 0)
-		{
-			/* skip HELP */
-			r += 4;
 
-			skip_cl_rl(r);
-			smtp_caps |= HELP;
-			continue;			
-		}
-		else if (strncmp(r, "8BITMIME", 8) == 0)
-		{
-			/* skip 8BITMIME */
-			r += 8;
-
-			skip_cl_rl(r);
-			smtp_caps |= EIGHT_BITMIME;
-			continue;		
-		}
-		else if (strncmp(r, "PIPELINING", 10) == 0)
-		{
-			/* skip PIPELINING */
-			r += 10;
-
-			skip_cl_rl(r);
-			smtp_caps |= PIPELINING;
-			continue;
-		}
-		else if (strncmp(r, "PRDR", 4) == 0)
-		{
-			/* skip PRDR */
-			r += 4;
-
-			skip_cl_rl(r);
-			smtp_caps |= PRDR;
-			continue;
-		}
-		else if (strncmp(r, "CHUNKING", 8) == 0)
-		{
-			/* skip CHUNKING */
-			r += 8;
-
-			skip_cl_rl(r);
-			smtp_caps |= CHUNKING;
-			continue;
-		}
+		ADD_SIMPLE_SMTP_CAPABILITY("HELP", 4, r, HELP);
+		ADD_SIMPLE_SMTP_CAPABILITY("8BITMIME", 8, r, EIGHT_BITMIME);
+		ADD_SIMPLE_SMTP_CAPABILITY("PIPELINING", 10, r, PIPELINING);
+		ADD_SIMPLE_SMTP_CAPABILITY("PRDR", 4, r, PRDR);
+		ADD_SIMPLE_SMTP_CAPABILITY("CHUNKING", 4, r, CHUNKING);
 
 		/* Go to the next line */
 		skip_cl_rl(r);
 	}
-	
+
 	return smtp_caps;
 }
 
