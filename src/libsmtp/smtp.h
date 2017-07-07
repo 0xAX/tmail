@@ -19,8 +19,14 @@
 #define CRLF 0x0D0A
 
 /* SMTP capabilties */
-#define SIZE 2
+#define SIZE 1
 #define EIGHT_BITMIME 2
+#define HELP 4
+#define PIPELINING 8
+#define PRDR 16
+#define CHUNKING 32
+#define SMTPTLS 64
+
 
 static inline bool smtp_eof(char *msg, int length)
 {

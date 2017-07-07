@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
 		goto finish;
 	}
 
-	conn = connect_to_service("smtp.gmail.com", "587");
+	conn = connect_to_service("172.17.0.2", "25");
 
 	if (!conn)
 	{

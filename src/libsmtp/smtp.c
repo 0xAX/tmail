@@ -24,7 +24,7 @@ static unsigned long parse_smtp_caps(const char *r)
 		r++;
 	/* skip \r\n */
 	r += 2;
-
+	
 	while (r[0] != 0)
 	{
 		if (r[0] == ' ' || r[0] == '\r' || r[0] == '\n')
@@ -41,8 +41,8 @@ static unsigned long parse_smtp_caps(const char *r)
 		/* get capability name */
 		if (strncmp(r, "SIZE", 4) == 0)
 		{
-			/* skip SIZE and SPACE */
-			r += 5;
+			/* skip SIZE */
+			r += 4;
 			/*
 			 * skip SIZE, we need to store it in struct or somewhere
 			 * else.
@@ -51,10 +51,71 @@ static unsigned long parse_smtp_caps(const char *r)
 				r++;
 			/* skip \r\n */
 			r += 2;
+
+			smtp_caps |= SIZE;
+			
 			continue;
 		}
-	}
+		else if (strncmp(r, "HELP", 4) == 0)
+		{
+			r += 4;
 
+			while (*r != '\r')
+				r++;
+			r += 2;
+
+			smtp_caps |= HELP;
+			continue;			
+		}
+		else if (strncmp(r, "8BITMIME", 8) == 0)
+		{
+			r += 8;
+
+			while (*r != '\r')
+				r++;
+			r += 2;
+
+			smtp_caps |= EIGHT_BITMIME;
+			continue;		
+		}
+		else if (strncmp(r, "PIPELINING", 10) == 0)
+		{
+			r += 10;
+
+			while (*r != '\r')
+				r++;
+			r += 2;
+
+			smtp_caps |= PIPELINING;
+			continue;
+		}
+		else if (strncmp(r, "PRDR", 4) == 0)
+		{
+			r += 4;
+			while (*r != '\r')
+				r++;
+			r += 2;
+
+			smtp_caps |= PRDR;
+			continue;
+		}
+		else if (strncmp(r, "CHUNKING", 8) == 0)
+		{
+			r += 8;
+			while (*r != '\r')
+				r++;
+			r += 2;
+
+			smtp_caps |= CHUNKING;
+			continue;
+		}
+
+		/* Go to the next line */
+		while (*r != '\r')
+			r++;
+		r += 2;
+	}
+	
 	return smtp_caps;
 }
 
