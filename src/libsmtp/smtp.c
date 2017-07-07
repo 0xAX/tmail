@@ -14,16 +14,20 @@
 
 #include "smtp.h"
 
-static unsigned long parse_smtp_caps(const char *r)
+static void skip_cl_rl(char *str)
+{
+	while (*str != '\r')
+		str++;
+	str += 2;
+}
+
+static unsigned long parse_smtp_caps(char *r)
 {
 	/* bitmap of a SMTP server capabilities */
 	unsigned long smtp_caps = 0;
 
 	/* skip greetings and parse SMTP capabilites */
-	while (*r != '\r')
-		r++;
-	/* skip \r\n */
-	r += 2;
+	skip_cl_rl(r);
 	
 	while (r[0] != 0)
 	{
@@ -38,82 +42,65 @@ static unsigned long parse_smtp_caps(const char *r)
 		 */
 		r += 4;
 
-		/* get capability name */
+		/* get capability name and set it in the bitmap */
 		if (strncmp(r, "SIZE", 4) == 0)
 		{
 			/* skip SIZE */
 			r += 4;
-			/*
-			 * skip SIZE, we need to store it in struct or somewhere
-			 * else.
-			 */
-			while (*r != '\r')
-				r++;
-			/* skip \r\n */
-			r += 2;
 
+			/* go to the next line */
+			skip_cl_rl(r);
 			smtp_caps |= SIZE;
-			
 			continue;
 		}
 		else if (strncmp(r, "HELP", 4) == 0)
 		{
+			/* skip HELP */
 			r += 4;
 
-			while (*r != '\r')
-				r++;
-			r += 2;
-
+			skip_cl_rl(r);
 			smtp_caps |= HELP;
 			continue;			
 		}
 		else if (strncmp(r, "8BITMIME", 8) == 0)
 		{
+			/* skip 8BITMIME */
 			r += 8;
 
-			while (*r != '\r')
-				r++;
-			r += 2;
-
+			skip_cl_rl(r);
 			smtp_caps |= EIGHT_BITMIME;
 			continue;		
 		}
 		else if (strncmp(r, "PIPELINING", 10) == 0)
 		{
+			/* skip PIPELINING */
 			r += 10;
 
-			while (*r != '\r')
-				r++;
-			r += 2;
-
+			skip_cl_rl(r);
 			smtp_caps |= PIPELINING;
 			continue;
 		}
 		else if (strncmp(r, "PRDR", 4) == 0)
 		{
+			/* skip PRDR */
 			r += 4;
-			while (*r != '\r')
-				r++;
-			r += 2;
 
+			skip_cl_rl(r);
 			smtp_caps |= PRDR;
 			continue;
 		}
 		else if (strncmp(r, "CHUNKING", 8) == 0)
 		{
+			/* skip CHUNKING */
 			r += 8;
-			while (*r != '\r')
-				r++;
-			r += 2;
 
+			skip_cl_rl(r);
 			smtp_caps |= CHUNKING;
 			continue;
 		}
 
 		/* Go to the next line */
-		while (*r != '\r')
-			r++;
-		r += 2;
+		skip_cl_rl(r);
 	}
 	
 	return smtp_caps;
