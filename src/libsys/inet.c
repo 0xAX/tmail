@@ -8,8 +8,8 @@
 
 #include "inet.h"
 
-#include <sys/socket.h>
 #include <arpa/inet.h>
+#include <sys/socket.h>
 
 /**
  * is_valid_ip_address - tries to understand is given
