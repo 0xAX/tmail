@@ -6,6 +6,8 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
+#include <arpa/inet.h>
+#include <assert.h>
 #include <errno.h>
 #include <netdb.h>
 #include <stdio.h>
@@ -16,6 +18,52 @@
 #include <unistd.h>
 
 #include "connect.h"
+#include "inet.h"
+
+static connection_t *connect_to_ip(const char *addr, connection_t *conn,
+				   const char *service)
+{
+	int ret;
+	struct sockaddr_in dest;
+
+	assert(conn->sd == -1);
+	assert(conn->error == NULL);
+
+	conn->sd = socket(AF_INET, SOCK_STREAM, 0);
+
+	if (conn->sd == -1)
+	{
+		char *err = strerror(errno);
+		int err_len = strlen(err) + 1;
+
+		conn->error = (char *)malloc(err_len);
+		snprintf((char *)conn->error, err_len, "%s", err);
+
+		return conn;
+	}
+
+	memset(&dest, 0, sizeof(dest));
+
+	dest.sin_family = AF_INET;
+	dest.sin_addr.s_addr = inet_addr(addr);
+	dest.sin_port = htons(atoi(service));
+
+	ret = connect(conn->sd, (struct sockaddr *)&dest,
+		      sizeof(struct sockaddr_in));
+
+	if (ret == -1)
+	{
+		char *err = strerror(errno);
+		int err_len = strlen(err) + 1;
+
+		conn->error = (char *)malloc(err_len);
+		snprintf((char *)conn->error, err_len, "%s", err);
+
+		return conn;
+	}
+
+	return conn;
+}
 
 /**
  * connect_to_service - connect to the given service with
@@ -49,6 +97,9 @@ connection_t *connect_to_service(const char *addr, const char *service)
 
 	conn->sd = -1;
 	conn->error = NULL;
+
+	if (is_valid_ip_address(addr))
+		return connect_to_ip(addr, conn, service);
 
 	memset(&hints, 0, sizeof hints);
 
@@ -86,7 +137,8 @@ connection_t *connect_to_service(const char *addr, const char *service)
 
 	for (rp = serv_info; rp != NULL; rp = rp->ai_next)
 	{
-		if ((conn->sd = socket(AF_INET, SOCK_STREAM, 0) == -1))
+		if ((conn->sd =
+			 socket(rp->ai_family, rp->ai_socktype, 0) == -1))
 			continue;
 
 		if (connect(conn->sd, rp->ai_addr, rp->ai_addrlen) != -1)
