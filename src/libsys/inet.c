@@ -17,7 +17,7 @@
  *
  * Return: true or false.
  */
-bool is_valid_ip_address(char *ip_addr)
+bool is_valid_ip_address(const char *ip_addr)
 {
 	struct sockaddr_in sa;
 
