@@ -67,8 +67,8 @@ void send_email(int socket)
 
 	assert(socket != -1);
 
-	/* send EHLO message */
-	send(socket, request, strlen(request) + 1, 0);
+	/* clear buffer */
+	memset(response, 0, sizeof(response));
 
 	/* read response from EHLO */
 	n = read(socket, response, sizeof(response));
@@ -86,6 +86,9 @@ void send_email(int socket)
 
 	/* clear buffer */
 	memset(response, 0, sizeof(response));
+
+	/* send EHLO message */
+	send(socket, request, strlen(request), 0);
 
 	/* read SMTP capabilities */
 	n = read(socket, response, sizeof(response));
