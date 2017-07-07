@@ -11,6 +11,6 @@
 
 #include <stdbool.h>
 
-bool isValidIpAddress(char *ip_addr);
+bool is_valid_ip_address(char *ip_addr);
 
 #endif /* __SYS_INET_H__ */
