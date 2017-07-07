@@ -70,18 +70,17 @@ void send_email(int socket)
 	/* clear buffer */
 	memset(response, 0, sizeof(response));
 
-	/* read response from EHLO */
-	n = read(socket, response, sizeof(response));
-
 	/* reading greetings from the server */
-	if (smtp_eof(response, n))
+	if ((n = recv(socket, response, sizeof(response), 0)) == -1)
 	{
-		/* exit early if something going wrong */
-		if (!(response[0] == '2' && response[1] == '2' &&
-		      response[2] == '0'))
-		{
-			/* TODO: We got something wrong. Return error */
-		}
+		/* TODO exit */
+	}
+
+	/* exit early if something going wrong */
+	if (!(response[0] == '2' && response[1] == '2' &&
+	      response[2] == '0'))
+	{
+		/* TODO: We got something wrong. Return error */
 	}
 
 	/* clear buffer */
@@ -91,15 +90,17 @@ void send_email(int socket)
 	send(socket, request, strlen(request), 0);
 
 	/* read SMTP capabilities */
-	n = read(socket, response, sizeof(response));
+	if ((n = recv(socket, response, sizeof(response), 0) == -1))
+	{
+		/* TODO exit */
+	}
 
 	/* check SMTP code */
-	if (smtp_eof(response, n))
-		if (!(response[0] == '2' && response[1] == '2' &&
-		      response[2] == '0'))
-		{
-			/* TODO: We got something wrong. Return error */
-		}
+	if (!(response[0] == '2' && response[1] == '2' &&
+	      response[2] == '0'))
+	{
+		/* TODO: We got something wrong. Return error */
+	}
 
 	/* everything is ok, let's parse SMTP server capabilities */
 	parse_smtp_caps(response);
