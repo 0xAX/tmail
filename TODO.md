@@ -70,7 +70,12 @@ to send.
   * Add `-f` option to pass file to the script.
   * If there are no given parameters, try to execute script on the
 current dir.
-  
+
+## libsys
+
+  * add tests for is_valid_ip_address()
+  * add IPv6 support to is_valid_ip_address()
+
 ## Scripts (misc)
 
   * Add valgrind script.
