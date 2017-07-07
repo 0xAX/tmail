@@ -11,7 +11,8 @@
 
 #include <stdbool.h>
 
-#define DEFAULT_SMTP_PORT 25
+#define SMTP_PORT 25
+#define SMTP_PORT_TLS 587
 
 #define CR 0x0D
 #define LF 0x0A

@@ -76,8 +76,7 @@ void send_email(int socket)
 	}
 
 	/* exit early if something going wrong */
-	if (!(response[0] == '2' && response[1] == '2' &&
-	      response[2] == '0'))
+	if (!(response[0] == '2' && response[1] == '2' && response[2] == '0'))
 	{
 		/* TODO: We got something wrong. Return error */
 	}
@@ -95,8 +94,7 @@ void send_email(int socket)
 	}
 
 	/* check SMTP code */
-	if (!(response[0] == '2' && response[1] == '2' &&
-	      response[2] == '0'))
+	if (!(response[0] == '2' && response[1] == '2' && response[2] == '0'))
 	{
 		/* TODO: We got something wrong. Return error */
 	}
