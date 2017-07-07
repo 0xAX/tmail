@@ -29,14 +29,14 @@
 
 /* check ehlo response and enable capability in a bitmap */
 #define ADD_SIMPLE_SMTP_CAPABILITY(CAP_NAME, CAP_NAME_LENGTH, SMTP_CAPS_STR,   \
-				   CAPABILITY)                                 \
+				   CAPABILITY_BIT)                             \
 	do                                                                     \
 	{                                                                      \
 		if (strncmp(SMTP_CAPS_STR, CAP_NAME, CAP_NAME_LENGTH) == 0)    \
 		{                                                              \
 			SMTP_CAPS_STR += CAP_NAME_LENGTH;                      \
 			skip_cl_rl(SMTP_CAPS_STR);                             \
-			smtp_caps |= CAPABILITY;                               \
+			smtp_caps |= CAPABILITY_BIT;                           \
 			continue;                                              \
 		}                                                              \
 	} while (false)
