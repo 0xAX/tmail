@@ -41,6 +41,7 @@
 		}                                                              \
 	} while (false)
 
+/* check if a `msg` contains CR LF at the end */
 static inline bool smtp_eof(char *msg, int length)
 {
 	if (msg[length - 2] == CR && msg[length - 1] == LF)
