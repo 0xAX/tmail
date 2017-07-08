@@ -11,6 +11,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <basic.h>
 
 #include "smtp.h"
 
@@ -24,7 +25,7 @@ static void skip_cl_rl(char *str)
 static unsigned long parse_smtp_caps(char *r)
 {
 	/* bitmap of a SMTP server capabilities */
-	unsigned long smtp_caps = 0;
+	bitmap_t smtp_caps = 0;
 
 	/* skip greetings and parse SMTP capabilites */
 	skip_cl_rl(r);
@@ -70,6 +71,7 @@ static unsigned long parse_smtp_caps(char *r)
 void send_email(int socket)
 {
 	int n;
+	bitmap_t capabilities;
 	char response[1024];
 	char *request = "EHLO localhost\r\n";
 
@@ -109,8 +111,11 @@ void send_email(int socket)
 	}
 
 	/* everything is ok, let's parse SMTP server capabilities */
-	parse_smtp_caps(response);
+	capabilities = parse_smtp_caps(response);
 
+	if (capabilities == 0)
+		/* something going wrong with caps parsing, exit */
+	
 	close(socket);
 
 	return;
