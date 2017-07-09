@@ -159,10 +159,6 @@ void send_email(int socket)
 
 	/* send data */
 	send(socket, "DATA\r\n", 6, 0);
-	if ((n = recv(socket, response, sizeof(response), 0) == -1))
-	{
-		/* TODO exit */
-	}
 	send(socket, "test message\r\n.\r\n", 17, 0);
 	send(socket, "QUIT\r\n", 6, 0);
 
