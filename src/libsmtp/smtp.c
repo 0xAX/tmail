@@ -26,7 +26,7 @@ static void skip_cl_rl(char *str)
  * Parse SMTP capabilities that we receive from EHLO response.
  *
  * RFC 5321 denotes it as:
- * 
+ *
  * ehlo-ok-rsp = ( "250" SP Domain [ SP ehlo-greet ] CRLF )
  *               / ( "250-" Domain [ SP ehlo-greet ] CRLF
  *                *( "250-" ehlo-line CRLF )
@@ -84,6 +84,7 @@ void send_email(int socket)
 	bitmap_t capabilities;
 	char response[1024];
 	char *request = "EHLO localhost\r\n";
+	char *mail_from_msg = "MAIL FROM:kuleshovmail@gmail.com\r\n";
 
 	assert(socket != -1);
 
@@ -123,9 +124,25 @@ void send_email(int socket)
 	/* everything is ok, let's parse SMTP server capabilities */
 	capabilities = parse_smtp_caps(response);
 
-	if (capabilities == 0)
-		/* something going wrong with caps parsing, exit */
-	
+	/* clear buffer after parsing SMTP capabilities */
+	memset(response, 0, sizeof(response));
+
+	/* Send MAIL FROM:.. */
+	send(socket, mail_from_msg, strlen(mail_from_msg), 0);
+
+	if ((n = recv(socket, response, sizeof(response), 0) == -1))
+	{
+		/* TODO exit */
+	}
+
+	if (!(response[0] == '2' && response[1] == '2' && response[2] == '0'))
+	{
+		/* TODO: We got something wrong. Return error */
+	}
+
+	printf("response %s\n", response);
+	printf("capabilities %lu\n", capabilities);
+
 	close(socket);
 
 	return;
