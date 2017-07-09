@@ -85,6 +85,7 @@ void send_email(int socket)
 	char response[1024];
 	char *request = "EHLO localhost\r\n";
 	char *mail_from_msg = "MAIL FROM:kuleshovmail@gmail.com\r\n";
+	char *rcpt_to_msg = "RCPT TO:kuleshovmail@gmail.com\r\n";
 
 	assert(socket != -1);
 
@@ -140,8 +141,22 @@ void send_email(int socket)
 		/* TODO: We got something wrong. Return error */
 	}
 
-	printf("response %s\n", response);
-	printf("capabilities %lu\n", capabilities);
+	memset(response, 0, sizeof(response));
+
+	/* Send RCPT TO:.. */
+	send(socket, rcpt_to_msg, strlen(rcpt_to_msg), 0);
+
+	if ((n = recv(socket, response, sizeof(response), 0) == -1))
+	{
+		/* TODO exit */
+	}
+
+	if (!(response[0] == '2' && response[1] == '2' && response[2] == '0'))
+	{
+		/* TODO: We got something wrong. Return error */
+	}
+
+	memset(response, 0, sizeof(response));
 
 	close(socket);
 
