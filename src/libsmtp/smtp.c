@@ -81,7 +81,6 @@ static unsigned long parse_smtp_caps(char *r)
 void send_email(int socket)
 {
 	int n;
-	bitmap_t capabilities;
 	char response[1024];
 	char *request = "EHLO localhost\r\n";
 	char *mail_from_msg = "MAIL FROM:kuleshovmail@gmail.com\r\n";
@@ -123,7 +122,7 @@ void send_email(int socket)
 	}
 
 	/* everything is ok, let's parse SMTP server capabilities */
-	capabilities = parse_smtp_caps(response);
+	parse_smtp_caps(response);
 
 	/* clear buffer after parsing SMTP capabilities */
 	memset(response, 0, sizeof(response));
