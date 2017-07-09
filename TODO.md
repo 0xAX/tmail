@@ -27,6 +27,10 @@ like this.
   * Move `options` outside of `parse_argv()`.
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
 
+## send-email
+
+  * Check that only one `from` is passed.
+
 ## libconfig
 
   * Add initial version and think about configuration syntax.
