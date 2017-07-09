@@ -7,6 +7,7 @@
  */
 
 #include <assert.h>
+#include <basic.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -21,10 +22,20 @@ static void skip_cl_rl(char *str)
 	str += 2;
 }
 
+/*
+ * Parse SMTP capabilities that we receive from EHLO response.
+ *
+ * RFC 5321 denotes it as:
+ *
+ * ehlo-ok-rsp = ( "250" SP Domain [ SP ehlo-greet ] CRLF )
+ *               / ( "250-" Domain [ SP ehlo-greet ] CRLF
+ *                *( "250-" ehlo-line CRLF )
+ *                   "250" SP ehlo-line CRLF )
+ */
 static unsigned long parse_smtp_caps(char *r)
 {
 	/* bitmap of a SMTP server capabilities */
-	unsigned long smtp_caps = 0;
+	bitmap_t smtp_caps = 0;
 
 	/* skip greetings and parse SMTP capabilites */
 	skip_cl_rl(r);
@@ -72,6 +83,8 @@ void send_email(int socket)
 	int n;
 	char response[1024];
 	char *request = "EHLO localhost\r\n";
+	char *mail_from_msg = "MAIL FROM:kuleshovmail@gmail.com\r\n";
+	char *rcpt_to_msg = "RCPT TO:kuleshovmail@gmail.com\r\n";
 
 	assert(socket != -1);
 
@@ -110,6 +123,44 @@ void send_email(int socket)
 
 	/* everything is ok, let's parse SMTP server capabilities */
 	parse_smtp_caps(response);
+
+	/* clear buffer after parsing SMTP capabilities */
+	memset(response, 0, sizeof(response));
+
+	/* Send MAIL FROM:.. */
+	send(socket, mail_from_msg, strlen(mail_from_msg), 0);
+
+	if ((n = recv(socket, response, sizeof(response), 0) == -1))
+	{
+		/* TODO exit */
+	}
+
+	if (!(response[0] == '2' && response[1] == '2' && response[2] == '0'))
+	{
+		/* TODO: We got something wrong. Return error */
+	}
+
+	memset(response, 0, sizeof(response));
+
+	/* Send RCPT TO:.. */
+	send(socket, rcpt_to_msg, strlen(rcpt_to_msg), 0);
+
+	if ((n = recv(socket, response, sizeof(response), 0) == -1))
+	{
+		/* TODO exit */
+	}
+
+	if (!(response[0] == '2' && response[1] == '2' && response[2] == '0'))
+	{
+		/* TODO: We got something wrong. Return error */
+	}
+
+	memset(response, 0, sizeof(response));
+
+	/* send data */
+	send(socket, "DATA\r\n", 6, 0);
+	send(socket, "test message\r\n.\r\n", 17, 0);
+	send(socket, "QUIT\r\n", 6, 0);
 
 	close(socket);
 
