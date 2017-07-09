@@ -9,11 +9,13 @@ include ../mk/Common.mk
 include ../mk/Build.mk
 
 TMAIL_OBJS = tmail.o
+TMAIL_OBJS += send-email.c
 
 # set of directories with C headers needed for tmail
 INCLUDES+=-Ilibsys/
 INCLUDES+=-Ilibutils/                    
 INCLUDES+=-Ilibsmtp/
+INCLUDES+=-I./
 
 # libraries which are required by tmail
 LIBS+=-ltmail-sys
