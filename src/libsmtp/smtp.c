@@ -22,6 +22,16 @@ static void skip_cl_rl(char *str)
 	str += 2;
 }
 
+/*
+ * Parse SMTP capabilities that we receive from EHLO response.
+ *
+ * RFC 5321 denotes it as:
+ * 
+ * ehlo-ok-rsp = ( "250" SP Domain [ SP ehlo-greet ] CRLF )
+ *               / ( "250-" Domain [ SP ehlo-greet ] CRLF
+ *                *( "250-" ehlo-line CRLF )
+ *                   "250" SP ehlo-line CRLF )
+ */
 static unsigned long parse_smtp_caps(char *r)
 {
 	/* bitmap of a SMTP server capabilities */
