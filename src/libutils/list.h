@@ -6,8 +6,8 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#ifndef __LIB_UTILS_LIST_H__
-#define __LIB_UTILS_LIST_H__
+#ifndef LIB_UTILS_LIST_H
+#define LIB_UTILS_LIST_H
 
 #include <assert.h>
 #include <errno.h>
@@ -83,4 +83,4 @@ static inline void list_free_full(list_t *list)
 	list_free(list);
 }
 
-#endif /* __LIB_UTILS_LIST_H__ */
+#endif /* LIB_UTILS_LIST_H */

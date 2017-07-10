@@ -6,8 +6,8 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#ifndef __LIB_UTILS_STACK_H__
-#define __LIB_UTILS_STACK_H__
+#ifndef LIB_UTILS_STACK_H
+#define LIB_UTILS_STACK_H
 
 #include "list.h"
 
@@ -68,4 +68,4 @@ void *pop(stack_t *stack);
 int push(stack_t *stack, void *item);
 void stack_free(stack_t *stack);
 
-#endif /* __LIB_UTILS_STACK_H__ */
+#endif /* LIB_UTILS_STACK_H */

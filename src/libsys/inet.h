@@ -6,11 +6,11 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#ifndef __SYS_INET_H__
-#define __SYS_INET_H__
+#ifndef SYS_INET_H
+#define SYS_INET_H
 
 #include <stdbool.h>
 
 bool is_valid_ip_address(const char *ip_addr);
 
-#endif /* __SYS_INET_H__ */
+#endif /* SYS_INET_H */

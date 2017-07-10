@@ -6,8 +6,8 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#ifndef __SYS_GET_HOST_NAME_H__
-#define __SYS_GET_HOST_NAME_H__
+#ifndef SYS_GET_HOST_NAME_H
+#define SYS_GET_HOST_NAME_H
 
 #ifndef HOST_NAME_MAX
 #define HOST_NAME_MAX 255
@@ -15,4 +15,4 @@
 
 char *hostname(void);
 
-#endif /* __SYS_GET_HOST_NAME_H__ */
+#endif /* SYS_GET_HOST_NAME_H */

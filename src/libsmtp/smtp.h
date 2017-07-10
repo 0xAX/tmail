@@ -6,8 +6,8 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#ifndef __LIB_SMTP_H__
-#define __LIB_SMTP_H__
+#ifndef LIB_SMTP_H
+#define LIB_SMTP_H
 
 #include <stdbool.h>
 

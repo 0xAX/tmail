@@ -6,8 +6,8 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#ifndef __LIB_UTILS_BASIC_H__
-#define __LIB_UTILS_BASIC_H__
+#ifndef LIB_UTILS_BASIC_H
+#define LIB_UTILS_BASIC_H
 
 #include <stdbool.h>
 #include <stdint.h>

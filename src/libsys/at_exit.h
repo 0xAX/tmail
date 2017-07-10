@@ -6,9 +6,9 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#ifndef __SYS_AT_EXIT_H__
-#define __SYS_AT_EXIT_H__
+#ifndef SYS_AT_EXIT_H
+#define SYS_AT_EXIT_H
 
 void register_exit_cb(void (*cb)(void));
 
-#endif /* __SYS_AT_EXIT_H__ */
+#endif /* SYS_AT_EXIT_H */

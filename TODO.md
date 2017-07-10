@@ -2,8 +2,6 @@
 
 ## Build
 
-  * Remove double underscores from `ifdef(s)`, to not get problems
-in C++ code.
   * Add ` -Weverything` for clang build.
   * Add enumeration of what avaliable targets will be built with the
 `make all`.

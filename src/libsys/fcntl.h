@@ -6,8 +6,8 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#ifndef __SYS_FCNTL_H__
-#define __SYS_FCNTL_H__
+#ifndef SYS_FCNTL_H
+#define SYS_FCNTL_H
 
 #include <basic.h>
 #include <fcntl.h>
@@ -15,4 +15,4 @@
 
 bool fd_valid(fd_t fd);
 
-#endif /* __SYS_FCNTL_H__ */
+#endif /* SYS_FCNTL_H */
