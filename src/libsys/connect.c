@@ -34,7 +34,7 @@ static connection_t *connect_to_ip(const char *addr, connection_t *conn,
 	if (conn->sd == -1)
 	{
 		char *err = strerror(errno);
-		int err_len = strlen(err) + 1;
+		size_t err_len = strlen(err) + 1;
 
 		conn->error = (char *)malloc(err_len);
 		snprintf((char *)conn->error, err_len, "%s", err);
@@ -49,12 +49,12 @@ static connection_t *connect_to_ip(const char *addr, connection_t *conn,
 	dest.sin_port = htons(atoi(service));
 
 	ret = connect(conn->sd, (struct sockaddr *)&dest,
-		      sizeof(struct sockaddr_in));
+		      (socklen_t)sizeof(struct sockaddr_in));
 
 	if (ret == -1)
 	{
 		char *err = strerror(errno);
-		int err_len = strlen(err) + 1;
+		size_t err_len = strlen(err) + 1;
 
 		conn->error = (char *)malloc(err_len);
 		snprintf((char *)conn->error, err_len, "%s", err);
@@ -118,7 +118,7 @@ connection_t *connect_to_service(const char *addr, const char *service)
 		if (ret == EAI_SYSTEM)
 		{
 			char *err = strerror(errno);
-			int err_len = strlen(err) + 1;
+			size_t err_len = strlen(err) + 1;
 
 			conn->error = (char *)malloc(err_len);
 			snprintf((char *)conn->error, err_len, "%s", err);
@@ -126,7 +126,7 @@ connection_t *connect_to_service(const char *addr, const char *service)
 		else
 		{
 			const char *err = gai_strerror(ret);
-			int err_len = strlen(err) + 1;
+			size_t err_len = strlen(err) + 1;
 
 			conn->error = (char *)malloc(err_len);
 			snprintf((char *)conn->error, err_len, "%s", err);
@@ -149,7 +149,7 @@ connection_t *connect_to_service(const char *addr, const char *service)
 	if (!rp)
 	{
 		char *err = strerror(errno);
-		int err_len = strlen(err) + 1;
+		size_t err_len = strlen(err) + 1;
 
 		conn->error = (char *)malloc(err_len);
 		snprintf((char *)conn->error, err_len, "%s", err);

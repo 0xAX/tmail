@@ -15,7 +15,7 @@
 
 #include "smtp.h"
 
-static void skip_cl_rl(char *str)
+static __attribute__((pure)) void skip_cl_rl(char *str)
 {
 	while (*str != '\r')
 		str++;
@@ -32,7 +32,7 @@ static void skip_cl_rl(char *str)
  *                *( "250-" ehlo-line CRLF )
  *                   "250" SP ehlo-line CRLF )
  */
-static unsigned long parse_smtp_caps(char *r)
+static __attribute__((pure)) unsigned long parse_smtp_caps(char *r)
 {
 	/* bitmap of a SMTP server capabilities */
 	bitmap_t smtp_caps = 0;
@@ -122,7 +122,10 @@ void send_email(int socket)
 	}
 
 	/* everything is ok, let's parse SMTP server capabilities */
-	parse_smtp_caps(response);
+	if (parse_smtp_caps(response))
+	{
+		;
+	}
 
 	/* clear buffer after parsing SMTP capabilities */
 	memset(response, 0, sizeof(response));

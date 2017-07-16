@@ -26,7 +26,7 @@ char *hostname(void)
 {
 	char hostname[HOST_NAME_MAX] = {0};
 
-	if (gethostname(hostname, HOST_NAME_MAX) != 0)
+	if (gethostname(hostname, (size_t)HOST_NAME_MAX) != 0)
 		return NULL;
 
 	return strdup(hostname);

@@ -23,6 +23,18 @@ WARNINGS+=-pedantic-errors
 WARNINGS+=-Wformat
 WARNINGS+=-Wformat-security
 WARNINGS+=-Werror=format-security
+WARNINGS+=-Wswitch-bool
+WARNINGS+=-Wswitch-enum
+WARNINGS+=-Wswitch-default
+WARNINGS+=-Wunused-const-variable
+WARNINGS+=-Wdeclaration-after-statement
+WARNINGS+=-Wshadow
+WARNINGS+=-Wundef
+WARNINGS+=-Wexpansion-to-defined
+WARNINGS+=-Wbad-function-cast
+WARNINGS+=-Wsizeof-array-argument
+WARNINGS+=-Wstrict-prototypes
+WARNINGS+=-Winline
 
 # Optimization flags
 OPTIMIZATION+=-O2
@@ -39,6 +51,15 @@ TMAIL_CC ?= gcc
 # Add compiler related warnings flags
 ifeq ($(TMAIL_CC), gcc)
 WARNINGS += -fmax-errors=2
+WARNINGS+=-Wlogical-op
+WARNINGS+=-Wswitch-unreachable
+WARNINGS+=-Wsuggest-attribute=pure
+WARNINGS+=-Wsuggest-attribute=const
+WARNINGS+=-Wsuggest-attribute=noreturn
+WARNINGS+=-Wsuggest-final-types
+WARNINGS+=-Wduplicated-branches
+WARNINGS+=-Wduplicated-cond
+WARNINGS+=-Wpointer-compare
 else ifeq ($(TMAIL_CC), clang)
 WARNINGS += -ferror-limit=2
 endif

@@ -161,7 +161,7 @@ list_t *list_remove(list_t *list, void *item, bool release_item)
  * @list - list where lookup will be executed.
  * @item - item to search in the list.
  */
-void *list_lookup(list_t *list, void *item)
+__attribute__((pure)) void *list_lookup(list_t *list, void *item)
 {
 	list_t *entry = NULL;
 
@@ -184,7 +184,7 @@ void *list_lookup(list_t *list, void *item)
  * @list - list where lookup will be executed.
  * @n - the position number in the list.
  */
-void *list_nth(list_t *list, unsigned long n)
+__attribute__((pure)) void *list_nth(list_t *list, unsigned long n)
 {
 	list_t *entry = NULL;
 	unsigned long i = 0;

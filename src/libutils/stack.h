@@ -10,6 +10,7 @@
 #define LIB_UTILS_STACK_H
 
 #include "list.h"
+#include <stdbool.h>
 
 /*
  * Darwin already provides stack_t type, so here

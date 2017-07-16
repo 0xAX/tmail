@@ -43,9 +43,11 @@ stack_t *stack_new(void)
  */
 int push(stack_t *stack, void *item)
 {
+	list_t *l = NULL;
+
 	assert(stack);
 
-	list_t *l = list_prepend(stack->l, item);
+	l = list_prepend(stack->l, item);
 	if (!l)
 		return 0;
 
@@ -64,9 +66,11 @@ int push(stack_t *stack, void *item)
  */
 void *pop(stack_t *stack)
 {
+	void *item = NULL;
+
 	assert(stack);
 
-	void *item = list_nth(stack->l, 0);
+	item = list_nth(stack->l, (unsigned long)0);
 
 	stack->l = list_remove(stack->l, item, false);
 
