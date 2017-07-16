@@ -60,3 +60,8 @@ CC_EXEC_FLAGS=-o
 CFLAGS_OBJS=$(WARNINGS) $(STANDARD) $(ARCH) $(MISC_FLAGS) -c -o
 # Set of compiler flags that will be passed during build of shared libraries
 CFLAGS_LIBS=-c $(WARNINGS) $(STANDARD) $(ARCH) $(MISC_FLAGS) -fpic
+
+# allow to use gnu extensions in clang 4.0.0 and above
+ifeq ($(TMAIL_CC), clang)
+CFLAGS_LIBS += -Wno-gnu
+endif
