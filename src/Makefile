@@ -9,7 +9,8 @@ include ../mk/Common.mk
 include ../mk/Build.mk
 
 TMAIL_OBJS = tmail.o
-TMAIL_OBJS += send-email.c
+TMAIL_OBJS += message.o
+TMAIL_OBJS += send-email.o
 
 # set of directories with C headers needed for tmail
 INCLUDES+=-Ilibsys/

@@ -14,11 +14,7 @@
 #include <unistd.h>
 
 #include <at_exit.h>
-#include <connect.h>
 #include <send-email.h>
-#include <smtp.h>
-
-static bool istty = true;
 
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
@@ -28,6 +24,7 @@ static void print_help()
 	printf("usage: tmail [--version] [--help]\n");
 	printf("\n");
 	printf("tmail provides following commands:\n");
+	printf("\n");
 	printf("    * send-email - send an email\n");
 	printf("    * config - manage tmail configuration\n");
 	printf("\n");
@@ -70,8 +67,6 @@ void exit_cb(void) { release_send_email_data(); }
 
 int main(int argc, char *argv[])
 {
-	connection_t *conn;
-
 	/* it is not good idea to run tmail via root */
 	if (!getuid())
 	{
@@ -92,49 +87,6 @@ int main(int argc, char *argv[])
 		send_email_cmd(--argc, ++argv);
 	else
 		parse_argv(argc, argv);
-
-	if (!isatty(STDIN_FILENO))
-	{
-		istty = false;
-	}
-
-	//	if (interactive)
-	//	{
-	//		/* TODO compose email interactively */
-	//		goto finish;
-	//	}
-
-	//	if (use_editor)
-	//	{
-	//		/*
-	//		 * TODO open editor that is specified by:
-	//		 *
-	//		 *  1. $EDITOR env
-	//		 *  2. $TMAIL_EDITOR env
-	//		 *  3. from configuration
-	//		 */
-	//		goto finish;
-	//	}
-
-	conn = connect_to_service("172.17.0.2", "25");
-
-	if (!conn)
-	{
-		fprintf(stderr, "%s", "Error: connection_t can't be allocated");
-		exit(EXIT_FAILURE);
-	}
-
-	if (conn->sd == -1)
-	{
-		fprintf(stderr, "%s", conn->error);
-		free(conn);
-		exit(EXIT_FAILURE);
-	}
-
-	send_email(conn->sd);
-
-	/* TODO remove this when we will use the `conn` */
-	free(conn);
 
 	exit(EXIT_SUCCESS);
 }

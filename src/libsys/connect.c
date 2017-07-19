@@ -131,7 +131,6 @@ connection_t *connect_to_service(const char *addr, const char *service)
 			conn->error = (char *)malloc(err_len);
 			snprintf((char *)conn->error, err_len, "%s", err);
 		}
-
 		return conn;
 	}
 
