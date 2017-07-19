@@ -19,14 +19,17 @@ like this.
   * Use `@placeholder` in `make uninstall` instead of plain `rm -rf`.
   * Use sanitizers during build.
   * Add `release` target.
+  * Support for [bsd make](https://www.freebsd.org/cgi/man.cgi?make(1)).
 
 ## tmail
 
   * Move `options` outside of `parse_argv()`.
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
+  * Support for colorful error messages.
 
 ## send-email
 
+  * Move to builtins directory.
   * Check that only one `from` is passed.
 
 ## libconfig
@@ -96,3 +99,10 @@ and
 ## contrib
 
   * Add systemd file to run tmail as a daemon.
+
+## distribution
+
+  * debian packge
+  * arch linux package
+  * fedora/centos package
+  * .*bsd packages
