@@ -8,9 +8,6 @@
 
 #include "inet.h"
 
-#include <arpa/inet.h>
-#include <sys/socket.h>
-
 /**
  * is_valid_ip_address - tries to understand is given
  * parameter ip address or not.

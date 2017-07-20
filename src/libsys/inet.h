@@ -10,6 +10,9 @@
 #define SYS_INET_H
 
 #include <stdbool.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 
 bool is_valid_ip_address(const char *ip_addr);
 
