@@ -43,16 +43,21 @@ WARNINGS+=-Wdeclaration-after-statement
 WARNINGS+=-Wshadow
 WARNINGS+=-Wundef
 WARNINGS+=-Wbad-function-cast
-WARNINGS+=-Wsizeof-array-argument
 WARNINGS+=-Wstrict-prototypes
 WARNINGS+=-Winline
 
 ifeq ($(TMAIL_CC), gcc)
 $(call gcc-supports-flag,UNUSED_CONST_VAR_WARN,-Wunused-const-variable)
 $(call gcc-supports-flag,EXPANSION_TO_DEFINED_WARN,-Wexpansion-to-defined)
+$(call gcc-supports-flag,SIZOF_ARRAY_WARN,-Wsizeof-array-argument)
 else ifeq ($(TMAIL_CC), clang)
 $(call clang-supports-flag,UNUSED_CONST_VAR_WARN,-Wunused-const-variable)
 $(call clang-supports-flag,EXPANSION_TO_DEFINED_WARN,-Wexpansion-to-defined)
+$(call gcc-supports-flag,SIZOF_ARRAY_WARN,-Wsizeof-array-argument)
+endif
+
+ifeq "$(SIZOF_ARRAY_WARN)" "1"
+WARNINGS+=-Wsizeof-array-argument
 endif
 
 ifeq "$(UNUSED_CONST_VAR_WARN)" "1"
