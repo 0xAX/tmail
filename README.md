@@ -25,7 +25,17 @@ and execute make:
 $ make
 ```
 
-**Done**
+or:
+
+```
+$ gmake
+```
+
+on `*BSD` systems.
+
+Additionally following flags can be passed to make:
+
+*TODO*
 
 After building is done, would be great to execute tests with:
 
