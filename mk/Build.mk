@@ -37,7 +37,6 @@ WARNINGS+=-pedantic-errors
 WARNINGS+=-Wformat
 WARNINGS+=-Wformat-security
 WARNINGS+=-Werror=format-security
-WARNINGS+=-Wswitch-bool
 WARNINGS+=-Wswitch-enum
 WARNINGS+=-Wswitch-default
 WARNINGS+=-Wdeclaration-after-statement
@@ -76,6 +75,7 @@ DEBUG_FLAGS+=-fstack-protector
 # Add compiler related warnings flags
 ifeq ($(TMAIL_CC), gcc)
 WARNINGS += -fmax-errors=2
+WARNINGS+=-Wswitch-bool
 WARNINGS+=-Wlogical-op
 WARNINGS+=-Wswitch-unreachable
 WARNINGS+=-Wsuggest-attribute=pure
