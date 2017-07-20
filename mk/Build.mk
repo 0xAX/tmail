@@ -40,15 +40,31 @@ WARNINGS+=-Werror=format-security
 WARNINGS+=-Wswitch-bool
 WARNINGS+=-Wswitch-enum
 WARNINGS+=-Wswitch-default
-WARNINGS+=-Wunused-const-variable
 WARNINGS+=-Wdeclaration-after-statement
 WARNINGS+=-Wshadow
 WARNINGS+=-Wundef
-WARNINGS+=-Wexpansion-to-defined
 WARNINGS+=-Wbad-function-cast
 WARNINGS+=-Wsizeof-array-argument
 WARNINGS+=-Wstrict-prototypes
 WARNINGS+=-Winline
+
+ifeq ($(TMAIL_CC), gcc)
+$(call gcc-supports-flag,UNUSED_CONST_VAR_WARN,-Wunused-const-variable)
+$(call gcc-supports-flag,EXPANSION_TO_DEFINED_WARN,-Wexpansion-to-defined)
+else ifeq ($(TMAIL_CC), clang)
+$(call clang-supports-flag,UNUSED_CONST_VAR_WARN,-Wunused-const-variable)
+$(call clang-supports-flag,EXPANSION_TO_DEFINED_WARN,-Wexpansion-to-defined)
+else
+$(error "TMAIL_CC should be set to gcc or clang")
+endif
+
+ifeq "$(UNUSED_CONST_VAR_WARN)" "1"
+	WARNINGS+=-Wunused-const-variable
+endif
+
+ifeq "$(EXPANSION_TO_DEFINED_WARN)" "1"
+	WARNINGS+=-Wexpansion-to-defined
+endif
 
 # Optimization flags
 OPTIMIZATION+=-O2
