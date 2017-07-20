@@ -54,8 +54,6 @@ $(call gcc-supports-flag,EXPANSION_TO_DEFINED_WARN,-Wexpansion-to-defined)
 else ifeq ($(TMAIL_CC), clang)
 $(call clang-supports-flag,UNUSED_CONST_VAR_WARN,-Wunused-const-variable)
 $(call clang-supports-flag,EXPANSION_TO_DEFINED_WARN,-Wexpansion-to-defined)
-else
-$(error "TMAIL_CC should be set to gcc or clang")
 endif
 
 ifeq "$(UNUSED_CONST_VAR_WARN)" "1"
