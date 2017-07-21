@@ -15,9 +15,10 @@
   * Build deb package.
   * Build rpm package.
   * Add new macro to expand to source code dirs, like
-`$(SRC_DIR)/$(TMAIL_SMTP_DIR)` -> `$(TMAIL_SMPT_SRC_DIR)` or something
+`$(SRC_DIR)/$(TMAIL_SMTP_LIB_DIR)` -> `$(TMAIL_SMPT_SRC_DIR)` or something
 like this.
   * Use `@placeholder` in `make uninstall` instead of plain `rm -rf`.
+  * Make `make install` and `make uninstall` more verbose.
   * Use sanitizers during build.
   * Add `release` target.
   * Support for [bsd make](https://www.freebsd.org/cgi/man.cgi?make(1)).
@@ -101,9 +102,17 @@ and
 
   * Add systemd file to run tmail as a daemon.
 
-## distribution
+## Distribution
 
   * debian packge
   * arch linux package
   * fedora/centos package
   * .*bsd packages
+
+## Documentation
+
+  * Add man for `smtp-caps`
+  * Update `Documentation/INSTALL.md`:
+
+1. Add information about make parameters
+2. Add information about variables that can be overwritten (defined with `?=`).
