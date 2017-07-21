@@ -7,41 +7,7 @@ tmail
 
 ## Build and installation
 
-Clone repo:
-
-```
-$ git clone git@github.com:0xAX/tmail.git
-```
-
-Go to clonned repo:
-
-```
-$ cd tmail
-```
-
-and execute make:
-
-```
-$ make
-```
-
-or:
-
-```
-$ gmake
-```
-
-on `*BSD` systems.
-
-Additionally following flags can be passed to make:
-
-*TODO*
-
-After building is done, would be great to execute tests with:
-
-```
-$ make test
-```
+See [INSTALL.md](https://github.com/0xAX/tmail/blob/master/Documentation/INSTALL.md).
 
 ## Usage
 
