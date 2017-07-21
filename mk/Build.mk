@@ -84,7 +84,6 @@ WARNINGS+=-Wswitch-bool
 WARNINGS+=-Wlogical-op
 WARNINGS+=-Wswitch-unreachable
 WARNINGS+=-Wsuggest-attribute=pure
-WARNINGS+=-Wsuggest-attribute=const
 WARNINGS+=-Wsuggest-attribute=noreturn
 WARNINGS+=-Wsuggest-final-types
 WARNINGS+=-Wduplicated-branches
