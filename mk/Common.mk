@@ -5,6 +5,10 @@
 
 # Name of main executable
 TMAIL_EXECUTABLE=tmail
+#
+# apps executables
+#
+SMTP_CAPS_EXECUTABLE = smtp-caps
 # Auxiliary sys library
 TMAIL_SYS_LIB=libtmail-sys.so
 # Auxiliary library with C utils
@@ -24,6 +28,16 @@ TEST_TARGET=test
 INSTALL_TARGET=install
 # A target to remove tmail from the system
 UNINSTALL_TARGET=uninstall
+# A target to build src/apps
+BUILD_APPS_TARGET=apps
+# targe to build libtmail-sys.so
+BUILD_SYS_LIB_TARGET = libtmail_sys
+# targe to build libtmail-smtp.so
+BUILD_SMTP_LIB_TARGET = libtmail_smtp
+# targe to build libtmail-utils.so
+BUILD_UTILS_LIB_TARGET = libtmail_utils
+# Build tmail's shared libraries
+BUILD_LIBS_TARGET = libs
 
 # Match all object files
 OBJECT_FILES=*.o
@@ -35,21 +49,23 @@ SRC_DIR=src/
 # Directory with makefile auxiliary scripts
 MK_DIR=mk/
 # Directory with system library
-SYS_DIR_NAME=libsys
+TMAIL_SYS_LIB_DIR=libsys
 # Directory with utils library
-UTILS_DIR_NAME=libutils
+TMAIL_UTILS_LIB_DIR=libutils
 # Directory with smtp library
-TMAIL_SMTP_DIR=libsmtp
+TMAIL_SMTP_LIB_DIR=libsmtp
+# Directory with auxiliary applications
+APPS_DIR=$(SRC_DIR)/apps
 
 # Directory to install tmail(s) executables
-BIN_DIR=/usr/local/bin
+BIN_DIR ?= /usr/local/bin
 # Directory to install tmail(s) libraries
-LIB_DIR=/usr/lib
+LIB_DIR ?= /usr/lib
 
 # use it for cleanups
-RM=rm -rf
+RM ?= rm -rf
 # default archiver
-AR=ar
+AR ?= ar
 # default linker
 LD ?= ld
 # default assembler
