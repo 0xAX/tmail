@@ -52,6 +52,7 @@ dkms.conf
 
 # tmail executables
 tmail
+src/apps/smtp-caps
 
 # valgrind core files
 vgcore.*
