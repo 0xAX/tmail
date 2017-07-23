@@ -22,6 +22,9 @@
 /* size of a pointer, should be portable */
 #define PTR_SIZE sizeof(ptr_t)
 
+/* check is the given bit set or not */
+#define IS_BIT_SET(bitmap, bit) ((bitmap) & (1 << (bit)))
+
 #ifndef NULL
 #define NULL (void *)0
 #endif

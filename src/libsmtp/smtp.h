@@ -9,7 +9,13 @@
 #ifndef LIB_SMTP_H
 #define LIB_SMTP_H
 
+#include <assert.h>
+#include <basic.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 #define SMTP_PORT 25
 #define SMTP_PORT_TLS 587
@@ -26,6 +32,11 @@
 #define PRDR 16
 #define CHUNKING 32
 #define SMTPTLS 64
+#define ENHANCEDSTATUSCODES 128
+#define SMTPUTF8 256
+
+/* SMTP session options */
+#define STOP_AFTER_CAPS 1
 
 /* check ehlo response and enable capability in a bitmap */
 #define ADD_SIMPLE_SMTP_CAPABILITY(CAP_NAME, CAP_NAME_LENGTH, SMTP_CAPS_STR,   \
@@ -49,6 +60,8 @@ static inline bool smtp_eof(char *msg, int length)
 	return false;
 }
 
-void send_email(int socket);
+void *send_email(int socket, bitmap_t opts);
+__attribute__((pure)) unsigned long parse_smtp_caps(char *r);
+__attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap);
 
 #endif /* __LIB_SMTP_H__ */

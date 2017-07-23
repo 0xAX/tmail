@@ -8,9 +8,11 @@
 include ../mk/Common.mk
 include ../mk/Build.mk
 
-TMAIL_OBJS = tmail.o
+TMAIL_OBJS += tmail.o
 TMAIL_OBJS += message.o
 TMAIL_OBJS += send-email.o
+
+SMTP_CAPS_OBJS += smtp-caps.o
 
 # set of directories with C headers needed for tmail
 INCLUDES+=-Ilibsys/
@@ -39,6 +41,9 @@ COMPILER_FLAGS = $(LIBS_PATH) $(INCLUDES) $(LINKER_OPTS) $(CC_EXEC_FLAGS)
 
 $(TMAIL_EXECUTABLE): $(TMAIL_OBJS)
 	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@	$(TMAIL_OBJS) $(LIBS)
+
+$(SMTP_CAPS_EXECUTABLE): $(SMTP_CAPS_OBJS)
+	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@	$(SMTP_CAPS_OBJS) $(LIBS)
 
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_OBJS) $@ $<

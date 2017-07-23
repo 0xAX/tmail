@@ -128,7 +128,7 @@ static void process_send_email(void)
 		goto fail;
 	message = compose_message(m);
 	if (message)
-		send_email(conn->sd);
+		send_email(conn->sd, 0);
 
 	free(m);
 fail:
