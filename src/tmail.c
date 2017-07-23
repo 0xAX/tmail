@@ -21,7 +21,7 @@ static void print_version(void) __attribute__((noreturn));
 
 static void print_help()
 {
-	printf("usage: tmail [--version] [--help]\n");
+	printf("Usage: tmail [--version] [--help]\n");
 	printf("\n");
 	printf("tmail provides following commands:\n");
 	printf("\n");
