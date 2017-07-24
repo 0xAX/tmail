@@ -116,7 +116,7 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 	char *rcpt_to_msg = "RCPT TO:kuleshovmail@gmail.com\r\n";
 
 	UNUSED(message);
-	
+
 	assert(socket != -1);
 
 	/* clear buffer */
