@@ -17,6 +17,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <message.h>
+
 #define SMTP_PORT 25
 #define SMTP_PORT_TLS 587
 
@@ -60,7 +62,7 @@ static inline bool smtp_eof(char *msg, int length)
 	return false;
 }
 
-void *send_email(int socket, bitmap_t opts);
+void *send_email(int socket, message_t *message, bitmap_t opts);
 __attribute__((pure)) unsigned long parse_smtp_caps(char *r);
 __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap);
 

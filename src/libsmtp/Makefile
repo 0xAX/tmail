@@ -8,7 +8,7 @@ default: $(TMAIL_SMTP_LIB)
 include ../../mk/Common.mk
 include ../../mk/Build.mk
 
-INCLUDES+=-I../libutils/
+INCLUDES += -I../ -I../libutils/ 
 
 LIB_SMTP_OBJS = smtp.o
 

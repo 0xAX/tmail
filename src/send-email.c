@@ -125,7 +125,7 @@ static void process_send_email(void)
 	m = fill_message();
 	if (!m)
 		goto fail;
-	send_email(conn->sd, 0);
+	send_email(conn->sd, m, 0);
 
 	free(m);
 fail:

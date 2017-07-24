@@ -107,7 +107,7 @@ __attribute__((pure)) unsigned long parse_smtp_caps(char *r)
 	return smtp_caps;
 }
 
-void *send_email(int socket, bitmap_t opts)
+void *send_email(int socket, message_t *message, bitmap_t opts)
 {
 	int n;
 	char response[1024];
@@ -115,6 +115,8 @@ void *send_email(int socket, bitmap_t opts)
 	char *mail_from_msg = "MAIL FROM:kuleshovmail@gmail.com\r\n";
 	char *rcpt_to_msg = "RCPT TO:kuleshovmail@gmail.com\r\n";
 
+	UNUSED(message);
+	
 	assert(socket != -1);
 
 	/* clear buffer */

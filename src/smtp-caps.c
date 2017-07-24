@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	ret = send_email(conn->sd, STOP_AFTER_CAPS);
+	ret = send_email(conn->sd, NULL, STOP_AFTER_CAPS);
 
 	if (ret)
 	{
