@@ -1,5 +1,5 @@
 /*
- * message.h - routines to parse and describe a mail message.
+ * message.c - routines to parse and describe a mail message.
  *
  * Copyright (c) 2017, Alexander Kuleshov <kuleshovmail at gmail dot com>
  *
@@ -7,12 +7,3 @@
  */
 
 #include "message.h"
-
-#include <basic.h>
-
-char *compose_message(message_t *m)
-{
-	assert(m != NULL);
-
-	return NULL;
-}

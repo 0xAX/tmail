@@ -92,7 +92,6 @@ static message_t *fill_message(void)
 
 static void process_send_email(void)
 {
-	const char *message = NULL;
 	message_t *m = NULL;
 	connection_t *conn = NULL;
 
@@ -126,9 +125,7 @@ static void process_send_email(void)
 	m = fill_message();
 	if (!m)
 		goto fail;
-	message = compose_message(m);
-	if (message)
-		send_email(conn->sd, 0);
+	send_email(conn->sd, 0);
 
 	free(m);
 fail:

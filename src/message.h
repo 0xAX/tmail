@@ -22,6 +22,4 @@ typedef struct
 	char *body;
 } message_t;
 
-char __attribute__((const)) * compose_message(message_t *m);
-
 #endif /* MESSAGE_H */
