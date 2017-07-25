@@ -120,7 +120,7 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 	assert(socket != -1);
 
 	/* clear buffer */
-	memset(response, 0, sizeof(response));
+	memset(response, 0, 1024);
 
 	/* reading greetings from the server */
 	if ((n = recv(socket, response, sizeof(response), 0)) == -1)
@@ -135,7 +135,7 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 	}
 
 	/* clear buffer */
-	memset(response, 0, sizeof(response));
+	memset(response, 0, 1024);
 
 	/* send EHLO message */
 	send(socket, request, strlen(request), 0);
@@ -162,7 +162,7 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 	}
 
 	/* clear buffer after parsing SMTP capabilities */
-	memset(response, 0, sizeof(response));
+	memset(response, 0, 1024);
 
 	/* Send MAIL FROM:.. */
 	send(socket, mail_from_msg, strlen(mail_from_msg), 0);
@@ -177,7 +177,7 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 		/* TODO: We got something wrong. Return error */
 	}
 
-	memset(response, 0, sizeof(response));
+	memset(response, 0, 1024);
 
 	/* Send RCPT TO:.. */
 	send(socket, rcpt_to_msg, strlen(rcpt_to_msg), 0);
@@ -192,14 +192,12 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 		/* TODO: We got something wrong. Return error */
 	}
 
-	memset(response, 0, sizeof(response));
+	memset(response, 0, 0);
 
 	/* send data */
 	send(socket, "DATA\r\n", 6, 0);
 	send(socket, "test message\r\n.\r\n", 17, 0);
 	send(socket, "QUIT\r\n", 6, 0);
-
-	close(socket);
 
 	return NULL;
 }

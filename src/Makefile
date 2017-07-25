@@ -8,10 +8,26 @@
 include ../mk/Common.mk
 include ../mk/Build.mk
 
+# object files for
 TMAIL_OBJS += tmail.o
 TMAIL_OBJS += message.o
 TMAIL_OBJS += send-email.o
 
+# object files for sys lib
+LIBSYS_OBJS += libsys/at_exit.o
+LIBSYS_OBJS += libsys/connect.o
+LIBSYS_OBJS += libsys/fcntl.o
+LIBSYS_OBJS += libsys/gethostname.o
+LIBSYS_OBJS += libsys/inet.o
+
+# object files for utils lib
+LIB_UTILS_OBJS += libutils/list.o
+LIB_UTILS_OBJS += libutils/stack.o
+
+# object files for smtp lib
+LIB_SMTP_OBJS += libsmtp/smtp.o
+
+# other apps
 SMTP_CAPS_OBJS += smtp-caps.o
 
 # set of directories with C headers needed for tmail
@@ -20,30 +36,13 @@ INCLUDES+=-Ilibutils/
 INCLUDES+=-Ilibsmtp/
 INCLUDES+=-I./
 
-# libraries which are required by tmail
-LIBS+=-ltmail-sys
-LIBS+=-ltmail-utils
-LIBS+=-ltmail-smtp
-
-# paths to these libraries
-# (we should add this at least to compile tmail
-#  without installation of libraries to system)
-LIBS_PATH+=-L$(shell pwd)/libsys
-LIBS_PATH+=-L$(shell pwd)/libutils
-LIBS_PATH+=-L$(shell pwd)/libsmtp
-
-# Tell to linker where libraries are
-LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/libsys
-LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/libutils
-LINKER_OPTS+=-Wl,-rpath,$(shell pwd)/libsmtp
-
 COMPILER_FLAGS = $(LIBS_PATH) $(INCLUDES) $(LINKER_OPTS) $(CC_EXEC_FLAGS)
 
 $(TMAIL_EXECUTABLE): $(TMAIL_OBJS)
-	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@	$(TMAIL_OBJS) $(LIBS)
+	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@	$(LIBSYS_OBJS) $(LIB_UTILS_OBJS) $(LIB_SMTP_OBJS) $(TMAIL_OBJS) $(LIBS)
 
 $(SMTP_CAPS_EXECUTABLE): $(SMTP_CAPS_OBJS)
-	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@	$(SMTP_CAPS_OBJS) $(LIBS)
+	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@ $(LIBSYS_OBJS) $(LIB_UTILS_OBJS) $(LIB_SMTP_OBJS) $(SMTP_CAPS_OBJS) $(LIBS)
 
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_OBJS) $@ $<

@@ -8,33 +8,29 @@ default: $(TMAIL_UTILS_LIB)
 include ../../mk/Common.mk
 include ../../mk/Build.mk
 
-OBJS+= list.o
-OBJS+= stack.o
+LIB_UTILS_OBJS += list.o
+LIB_UTILS_OBJS += stack.o
 
-# test options
-LINKER_TEST_FLAGS=-Wl,-rpath,$(shell pwd) -L.
+TEST_EXECUTABLES += list_test
+TEST_EXECUTABLES += stack_test
 
-LIST_TEST_COMPILE=-g list_test.c -o list_test -ltmail-utils
-STACK_TEST_COMPILE=-g stack_test.c -o stack_test -ltmail-utils
-
-TEST_EXECUTABLES=list_test
-TEST_EXECUTABLES=stack_test
-
-$(TMAIL_UTILS_LIB): $(OBJS)
-	$(QUIET_CC) $(TMAIL_CC) $(CC_SHLIB_FLAGS) $(TMAIL_UTILS_LIB) $(OBJS)
+$(TMAIL_UTILS_LIB): $(LIB_UTILS_OBJS)
+	$(QUIET_CC) $(TMAIL_CC) $(CC_SHLIB_FLAGS) $@ $<
 
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(CFLAGS_LIBS) $(BUILD_LIB_FLAGS) $<
 
 $(TEST_TARGET):
 	@rm -rf $(TEST_EXECUTABLES)
-	$(TMAIL_CC) $(LIST_TEST_COMPILE) $(LINKER_TEST_FLAGS)
-	$(TMAIL_CC) $(STACK_TEST_COMPILE) $(LINKER_TEST_FLAGS)
+	$(TMAIL_CC) -ggdb -c list_test.c
+	$(TMAIL_CC) -ggdb list.o list_test.o -o list_test
+	$(TMAIL_CC) -ggdb -c stack_test.c
+	$(TMAIL_CC) -ggdb list.o stack.o stack_test.o -o stack_test
 	@exec ./run_tests.pl
 
 $(CLEAN_TARGET):
 	@echo "./src/libutils"
-	$(QUIET_CLEAN_OBJECTS) $(RM) $(OBJS)
+	$(QUIET_CLEAN_OBJECTS) $(RM) $(LIB_UTILS_OBJS)
 	$(QUIET_CLEAN_SHARED_LIBS) $(RM) $(TMAIL_UTILS_LIB)
 	@rm -rf $(TEST_EXECUTABLES)
 

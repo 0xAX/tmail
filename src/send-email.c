@@ -73,7 +73,7 @@ static void print_help(void)
 
 static message_t *fill_message(void)
 {
-	message_t *m = (message_t *)malloc(sizeof(message_t *));
+	message_t *m = (message_t *)malloc(sizeof(message_t));
 
 	if (!m)
 	{
@@ -129,7 +129,9 @@ static void process_send_email(void)
 
 	free(m);
 fail:
-	free((char *)conn->error);
+	if (conn->error)
+		free((char *)conn->error);
+	close(conn->sd);
 	free(conn);
 finish:
 	return;

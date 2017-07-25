@@ -8,23 +8,23 @@ default: $(TMAIL_SYS_LIB)
 include ../../mk/Common.mk
 include ../../mk/Build.mk
 
-INCLUDES+=-I../libutils/
+INCLUDES += -I../libutils/
 
-OBJS += at_exit.o
-OBJS += connect.o
-OBJS += fcntl.o
-OBJS += gethostname.o
-OBJS += inet.o
+LIB_SYS_OBJS += at_exit.o
+LIB_SYS_OBJS += connect.o
+LIB_SYS_OBJS += fcntl.o
+LIB_SYS_OBJS += gethostname.o
+LIB_SYS_OBJS += inet.o
 
-$(TMAIL_SYS_LIB): $(OBJS)
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CC_SHLIB_FLAGS) $(TMAIL_SYS_LIB) $(OBJS)
+$(TMAIL_SYS_LIB): $(LIB_SYS_OBJS)
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CC_SHLIB_FLAGS) $@ $<
 
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_LIBS) $(BUILD_LIB_FLAGS) $<
 
 $(CLEAN_TARGET):
 	@echo "./src/libsys"
-	$(QUIET_CLEAN_OBJECTS) $(RM) $(OBJS)
+	$(QUIET_CLEAN_OBJECTS) $(RM) $(LIB_SYS_OBJS)
 	$(QUIET_CLEAN_SHARED_LIBS) $(RM) $(TMAIL_SYS_LIB)
 
 .PHONY: $(CLEAN_TARGET)

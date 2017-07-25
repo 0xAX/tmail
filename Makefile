@@ -60,7 +60,6 @@ $(CLEAN_TARGET):
 $(HELP_TARGET):
 	@echo  'Common targets:'
 	@echo  '  * all       - Build everything.'
-	@echo  '  * apps      - Build auxiliary applications (smtp-caps and so on.)'
 	@echo  '  * test      - Run all tests.'
 	@echo  '  * install   - Install tmail with tools and libraries.'
 	@echo  '  * uninstall - Uninstall tmail with tools and libraries.'

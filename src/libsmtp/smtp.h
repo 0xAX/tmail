@@ -11,13 +11,12 @@
 
 #include <assert.h>
 #include <basic.h>
+#include <message.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-
-#include <message.h>
 
 #define SMTP_PORT 25
 #define SMTP_PORT_TLS 587
