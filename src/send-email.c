@@ -82,10 +82,16 @@ static message_t *fill_message(void)
 	}
 
 	m->from = from;
-	m->to = rcps;
-	m->cc = cc;
-	m->bcc = bcc;
-	m->attachments = attachments;
+
+	if (to)
+		m->to = rcps;
+	if (cc)
+		m->cc = cc;
+	if (bcc)
+		m->bcc = bcc;
+
+	if (attachment)
+		m->attachments = attachments;
 
 	return m;
 }
