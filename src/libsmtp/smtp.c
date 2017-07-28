@@ -110,17 +110,34 @@ __attribute__((pure)) unsigned long parse_smtp_caps(char *r)
 void *send_email(int socket, message_t *message, bitmap_t opts)
 {
 	int n;
+	char request[1024];
 	char response[1024];
-	char *request = "EHLO localhost\r\n";
 	char *mail_from_msg = "MAIL FROM:kuleshovmail@gmail.com\r\n";
 	char *rcpt_to_msg = "RCPT TO:kuleshovmail@gmail.com\r\n";
+	char *host = hostname();
 
+	//char *request = "EHLO localhost\r\n";
+
+	if (!host)
+	{
+		fprintf(stderr, "Error: can't get local hostname\n");
+		return NULL;
+	}
+
+	/* clear buffers */
+	memset(request, 0, 1024);
+	memset(response, 0, 1024);
+
+	/* build ehlo message */
+	strcat(request, "EHLO ");
+	strcat(request, host);
+	strcat(request, "\r\n");
+	
 	UNUSED(message);
 
 	assert(socket != -1);
 
 	/* clear buffer */
-	memset(response, 0, 1024);
 
 	/* reading greetings from the server */
 	if ((n = recv(socket, response, sizeof(response), 0)) == -1)
@@ -139,13 +156,18 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 
 	/* send EHLO message */
 	send(socket, request, strlen(request), 0);
-
+	
 	/* read SMTP capabilities */
 	if ((n = recv(socket, response, sizeof(response), 0) == -1))
 	{
 		/* TODO exit */
 	}
 
+	printf("request %s\n", request);
+	printf("response %s\n", response);
+//	return NULL;
+
+	
 	/* check SMTP code */
 	if (!(response[0] == '2' && response[1] == '2' && response[2] == '0'))
 	{
@@ -153,7 +175,10 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 	}
 
 	if (opts & STOP_AFTER_CAPS)
+	{
+		free(host);
 		return strdup(response);
+	}
 
 	/* everything is ok, let's parse SMTP server capabilities */
 	if (parse_smtp_caps(response))
@@ -177,6 +202,7 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 		/* TODO: We got something wrong. Return error */
 	}
 
+	printf("response FROM %s\n", response);
 	memset(response, 0, 1024);
 
 	/* Send RCPT TO:.. */
@@ -199,5 +225,9 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 	send(socket, "test message\r\n.\r\n", 17, 0);
 	send(socket, "QUIT\r\n", 6, 0);
 
+	free(host);
+
+	printf("Message must be sent\n");
+	
 	return NULL;
 }

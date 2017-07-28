@@ -10,6 +10,7 @@ include ../../mk/Build.mk
 
 INCLUDES += -I../
 INCLUDES += -I../libutils/
+INCLUDES += -I../libsys/
 
 LIB_SMTP_OBJS = smtp.o
 

@@ -18,6 +18,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <gethostname.h>
+
 #define SMTP_PORT 25
 #define SMTP_PORT_TLS 587
 
