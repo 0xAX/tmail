@@ -82,6 +82,7 @@ static message_t *fill_message(void)
 	}
 
 	m->from = from;
+	m->subject = subject;
 
 	if (rcps)
 		m->to = rcps;
