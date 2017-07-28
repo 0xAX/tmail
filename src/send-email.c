@@ -90,7 +90,7 @@ static message_t *fill_message(void)
 	if (bcc)
 		m->bcc = bcc;
 
-	if (attachment)
+	if (attachments)
 		m->attachments = attachments;
 
 	return m;
