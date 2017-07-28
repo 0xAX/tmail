@@ -89,7 +89,6 @@ static message_t *fill_message(void)
 		m->cc = cc;
 	if (bcc)
 		m->bcc = bcc;
-
 	if (attachments)
 		m->attachments = attachments;
 
@@ -121,10 +120,11 @@ static void process_send_email(void)
 
 	if (!rcps && !cc)
 	{
-		fprintf(stderr, "Error: at least one recipient must be given\n");
+		fprintf(stderr,
+			"Error: at least one recipient must be given\n");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	/* connect to SMTP server */
 	conn = connect_to_service("172.17.0.3", "25");
 	if (conn->error)
