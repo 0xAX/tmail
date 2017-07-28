@@ -83,7 +83,7 @@ static message_t *fill_message(void)
 
 	m->from = from;
 
-	if (to)
+	if (rcps)
 		m->to = rcps;
 	if (cc)
 		m->cc = cc;
