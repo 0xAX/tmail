@@ -86,4 +86,7 @@ int send_rcpt_to_message(int socket, char *buffer);
 /* mail_from.c */
 int send_mail_from_message(int socket, char *buffer);
 
+/* quit.c */
+int send_quit_message(int socket, char *buffer);
+
 #endif /* __LIB_SMTP_H__ */
