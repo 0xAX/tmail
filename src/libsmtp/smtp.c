@@ -116,7 +116,7 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 	char *rcpt_to_msg = "RCPT TO:kuleshovmail@gmail.com\r\n";
 	char *host = hostname();
 
-	//char *request = "EHLO localhost\r\n";
+	assert(socket != -1);
 
 	if (!host)
 	{
@@ -132,46 +132,43 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 	strcat(request, "EHLO ");
 	strcat(request, host);
 	strcat(request, "\r\n");
-	
+
 	UNUSED(message);
-
-	assert(socket != -1);
-
-	/* clear buffer */
 
 	/* reading greetings from the server */
 	if ((n = recv(socket, response, sizeof(response), 0)) == -1)
 	{
-		/* TODO exit */
+		fprintf(stderr, "Error: something going wrong. SMTP server "
+				"didn't return response\n");
+		return NULL;
 	}
 
 	/* exit early if something going wrong */
 	if (!(response[0] == '2' && response[1] == '2' && response[2] == '0'))
 	{
-		/* TODO: We got something wrong. Return error */
+		fprintf(stderr, "Error: SMTP server greetings error\n");
+		return NULL;
 	}
 
-	/* clear buffer */
+	/* clear response buffer */
 	memset(response, 0, 1024);
 
 	/* send EHLO message */
 	send(socket, request, strlen(request), 0);
-	
+
 	/* read SMTP capabilities */
 	if ((n = recv(socket, response, sizeof(response), 0) == -1))
 	{
-		/* TODO exit */
+		fprintf(stderr, "Error: Can\'t read SMTP EHLO response\n");
+		return NULL;
 	}
 
-	printf("request %s\n", request);
-	printf("response %s\n", response);
-//	return NULL;
-
-	
 	/* check SMTP code */
-	if (!(response[0] == '2' && response[1] == '2' && response[2] == '0'))
+	if (!(response[0] == '2' && response[1] == '5' && response[2] == '0'))
 	{
-		/* TODO: We got something wrong. Return error */
+		fprintf(stderr, "Error: SMTP EHLO wrong response: %s\n",
+			response);
+		return NULL;
 	}
 
 	if (opts & STOP_AFTER_CAPS)
@@ -185,8 +182,6 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 	{
 		;
 	}
-
-	/* clear buffer after parsing SMTP capabilities */
 	memset(response, 0, 1024);
 
 	/* Send MAIL FROM:.. */
@@ -194,40 +189,85 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 
 	if ((n = recv(socket, response, sizeof(response), 0) == -1))
 	{
-		/* TODO exit */
+		fprintf(stderr,
+			"Error: Can't get response for MAIL FROM command\n");
+		return NULL;
 	}
 
-	if (!(response[0] == '2' && response[1] == '2' && response[2] == '0'))
+	if (!(response[0] == '2' && response[1] == '5' && response[2] == '0'))
 	{
-		/* TODO: We got something wrong. Return error */
+		fprintf(stderr, "Error: SMTP MAIL FROM wrong response: %s\n",
+			response);
+		return NULL;
 	}
-
-	printf("response FROM %s\n", response);
 	memset(response, 0, 1024);
 
 	/* Send RCPT TO:.. */
 	send(socket, rcpt_to_msg, strlen(rcpt_to_msg), 0);
-
 	if ((n = recv(socket, response, sizeof(response), 0) == -1))
 	{
-		/* TODO exit */
+		fprintf(stderr,
+			"Error: Can't get response for RCPT TO command\n");
+		return NULL;
 	}
-
-	if (!(response[0] == '2' && response[1] == '2' && response[2] == '0'))
+	if (!(response[0] == '2' && response[1] == '5' && response[2] == '0'))
 	{
-		/* TODO: We got something wrong. Return error */
+		fprintf(stderr, "Error: SMTP RCPT TO wrong response: %s\n",
+			response);
+		return NULL;
 	}
-
-	memset(response, 0, 0);
+	memset(response, 0, 1024);
 
 	/* send data */
 	send(socket, "DATA\r\n", 6, 0);
-	send(socket, "test message\r\n.\r\n", 17, 0);
+	if ((n = recv(socket, response, sizeof(response), 0) == -1))
+	{
+		fprintf(stderr,
+			"Error: Can\'t get response for DATA command\n");
+		return NULL;
+	}
+	if (!(response[0] == '3' && response[1] == '5' && response[2] == '4'))
+	{
+		fprintf(stderr, "Error: SMTP DATA wrong response: %s\n",
+			response);
+		return NULL;
+	}
+	memset(response, 0, 1024);
+
+	/* send message body */
+	send(socket, "test message 2\r\n.\r\n", 19, 0);
+	if ((n = recv(socket, response, sizeof(response), 0) == -1))
+	{
+		fprintf(stderr,
+			"Error: Can\'t get response from message BODY\n");
+		return NULL;
+	}
+	if (!(response[0] == '2' && response[1] == '5' && response[2] == '0'))
+	{
+		fprintf(stderr, "Error: wrong response for message body: %s\n",
+			response);
+		return NULL;
+	}
+	memset(response, 0, 1024);
+
+	/* send quit */
 	send(socket, "QUIT\r\n", 6, 0);
+	if ((n = recv(socket, response, sizeof(response), 0) == -1))
+	{
+		fprintf(stderr, "Can't get response for SMTP QUIT command\n");
+		return NULL;
+	}
+	if (!(response[0] == '2' && response[1] == '2' && response[2] == '1'))
+	{
+		fprintf(stderr, "Error: Your message should be sent, but an "
+				"error is gotten from SMTP server on QUIT: "
+				"%s\n",
+			response);
+		return NULL;
+	}
+	memset(response, 0, 1024);
 
 	free(host);
 
-	printf("Message must be sent\n");
-	
 	return NULL;
 }
