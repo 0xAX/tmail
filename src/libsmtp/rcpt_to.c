@@ -46,6 +46,7 @@ static int send_rcpt_to(int socket, char *buffer, list_t *recipients,
 			fprintf(
 			    stderr,
 			    "Error: Can't get response for RCPT TO command\n");
+			free(rcpt_to_msg);
 			return 0;
 		}
 
@@ -54,6 +55,7 @@ static int send_rcpt_to(int socket, char *buffer, list_t *recipients,
 			fprintf(stderr,
 				"Error: SMTP RCPT TO wrong response: %s\n",
 				buffer);
+			free(rcpt_to_msg);
 			return 0;
 		}
 
