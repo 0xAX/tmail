@@ -22,6 +22,7 @@ like this.
   * Use sanitizers during build.
   * Add `release` target.
   * Support for [bsd make](https://www.freebsd.org/cgi/man.cgi?make(1)).
+  * Add `install_docs` target.
 
 ## tmail
 
@@ -111,7 +112,6 @@ and
 
 ## Documentation
 
-  * Add man for `smtp-caps`
   * Update `Documentation/INSTALL.md`:
 
 1. Add information about make parameters
