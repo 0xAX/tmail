@@ -68,17 +68,9 @@ to send.
 
 ## Scripts
 
-### check_coding_style
-
-  * Check 80 columns in code, commit message, build files and docs.
-  * Check that we have no anything before square brackets.
-  * Check Sign-Off-By signature in a commit message.
-  * Check header and empty line after it in a commit message.
-  * Check that there are no one line comments.
-
 ### apply-clang-format.sh
 
-  * Add `-f` option to pass file to the script.
+  * Add `-f` option to pass a file to the script.
   * If there are no given parameters, try to execute script on the
 current dir.
 
