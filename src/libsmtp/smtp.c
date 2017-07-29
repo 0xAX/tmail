@@ -46,7 +46,7 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 		return NULL;
 	if (!read_smtp_greetings(socket, response))
 		return NULL;
-	if (!send_ehlo_message(socket, request, response))
+	if (!send_ehlo_message(socket, request, response, opts))
 		return NULL;
 
 	if (opts & STOP_AFTER_CAPS)

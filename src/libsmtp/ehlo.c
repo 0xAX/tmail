@@ -120,7 +120,7 @@ int build_ehlo_msg(char *buffer)
 	return 1;
 }
 
-int send_ehlo_message(int socket, char *request, char *buffer)
+int send_ehlo_message(int socket, char *request, char *buffer, bitmap_t opts)
 {
 	int n = 0;
 
@@ -139,7 +139,8 @@ int send_ehlo_message(int socket, char *request, char *buffer)
 		return 0;
 	}
 
-	memset(buffer, 0, 1024);
+	if (!(opts & STOP_AFTER_CAPS))
+		memset(buffer, 0, 1024);
 
 	return 1;
 }
