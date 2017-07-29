@@ -75,6 +75,8 @@ static message_t *fill_message(void)
 {
 	message_t *m = (message_t *)malloc(sizeof(message_t));
 
+	memset(m, 0, sizeof(message_t));
+
 	if (!m)
 	{
 		fprintf(stderr, "%s", strerror(errno));
