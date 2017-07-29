@@ -79,4 +79,7 @@ __attribute__((pure)) unsigned long parse_smtp_caps(char *r);
 __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap);
 int build_ehlo_msg(char *buffer);
 
+/* rcpt_to.c */
+int send_rcpt_to_message(int socket, char *buffer);
+
 #endif /* __LIB_SMTP_H__ */

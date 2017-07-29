@@ -13,6 +13,7 @@ INCLUDES += -I../libutils/
 INCLUDES += -I../libsys/
 
 LIB_SMTP_OBJS += ehlo.o
+LIB_SMTP_OBJS += rcpt_to.o
 LIB_SMTP_OBJS += smtp.o
 
 $(TMAIL_SMTP_LIB): $(LIB_SMTP_OBJS)
