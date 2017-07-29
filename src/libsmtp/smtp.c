@@ -31,31 +31,6 @@ static int read_smtp_greetings(int socket, char *buffer)
 	return 1;
 }
 
-static int send_message_body(int socket, char *buffer)
-{
-	int n = 0;
-
-	send(socket, "test message 1\r\n.\r\n", 19, 0);
-
-	if ((n = recv(socket, buffer, 1024, 0) == -1))
-	{
-		fprintf(stderr,
-			"Error: Can\'t get response from message BODY\n");
-		return 0;
-	}
-
-	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
-	{
-		fprintf(stderr, "Error: wrong response for message body: %s\n",
-			buffer);
-		return 0;
-	}
-
-	memset(buffer, 0, 1024);
-
-	return 1;
-}
-
 void *send_email(int socket, message_t *message, bitmap_t opts)
 {
 	char request[1024];
