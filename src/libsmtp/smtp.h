@@ -82,4 +82,7 @@ int build_ehlo_msg(char *buffer);
 /* rcpt_to.c */
 int send_rcpt_to_message(int socket, char *buffer);
 
+/* mail_from.c */
+int send_mail_from_message(int socket, char *buffer);
+
 #endif /* __LIB_SMTP_H__ */
