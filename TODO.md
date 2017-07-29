@@ -41,6 +41,7 @@ like this.
 
 ## libsmtp
 
+  * Specify blind copies in RCPT TO.
   * Add send message in the separate thread.
   * Get correct argument for `EHLO` command.
   * Add comments to describe SMTP capabilties in the smtp.h
