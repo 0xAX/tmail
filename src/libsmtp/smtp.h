@@ -63,8 +63,20 @@ static inline bool smtp_eof(char *msg, int length)
 	return false;
 }
 
+/* skip \r\n 2 bytes from the given string */
+static inline __attribute__((pure)) void skip_cl_rl(char *str)
+{
+	while (*str != '\r')
+		str++;
+	str += 2;
+}
+
+/* smtp.c */
 void *send_email(int socket, message_t *message, bitmap_t opts);
+
+/* ehlo.c */
 __attribute__((pure)) unsigned long parse_smtp_caps(char *r);
 __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap);
+int build_ehlo_msg(char *buffer);
 
 #endif /* __LIB_SMTP_H__ */
