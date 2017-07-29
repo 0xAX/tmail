@@ -38,8 +38,6 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 
 	assert(socket != -1);
 
-	UNUSED(message);
-
 	memset(response, 0, 1024);
 
 	if (!build_ehlo_msg(request))
@@ -59,7 +57,7 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 	}
 	memset(response, 0, 1024);
 
-	if (!send_mail_from_message(socket, response))
+	if (!send_mail_from_message(socket, message, response))
 		return NULL;
 	if (!send_rcpt_to_message(socket, response))
 		return NULL;
