@@ -21,7 +21,7 @@ int send_mail_from_message(int socket, message_t *message, char *buffer)
 	 * 1        - \0 byte
 	 */
 	char *mail_from_msg = (char *)malloc(10 + from_len + 2 + 1);
-	memset(mail_from_msg, 0, 10 + from_len + 2);
+	memset(mail_from_msg, 0, 10 + from_len + 2 + 1);
 	if (!mail_from_msg)
 	{
 		fprintf(stderr, "Error: Can't allocate memory for SMTP MAIL "

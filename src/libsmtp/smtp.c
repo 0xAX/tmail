@@ -59,7 +59,7 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 
 	if (!send_mail_from_message(socket, message, response))
 		return NULL;
-	if (!send_rcpt_to_message(socket, response))
+	if (!send_rcpt_to_message(socket, message, response))
 		return NULL;
 	if (!send_data_message(socket, response))
 		return NULL;
