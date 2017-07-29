@@ -107,75 +107,219 @@ __attribute__((pure)) unsigned long parse_smtp_caps(char *r)
 	return smtp_caps;
 }
 
-void *send_email(int socket, message_t *message, bitmap_t opts)
+static int build_ehlo_msg(char *buffer)
 {
-	int n;
-	char request[1024];
-	char response[1024];
-	char *mail_from_msg = "MAIL FROM:kuleshovmail@gmail.com\r\n";
-	char *rcpt_to_msg = "RCPT TO:kuleshovmail@gmail.com\r\n";
 	char *host = hostname();
-
-	assert(socket != -1);
 
 	if (!host)
 	{
 		fprintf(stderr, "Error: can't get local hostname\n");
-		return NULL;
+		return 0;
 	}
 
-	/* clear buffers */
-	memset(request, 0, 1024);
-	memset(response, 0, 1024);
+	memset(buffer, 0, 1024);
 
-	/* build ehlo message */
-	strcat(request, "EHLO ");
-	strcat(request, host);
-	strcat(request, "\r\n");
+	strcat(buffer, "EHLO ");
+	strcat(buffer, host);
+	strcat(buffer, "\r\n");
 
-	UNUSED(message);
+	free(host);
+	return 1;
+}
 
-	/* reading greetings from the server */
-	if ((n = recv(socket, response, sizeof(response), 0)) == -1)
+static int read_smtp_greetings(int socket, char *buffer)
+{
+	int n = 0;
+
+	if ((n = recv(socket, buffer, 1024, 0)) == -1)
 	{
 		fprintf(stderr, "Error: something going wrong. SMTP server "
 				"didn't return response\n");
-		return NULL;
+		return 0;
 	}
 
-	/* exit early if something going wrong */
-	if (!(response[0] == '2' && response[1] == '2' && response[2] == '0'))
+	if (!(buffer[0] == '2' && buffer[1] == '2' && buffer[2] == '0'))
 	{
 		fprintf(stderr, "Error: SMTP server greetings error\n");
-		return NULL;
+		return 0;
 	}
 
 	/* clear response buffer */
-	memset(response, 0, 1024);
+	memset(buffer, 0, 1024);
 
-	/* send EHLO message */
+	return 1;
+}
+
+static int send_ehlo_message(int socket, char *request, char *buffer)
+{
+	int n = 0;
+
 	send(socket, request, strlen(request), 0);
 
-	/* read SMTP capabilities */
-	if ((n = recv(socket, response, sizeof(response), 0) == -1))
+	if ((n = recv(socket, buffer, 1024, 0) == -1))
 	{
 		fprintf(stderr, "Error: Can\'t read SMTP EHLO response\n");
-		return NULL;
+		return 0;
 	}
 
-	/* check SMTP code */
-	if (!(response[0] == '2' && response[1] == '5' && response[2] == '0'))
+	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
 	{
 		fprintf(stderr, "Error: SMTP EHLO wrong response: %s\n",
-			response);
-		return NULL;
+			buffer);
+		return 0;
 	}
 
-	if (opts & STOP_AFTER_CAPS)
+	memset(buffer, 0, 1024);
+
+	return 1;
+}
+
+static int send_mail_from_message(int socket, char *buffer)
+{
+	int n = 0;
+	char *mail_from_msg = "MAIL FROM:kuleshovmail@gmail.com\r\n";
+
+	send(socket, mail_from_msg, strlen(mail_from_msg), 0);
+
+	if ((n = recv(socket, buffer, 1024, 0) == -1))
 	{
-		free(host);
-		return strdup(response);
+		fprintf(stderr,
+			"Error: Can't get response for MAIL FROM command\n");
+		return 0;
 	}
+
+	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
+	{
+		fprintf(stderr, "Error: SMTP MAIL FROM wrong response: %s\n",
+			buffer);
+		return 0;
+	}
+
+	memset(buffer, 0, 1024);
+
+	return 1;
+}
+
+static int send_rcpt_to_message(int socket, char *buffer)
+{
+	int n = 0;
+	char *rcpt_to_msg = "RCPT TO:kuleshovmail@gmail.com\r\n";
+
+	send(socket, rcpt_to_msg, strlen(rcpt_to_msg), 0);
+
+	if ((n = recv(socket, buffer, 1024, 0) == -1))
+	{
+		fprintf(stderr,
+			"Error: Can't get response for RCPT TO command\n");
+		return 0;
+	}
+
+	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
+	{
+		fprintf(stderr, "Error: SMTP RCPT TO wrong response: %s\n",
+			buffer);
+		return 0;
+	}
+
+	memset(buffer, 0, 1024);
+
+	return 1;
+}
+
+static int send_data_message(int socket, char *buffer)
+{
+	int n = 0;
+
+	send(socket, "DATA\r\n", 6, 0);
+
+	if ((n = recv(socket, buffer, 1024, 0) == -1))
+	{
+		fprintf(stderr,
+			"Error: Can\'t get response for DATA command\n");
+		return 0;
+	}
+
+	if (!(buffer[0] == '3' && buffer[1] == '5' && buffer[2] == '4'))
+	{
+		fprintf(stderr, "Error: SMTP DATA wrong response: %s\n",
+			buffer);
+		return 0;
+	}
+
+	memset(buffer, 0, 1024);
+
+	return 1;
+}
+
+static int send_message_body(int socket, char *buffer)
+{
+	int n = 0;
+
+	send(socket, "test message 1\r\n.\r\n", 19, 0);
+
+	if ((n = recv(socket, buffer, 1024, 0) == -1))
+	{
+		fprintf(stderr,
+			"Error: Can\'t get response from message BODY\n");
+		return 0;
+	}
+
+	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
+	{
+		fprintf(stderr, "Error: wrong response for message body: %s\n",
+			buffer);
+		return 0;
+	}
+
+	memset(buffer, 0, 1024);
+
+	return 1;
+}
+
+static int send_quit_message(int socket, char *buffer)
+{
+	int n = 0;
+
+	send(socket, "QUIT\r\n", 6, 0);
+
+	if ((n = recv(socket, buffer, 1024, 0) == -1))
+	{
+		fprintf(stderr, "Can't get response for SMTP QUIT command\n");
+		return 0;
+	}
+
+	if (!(buffer[0] == '2' && buffer[1] == '2' && buffer[2] == '1'))
+	{
+		fprintf(stderr, "Error: Your message should be sent, but an "
+				"error is gotten from SMTP server on QUIT: "
+				"%s\n",
+			buffer);
+		return 0;
+	}
+
+	return 1;
+}
+
+void *send_email(int socket, message_t *message, bitmap_t opts)
+{
+	char request[1024];
+	char response[1024];
+
+	assert(socket != -1);
+
+	UNUSED(message);
+
+	memset(response, 0, 1024);
+
+	if (!build_ehlo_msg(request))
+		return NULL;
+	if (!read_smtp_greetings(socket, response))
+		return NULL;
+	if (!send_ehlo_message(socket, request, response))
+		return NULL;
+
+	if (opts & STOP_AFTER_CAPS)
+		return strdup(response);
 
 	/* everything is ok, let's parse SMTP server capabilities */
 	if (parse_smtp_caps(response))
@@ -184,90 +328,16 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 	}
 	memset(response, 0, 1024);
 
-	/* Send MAIL FROM:.. */
-	send(socket, mail_from_msg, strlen(mail_from_msg), 0);
+	if (!send_mail_from_message(socket, response))
+		return NULL;
+	if (!send_rcpt_to_message(socket, response))
+		return NULL;
+	if (!send_data_message(socket, response))
+		return NULL;
+	if (!send_message_body(socket, response))
+		return NULL;
+	if (!send_quit_message(socket, response))
+		return NULL;
 
-	if ((n = recv(socket, response, sizeof(response), 0) == -1))
-	{
-		fprintf(stderr,
-			"Error: Can't get response for MAIL FROM command\n");
-		return NULL;
-	}
-
-	if (!(response[0] == '2' && response[1] == '5' && response[2] == '0'))
-	{
-		fprintf(stderr, "Error: SMTP MAIL FROM wrong response: %s\n",
-			response);
-		return NULL;
-	}
-	memset(response, 0, 1024);
-
-	/* Send RCPT TO:.. */
-	send(socket, rcpt_to_msg, strlen(rcpt_to_msg), 0);
-	if ((n = recv(socket, response, sizeof(response), 0) == -1))
-	{
-		fprintf(stderr,
-			"Error: Can't get response for RCPT TO command\n");
-		return NULL;
-	}
-	if (!(response[0] == '2' && response[1] == '5' && response[2] == '0'))
-	{
-		fprintf(stderr, "Error: SMTP RCPT TO wrong response: %s\n",
-			response);
-		return NULL;
-	}
-	memset(response, 0, 1024);
-
-	/* send data */
-	send(socket, "DATA\r\n", 6, 0);
-	if ((n = recv(socket, response, sizeof(response), 0) == -1))
-	{
-		fprintf(stderr,
-			"Error: Can\'t get response for DATA command\n");
-		return NULL;
-	}
-	if (!(response[0] == '3' && response[1] == '5' && response[2] == '4'))
-	{
-		fprintf(stderr, "Error: SMTP DATA wrong response: %s\n",
-			response);
-		return NULL;
-	}
-	memset(response, 0, 1024);
-
-	/* send message body */
-	send(socket, "test message 2\r\n.\r\n", 19, 0);
-	if ((n = recv(socket, response, sizeof(response), 0) == -1))
-	{
-		fprintf(stderr,
-			"Error: Can\'t get response from message BODY\n");
-		return NULL;
-	}
-	if (!(response[0] == '2' && response[1] == '5' && response[2] == '0'))
-	{
-		fprintf(stderr, "Error: wrong response for message body: %s\n",
-			response);
-		return NULL;
-	}
-	memset(response, 0, 1024);
-
-	/* send quit */
-	send(socket, "QUIT\r\n", 6, 0);
-	if ((n = recv(socket, response, sizeof(response), 0) == -1))
-	{
-		fprintf(stderr, "Can't get response for SMTP QUIT command\n");
-		return NULL;
-	}
-	if (!(response[0] == '2' && response[1] == '2' && response[2] == '1'))
-	{
-		fprintf(stderr, "Error: Your message should be sent, but an "
-				"error is gotten from SMTP server on QUIT: "
-				"%s\n",
-			response);
-		return NULL;
-	}
-	memset(response, 0, 1024);
-
-	free(host);
-
-	return NULL;
+	return (void *)1;
 }
