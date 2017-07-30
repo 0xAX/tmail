@@ -83,6 +83,12 @@ int send_rcpt_to_message(int socket, message_t *message, char *buffer)
 	if (!ret)
 		return ret;
 
+	if (message->bcc)
+		ret = send_rcpt_to(socket, buffer, message->bcc, entry);
+
+	if (!ret)
+		return ret;
+
 	if (!message->to && !message->cc)
 	{
 		fprintf(stderr, "Error: neither TO: nor CC: were not given.");
