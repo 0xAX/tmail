@@ -63,7 +63,7 @@ void *send_email(int socket, message_t *message, bitmap_t opts)
 		return NULL;
 	if (!send_data_message(socket, response))
 		return NULL;
-	if (!send_message_body(socket, response))
+	if (!send_message_body(socket, message, response))
 		return NULL;
 	if (!send_quit_message(socket, response))
 		return NULL;

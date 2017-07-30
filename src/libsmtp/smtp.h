@@ -93,6 +93,6 @@ int send_quit_message(int socket, char *buffer);
 int send_data_message(int socket, char *buffer);
 
 /* body.c */
-int send_message_body(int socket, char *buffer);
+int send_message_body(int socket, message_t *message, char *buffer);
 
 #endif /* __LIB_SMTP_H__ */
