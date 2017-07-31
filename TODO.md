@@ -34,6 +34,7 @@ like this.
 
   * Move to builtins directory.
   * Check that only one `from` is passed.
+  * Support for message preview.
 
 ## libconfig
 
@@ -46,6 +47,8 @@ like this.
   * Get correct argument for `EHLO` command.
   * Add comments to describe SMTP capabilties in the smtp.h
   * Generate Message-Id header.
+  * Check message size if `SIZE` capability is supported.
+  * Send 'Reply-to:' if need (add a field to message struct).
 
 ## libmail
 
