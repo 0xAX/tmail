@@ -29,9 +29,12 @@ like this.
   * Move `options` outside of `parse_argv()`.
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
   * Support for colorful error messages.
+  * Return non-zero error code if we exit during failure case.
 
 ## send-email
 
+  * Add `--from-file` command line option.
+  * If from file wasn't given and stdin is empty (select/poll), open editor.
   * Move to builtins directory.
   * Check that only one `from` is passed.
   * Support for message preview.
