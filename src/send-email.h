@@ -9,6 +9,25 @@
 #ifndef SEND_EMAIL_H
 #define SEND_EMAIL_H
 
+#include <assert.h>
+#include <getopt.h>
+#include <locale.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/select.h>
+#include <unistd.h>
+
+#include <at_exit.h>
+#include <connect.h>
+#include <fcntl.h>
+#include <gethostname.h>
+#include <list.h>
+#include <message.h>
+#include <send-email.h>
+#include <smtp.h>
+
 #define SEND_EMAIL "send-email"
 
 void release_send_email_data(void);

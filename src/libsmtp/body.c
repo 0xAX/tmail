@@ -74,6 +74,7 @@ int send_message_body(int socket, message_t *message, char *buffer)
 {
 	int n = 0;
 	list_t *entry = NULL;
+	char body[4096];
 
 	/* send MIME version header */
 	send(socket, "MIME-Version: 1.0\r\n", 19, 0);
@@ -95,7 +96,6 @@ int send_message_body(int socket, message_t *message, char *buffer)
 	if (message->cc)
 	{
 		send(socket, "Cc: ", 4, 0);
-
 		for_each_list_item(message->cc, entry)
 		{
 			send(socket, entry->item, strlen(entry->item), 0);
@@ -124,8 +124,24 @@ int send_message_body(int socket, message_t *message, char *buffer)
 	send(socket, "\r\n", 2, 0);
 
 	/* send message body */
-	send(socket, "test message 1\r\n.\r\n",
-	     strlen("test message 1\r\n.\r\n"), 0);
+	memset(body, 0, 4096);
+	while ((n = read(message->body->message_fd, body, 4096)) > 0)
+	{
+		send(socket, body, n, 0);
+		memset(body, 0, 4096);
+	}
+
+	if (message->body->source != STDIN)
+		close(message->body->message_fd);
+
+	if (n == -1)
+	{
+		fprintf(stderr, "Error: can't read message body");
+		return 0;
+	}
+
+	/* finsih message body */
+	send(socket, "\r\n.\r\n", 5, 0);
 
 	if ((n = recv(socket, buffer, 1024, 0) == -1))
 	{

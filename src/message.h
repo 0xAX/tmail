@@ -9,7 +9,16 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
+#include <basic.h>
 #include <list.h>
+
+typedef enum { STDIN = 0, EXTERNAL_FILE = 1 } message_source_t;
+
+typedef struct
+{
+	message_source_t source;
+	fd_t message_fd;
+} message_body_t;
 
 typedef struct
 {
@@ -19,7 +28,11 @@ typedef struct
 	list_t *attachments;
 	list_t *cc;
 	list_t *bcc;
-	char *body;
+	message_body_t *body;
+	// fd_t body;
+	// bool stdin;
 } message_t;
+
+int fill_message_body(message_t *message);
 
 #endif /* MESSAGE_H */

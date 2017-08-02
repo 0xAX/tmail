@@ -6,22 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include <assert.h>
-#include <getopt.h>
-#include <locale.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-#include <at_exit.h>
-#include <connect.h>
-#include <gethostname.h>
-#include <list.h>
-#include <message.h>
-#include <send-email.h>
-#include <smtp.h>
+#include "send-email.h"
 
 static char *from = NULL;
 static char *subject = NULL;
@@ -74,14 +59,24 @@ static void print_help(void)
 static message_t *fill_message(void)
 {
 	message_t *m = (message_t *)malloc(sizeof(message_t));
-
-	memset(m, 0, sizeof(message_t));
+	m->body = NULL;
 
 	if (!m)
 	{
 		fprintf(stderr, "%s", strerror(errno));
 		return NULL;
 	}
+	memset(m, 0, sizeof(message_t));
+
+	m->body = (message_body_t *)malloc(sizeof(message_body_t));
+	if (!m)
+	{
+		free(m);
+		m = NULL;
+		fprintf(stderr, "%s", strerror(errno));
+		return NULL;
+	}
+	memset(m->body, 0, sizeof(message_body_t));
 
 	m->from = from;
 	m->subject = subject;
@@ -94,6 +89,16 @@ static message_t *fill_message(void)
 		m->bcc = bcc;
 	if (attachments)
 		m->attachments = attachments;
+
+	if (!fill_message_body(m))
+	{
+		fprintf(stderr, "Error: no message body given\n");
+		free(m->body);
+		m->body = NULL;
+		free(m);
+		m = NULL;
+		return NULL;
+	}
 
 	return m;
 }
@@ -129,7 +134,7 @@ static void process_send_email(void)
 	}
 
 	/* connect to SMTP server */
-	conn = connect_to_service("172.17.0.2", "25");
+	conn = connect_to_service("172.17.0.3", "25");
 	if (conn->error)
 	{
 		fprintf(stderr, "%s", conn->error);
@@ -142,7 +147,10 @@ static void process_send_email(void)
 		goto fail;
 	send_email(conn->sd, m, 0);
 
-	free(m);
+	if (m->body)
+		free(m->body);
+	if (m)
+		free(m);
 fail:
 	if (conn->error)
 		free((char *)conn->error);
@@ -163,7 +171,7 @@ void release_send_email_data(void)
 
 void send_email_cmd(int argc, char *argv[])
 {
-	int c;
+	int c = 0;
 
 	static const struct option options[] = {
 	    {"attachment", no_argument, NULL, 'a'},
