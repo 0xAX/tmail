@@ -39,6 +39,10 @@ like this.
   * Check that only one `from` is passed.
   * Support for message preview.
 
+## libencoding
+
+  * Add base64 `base64_encode()`.
+
 ## libconfig
 
   * Add initial version and think about configuration syntax.
