@@ -60,6 +60,7 @@ vgcore.*
 # tests
 list_test
 stack_test
+base64_test
 
 # log files
 log.*
