@@ -20,13 +20,17 @@ $(TMAIL_UTILS_LIB): $(LIB_UTILS_OBJS)
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(CFLAGS_LIBS) $(BUILD_LIB_FLAGS) $<
 
-$(TEST_TARGET):
-	@rm -rf $(TEST_EXECUTABLES)
-	$(TMAIL_CC) -ggdb -c list_test.c
-	$(TMAIL_CC) -ggdb list.o list_test.o -o list_test
-	$(TMAIL_CC) -ggdb -c stack_test.c
-	$(TMAIL_CC) -ggdb list.o stack.o stack_test.o -o stack_test
+$(TEST_TARGET): $(TEST_EXECUTABLES)
 	@exec ./run_tests.pl
+	@rm -rf $(TEST_EXECUTABLES)
+
+list_test:
+	$(TMAIL_CC) $(DEBUG_FLAGS) -c list_test.c
+	$(TMAIL_CC) $(DEBUG_FLAGS) list.o list_test.o -o list_test
+
+stack_test:
+	$(TMAIL_CC) $(DEBUG_FLAGS) -c stack_test.c
+	$(TMAIL_CC) $(DEBUG_FLAGS) list.o stack.o stack_test.o -o stack_test
 
 $(CLEAN_TARGET):
 	@echo "./src/libutils"

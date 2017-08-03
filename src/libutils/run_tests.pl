@@ -9,6 +9,8 @@ use strict;
 use warnings;
 use Term::ANSIColor 2.00 qw(:pushpop);
 
+require "../../scripts/test_diff.pl";
+
 my @libutils_tests = qw(
     ./list_test
     ./stack_test
@@ -62,24 +64,6 @@ for my $test (@libutils_tests) {
                print PUSHCOLOR GREEN "ok\n";
                print POPCOLOR;	    
         }
-}
-
-sub print_diff {
-    my ($result, $expected) = @_;
-    my @result_splitted = split(/\n/, $result);
-    my @expected_splitted = split(/\n/, $expected);
-
-    for my $res (0 .. $#result_splitted) {
-            if ($result_splitted[$res] ne $expected_splitted[$res]) {
-                   print PUSHCOLOR RED "failed\n";
-                   print "ERROR:\n";
-                   print "  expected: $expected_splitted[$res]\n";
-                   print "  got: $result_splitted[$res]\n";
-            }
-    }
-
-    print POPCOLOR;
-    exit 1;
 }
 
 exit 0;
