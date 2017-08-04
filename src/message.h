@@ -29,8 +29,6 @@ typedef struct
 	list_t *cc;
 	list_t *bcc;
 	message_body_t *body;
-	// fd_t body;
-	// bool stdin;
 } message_t;
 
 int fill_message_body(message_t *message);
