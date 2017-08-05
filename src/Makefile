@@ -16,7 +16,7 @@ TMAIL_OBJS += send-email.o
 # object files for sys lib
 LIBSYS_OBJS += libsys/at_exit.o
 LIBSYS_OBJS += libsys/connect.o
-LIBSYS_OBJS += libsys/fcntl.o
+LIBSYS_OBJS += libsys/fcntl_utils.o
 LIBSYS_OBJS += libsys/gethostname.o
 LIBSYS_OBJS += libsys/inet.o
 

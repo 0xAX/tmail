@@ -18,10 +18,10 @@
 #include <string.h>
 #include <sys/select.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #include <at_exit.h>
 #include <connect.h>
-#include <fcntl.h>
 #include <gethostname.h>
 #include <list.h>
 #include <message.h>

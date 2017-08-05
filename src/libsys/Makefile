@@ -12,7 +12,7 @@ INCLUDES += -I../libutils/
 
 LIB_SYS_OBJS += at_exit.o
 LIB_SYS_OBJS += connect.o
-LIB_SYS_OBJS += fcntl.o
+LIB_SYS_OBJS += fcntl_utils.o
 LIB_SYS_OBJS += gethostname.o
 LIB_SYS_OBJS += inet.o
 

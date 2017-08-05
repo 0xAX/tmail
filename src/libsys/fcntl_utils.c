@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "fcntl.h"
+#include "fcntl_utils.h"
 
 /**
  * fd_valid - check the given file descriptor.

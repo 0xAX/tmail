@@ -87,8 +87,19 @@ static message_t *fill_message(void)
 		m->cc = cc;
 	if (bcc)
 		m->bcc = bcc;
+
 	if (attachments)
-		m->attachments = attachments;
+	{
+		list_t *entry = NULL;
+
+		for_each_list_item(attachments, entry)
+		{
+			//fd_t fd = open((char *)entry->item, O_RDONLY);
+			printf("entry->item %s\n", (char *)entry->item);
+		}
+	}
+
+	//m->attachments = attachments;
 
 	if (!fill_message_body(m))
 	{
@@ -134,7 +145,7 @@ static void process_send_email(void)
 	}
 
 	/* connect to SMTP server */
-	conn = connect_to_service("172.17.0.3", "25");
+	conn = connect_to_service("172.17.0.2", "25");
 	if (conn->error)
 	{
 		fprintf(stderr, "%s", conn->error);
