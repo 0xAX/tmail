@@ -64,3 +64,6 @@ base64_test
 
 # log files
 log.*
+
+# core files
+*.core
