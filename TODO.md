@@ -16,7 +16,6 @@
   * Add new macro to expand to source code dirs, like
 `$(SRC_DIR)/$(TMAIL_SMTP_LIB_DIR)` -> `$(TMAIL_SMPT_SRC_DIR)` or something
 like this.
-  * Use `@placeholder` in `make uninstall` instead of plain `rm -rf`.
   * Make `make install` and `make uninstall` more verbose.
   * Use sanitizers during build.
   * Add `release` target.
