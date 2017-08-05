@@ -59,7 +59,7 @@ static inline bool list_empty(list_t *list)
  * list_length - return amount of elements in the given
  * list.
  */
-static inline unsigned long list_length(list_t *list)
+__attribute__((pure)) static inline unsigned long list_length(list_t *list)
 {
 	int cnt = 0;
 	list_t *entry = NULL;
