@@ -90,22 +90,43 @@ static message_t *fill_message(void)
 
 	if (attachments)
 	{
+		int i = 0;
 		list_t *entry = NULL;
+		int count = list_length(attachments);
+
+		m->attachments = (int *)malloc(sizeof(int) * count + 1);
+		if (!m->attachments)
+		{
+			free(m);
+			m = NULL;
+			fprintf(stderr, "%s", strerror(errno));
+			return NULL;
+		}
 
 		for_each_list_item(attachments, entry)
 		{
-			//fd_t fd = open((char *)entry->item, O_RDONLY);
-			printf("entry->item %s\n", (char *)entry->item);
+			fd_t fd = open((char *)entry->item, O_RDONLY);
+
+			if (fd == -1)
+			{
+				free(m);
+				m = NULL;
+				fprintf(stderr, "%s", strerror(errno));
+				return NULL;
+			}
+
+			m->attachments[i] = fd;
+			i++;
 		}
 	}
-
-	//m->attachments = attachments;
 
 	if (!fill_message_body(m))
 	{
 		fprintf(stderr, "Error: no message body given\n");
 		free(m->body);
 		m->body = NULL;
+		free(m->attachments);
+		m->attachments = NULL;
 		free(m);
 		m = NULL;
 		return NULL;
@@ -160,6 +181,8 @@ static void process_send_email(void)
 
 	if (m->body)
 		free(m->body);
+	if (m->attachments)
+		free(m->attachments);
 	if (m)
 		free(m);
 fail:

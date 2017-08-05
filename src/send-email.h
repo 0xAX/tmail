@@ -10,6 +10,7 @@
 #define SEND_EMAIL_H
 
 #include <assert.h>
+#include <fcntl.h>
 #include <getopt.h>
 #include <locale.h>
 #include <stdbool.h>
@@ -18,7 +19,6 @@
 #include <string.h>
 #include <sys/select.h>
 #include <unistd.h>
-#include <fcntl.h>
 
 #include <at_exit.h>
 #include <connect.h>
