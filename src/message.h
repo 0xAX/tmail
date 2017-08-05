@@ -9,6 +9,8 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
+#include <sys/select.h>
+
 #include <basic.h>
 #include <list.h>
 
