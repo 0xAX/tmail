@@ -24,11 +24,15 @@ $(DEFAULT_TARGET): $(BUILD_LIBS_TARGET)
 	@cd $(SRC_DIR) && $(MAKE) $(MAKE_FLAGS) $(SMTP_CAPS_EXECUTABLE) TOPDIR=$(TOPDIR)
 
 $(BUILD_LIBS_TARGET): $(BUILD_SYS_LIB_TARGET) \
-		      $(BUILD_SMTP_LIB_TARGET) \
-		      $(BUILD_UTILS_LIB_TARGET)
+		      $(BUILD_UTILS_LIB_TARGET) \
+                      $(BUILD_ENCODING_LIB_TARGET) \
+                      $(BUILD_SMTP_LIB_TARGET)
 
 $(BUILD_SYS_LIB_TARGET):
 	@cd $(SRC_DIR)$(TMAIL_SYS_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_SYS_LIB) TOPDIR=$(TOPDIR)
+
+$(BUILD_ENCODING_LIB_TARGET):
+	@cd $(SRC_DIR)$(TMAIL_ENCODING_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_ENCODING_LIB) TOPDIR=$(TOPDIR)
 
 $(BUILD_SMTP_LIB_TARGET):
 	@cd $(SRC_DIR)$(TMAIL_SMTP_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_SMTP_LIB) TOPDIR=$(TOPDIR)
@@ -38,12 +42,14 @@ $(BUILD_UTILS_LIB_TARGET):
 
 $(TEST_TARGET): $(BUILD_LIBS_TARGET)
 	@cd $(SRC_DIR)$(TMAIL_UTILS_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(TEST_TARGET)
+	@cd $(SRC_DIR)$(TMAIL_ENCODING_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(TEST_TARGET)
 
 $(INSTALL_TARGET): $(BUILD_LIBS_TARGET)
 	@$(INSTALL) $(TMAIL_EXECUTABLE) $(BIN_DIR)
 	@$(INSTALL) $(SRC_DIR)$(TMAIL_UTILS_LIB_DIR)/$(TMAIL_UTILS_LIB) $(LIB_DIR)
 	@$(INSTALL) $(SRC_DIR)$(TMAIL_SYS_LIB_DIR)/$(TMAIL_SYS_LIB) $(LIB_DIR)
 	@$(INSTALL) $(SRC_DIR)$(TMAIL_SMTP_LIB_DIR)/$(TMAIL_SMTP_LIB) $(LIB_DIR)
+	@$(INSTALL) $(SRC_DIR)$(TMAIL_ENCODING_LIB_DIR)/$(TMAIL_ENCODING_LIB) $(LIB_DIR)
 
 $(UNINSTALL_TARGET):
 	@rm -rf $(BIN_DIR)/$(TMAIL_EXECUTABLE)
@@ -51,6 +57,7 @@ $(UNINSTALL_TARGET):
 	@rm -rf $(LIB_DIR)/$(TMAIL_SMTP_LIB)
 	@rm -rf $(LIB_DIR)/$(TMAIL_SYS_LIB)
 	@rm -rf $(LIB_DIR)/$(TMAIL_UTILS_LIB)
+	@rm -rf $(LIB_DIR)/$(TMAIL_ENCODING_LIB)
 
 $(CLEAN_TARGET):
 	@echo "./"
@@ -69,6 +76,7 @@ $(HELP_TARGET):
 	@echo  '  * libtmail_smtp - build smtp shared library.'
 	@echo  '  * libtmail_sys  - build sys shared library.'
 	@echo  '  * libtmail_utils - build utils shared library.'
+	@echo  '  * libtmail_encoding - build encoding shared library.'
 	@echo  ''
 	@echo  'Cleaning targets:'
 	@echo  '  * clean     - Remove most generated files like object files, executables and etc.'

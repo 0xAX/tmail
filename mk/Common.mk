@@ -17,6 +17,8 @@ TMAIL_SYS_LIB=libtmail-sys.so
 TMAIL_UTILS_LIB=libtmail-utils.so
 # SMTP library
 TMAIL_SMTP_LIB=libtmail-smtp.so
+# Library that provides different encoding facilities
+TMAIL_ENCODING_LIB=libtmail-encoding.so
 
 # Default target to build tmail fully
 DEFAULT_TARGET=all
@@ -34,8 +36,10 @@ UNINSTALL_TARGET=uninstall
 BUILD_SYS_LIB_TARGET = libtmail_sys
 # targe to build libtmail-smtp.so
 BUILD_SMTP_LIB_TARGET = libtmail_smtp
-# targe to build libtmail-utils.so
+# target to build libtmail-utils.so
 BUILD_UTILS_LIB_TARGET = libtmail_utils
+# target to build libtmail-encoding.so
+BUILD_ENCODING_LIB_TARGET = libtmail_encoding
 # Build tmail's shared libraries
 BUILD_LIBS_TARGET = libs
 
@@ -54,6 +58,8 @@ TMAIL_SYS_LIB_DIR=libsys
 TMAIL_UTILS_LIB_DIR=libutils
 # Directory with smtp library
 TMAIL_SMTP_LIB_DIR=libsmtp
+# Directory with encoding library
+TMAIL_ENCODING_LIB_DIR=libencoding
 
 # Directory to install tmail(s) executables
 BIN_DIR ?= /usr/local/bin

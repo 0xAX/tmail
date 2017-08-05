@@ -75,6 +75,7 @@ OPTIMIZATION+=-D_FORTIFY_SOURCE=2
 # Debug flags
 DEBUG_FLAGS+=-O
 DEBUG_FLAGS+=-g3
+DEBUG_FLAGS+=-ggdb
 DEBUG_FLAGS+=-fstack-protector
 
 # Add compiler related warnings flags
