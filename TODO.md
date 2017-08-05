@@ -106,6 +106,7 @@ and
 ## contrib
 
   * Add systemd file to run tmail as a daemon.
+  * Add configuration examples to `contrib/` dir.
 
 ## Distribution
 
@@ -120,3 +121,9 @@ and
 
 1. Add information about make parameters
 2. Add information about variables that can be overwritten (defined with `?=`).
+
+## Testing
+
+  * Add tests for `hostname()`.
+  * Add tests for `fd_valid()`.
+  * Add tests for `is_valid_ip_address()`.
