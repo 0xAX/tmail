@@ -27,7 +27,7 @@ typedef struct
 	char *from;
 	list_t *to;
 	char *subject;
-	int  *attachments;
+	int *attachments;
 	list_t *cc;
 	list_t *bcc;
 	message_body_t *body;
