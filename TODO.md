@@ -18,7 +18,6 @@
 like this.
   * Make `make install` and `make uninstall` more verbose.
   * Use sanitizers during build.
-  * Add `release` target.
   * Support for [bsd make](https://www.freebsd.org/cgi/man.cgi?make(1)).
   * Add `install_docs` target.
 
