@@ -2,7 +2,6 @@
 
 ## Build
 
-  * Add `gcc-7` to CI.
   * Add ` -Weverything` for clang build.
   * Add enumeration of what avaliable targets will be built with the
 `make all`.
