@@ -37,6 +37,7 @@ like this.
   * Move to builtins directory.
   * Check that only one `from` is passed.
   * Support for message preview.
+  * Documentation!
 
 ## libencoding
 
