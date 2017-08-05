@@ -1,5 +1,9 @@
 # TODO
 
+## General
+
+  * Add `mfree()`.
+
 ## Build
 
   * Add ` -Weverything` for clang build.
