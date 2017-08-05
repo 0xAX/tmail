@@ -50,10 +50,28 @@ ifeq ($(TMAIL_CC), gcc)
 $(call gcc-supports-flag,UNUSED_CONST_VAR_WARN,-Wunused-const-variable)
 $(call gcc-supports-flag,EXPANSION_TO_DEFINED_WARN,-Wexpansion-to-defined)
 $(call gcc-supports-flag,SIZOF_ARRAY_WARN,-Wsizeof-array-argument)
+$(call gcc-supports-flag,SWITCH_UNREACHEABLE_WARN,-Wswitch-unreachable)
+$(call gcc-supports-flag,DUPLICATED_BRANCES_WARN,-Wduplicated-branches)
+$(call gcc-supports-flag,POINTER_COMPARE_WARN,-Wpointer-compare)
 else ifeq ($(TMAIL_CC), clang)
 $(call clang-supports-flag,UNUSED_CONST_VAR_WARN,-Wunused-const-variable)
 $(call clang-supports-flag,EXPANSION_TO_DEFINED_WARN,-Wexpansion-to-defined)
-$(call gcc-supports-flag,SIZOF_ARRAY_WARN,-Wsizeof-array-argument)
+$(call clang-supports-flag,SIZOF_ARRAY_WARN,-Wsizeof-array-argument)
+$(call clang-supports-flag,SWITCH_UNREACHEABLE_WARN,-Wswitch-unreachable)
+$(call clang-supports-flag,DUPLICATED_BRANCES_WARN,-Wduplicated-branches)
+$(call clang-supports-flag,POINTER_COMPARE_WARN,-Wpointer-compare)
+endif
+
+ifeq "$(DUPLICATED_BRANCES_WARN)" "1"
+WARNINGS+=-Wduplicated-branches
+endif
+
+ifeq "$(POINTER_COMPARE_WARN)" "1"
+WARNINGS+=-Wpointer-compare
+endif
+
+ifeq "$(SWITCH_UNREACHEABLE_WARN)" "1"
+WARNINGS+=-Wswitch-unreachable
 endif
 
 ifeq "$(SIZOF_ARRAY_WARN)" "1"
@@ -83,13 +101,10 @@ ifeq ($(TMAIL_CC), gcc)
 WARNINGS += -fmax-errors=2
 WARNINGS+=-Wswitch-bool
 WARNINGS+=-Wlogical-op
-WARNINGS+=-Wswitch-unreachable
 WARNINGS+=-Wsuggest-attribute=pure
 WARNINGS+=-Wsuggest-attribute=noreturn
 WARNINGS+=-Wsuggest-final-types
-WARNINGS+=-Wduplicated-branches
 WARNINGS+=-Wduplicated-cond
-WARNINGS+=-Wpointer-compare
 else ifeq ($(TMAIL_CC), clang)
 WARNINGS += -ferror-limit=2
 endif
