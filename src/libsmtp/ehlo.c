@@ -103,18 +103,21 @@ __attribute__((pure)) unsigned long parse_smtp_caps(char *r)
 int build_ehlo_msg(char *buffer)
 {
 	char *host = hostname();
-
+	size_t host_len = 0;
+	
 	if (!host)
 	{
 		fprintf(stderr, "Error: can't get local hostname\n");
 		return 0;
 	}
 
+	host_len = strlen(host);
+
 	memset(buffer, 0, 1024);
 
-	strcat(buffer, "EHLO ");
-	strcat(buffer, host);
-	strcat(buffer, "\r\n");
+	strncat(buffer, "EHLO ", 5);
+	strncat(buffer, host, host_len);
+	strncat(buffer, "\r\n", 2);
 
 	free(host);
 	return 1;
