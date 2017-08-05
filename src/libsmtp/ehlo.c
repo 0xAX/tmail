@@ -104,7 +104,7 @@ int build_ehlo_msg(char *buffer)
 {
 	char *host = hostname();
 	size_t host_len = 0;
-	
+
 	if (!host)
 	{
 		fprintf(stderr, "Error: can't get local hostname\n");

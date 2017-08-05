@@ -55,7 +55,6 @@ static bool check_external_file(message_t *message)
  */
 int fill_message_body(message_t *message)
 {
-
 	if (check_stdin(message))
 		return 1;
 	if (check_external_file(message))

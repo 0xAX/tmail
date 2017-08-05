@@ -28,7 +28,8 @@ int main(int argc, char *argv[])
 	char *result_test_4 = base64_encode(test_4, strlen(test_4));
 	printf("result_test_encoding_4 %s\n", result_test_4);
 
-	char *test_5 = "The test of the long long, very long line, a little bit longer than seventy six bytes length";
+	char *test_5 = "The test of the long long, very long line, a little "
+		       "bit longer than seventy six bytes length";
 	char *result_test_5 = base64_encode(test_5, strlen(test_5));
 	printf("result_test_encoding_5 %s\n", result_test_5);
 
