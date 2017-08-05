@@ -47,7 +47,7 @@ char *base64_encode(char *data, size_t len)
 		 */
 		if (i > 0 && (i / 3 * 4) % 76 == 0)
 		{
-			strcat(result, (char *)"\r\n");
+			strncat(result, (char *)"\r\n", 2);
 			j += 2;
 		}
 		

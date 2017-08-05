@@ -36,9 +36,9 @@ static int send_message_with_param(int socket, char *cmd, int cmd_len,
 	memset(msg, 0, cmd_len + msg_len + 2 + 1);
 
 	/* build SMTP message and send it*/
-	strcat(msg, cmd);
+	strncat(msg, cmd, cmd_len);
 	strncat(msg, data, msg_len);
-	strcat(msg, "\r\n");
+	strncat(msg, "\r\n", 2);
 	send(socket, msg, cmd_len + msg_len + 2, 0);
 
 	free(msg);
