@@ -71,17 +71,10 @@ void free_message(message_t *message)
 		return;
 
 	if (message->body)
-	{
-		free(message->body);
-		message->body = NULL;
-	}
+		mfree(message->body);
 
 	if (message->attachments)
-	{
-		free(message->attachments);
-		message->attachments = NULL;
-	}
+		mfree(message->attachments);
 
-	free(message);
-	message = NULL;
+	mfree(message);
 }
