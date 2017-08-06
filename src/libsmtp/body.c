@@ -70,8 +70,11 @@ static int send_date(int socket)
 	return 1;
 }
 
-static int send_body(int socket)
+static int send_body(int socket, message_t *message, char *buffer)
 {
+	int n = 0;
+	char body[4096];
+
 	/* send utf8 by default */
 	send(socket, "Content-Type: text/plain; charset=utf-8\r\n", 41, 0);
 
@@ -117,9 +120,7 @@ static int send_body(int socket)
 
 int send_message_body(int socket, message_t *message, char *buffer)
 {
-	int n = 0;
 	list_t *entry = NULL;
-	char body[4096];
 
 	/* send MIME version header */
 	send(socket, "MIME-Version: 1.0\r\n", 19, 0);
@@ -162,7 +163,7 @@ int send_message_body(int socket, message_t *message, char *buffer)
 	if (!send_date(socket))
 		return 0;
 
-	if (!send_body(socket))
+	if (!send_body(socket, message, buffer))
 		return 0;
 
 	memset(buffer, 0, 1024);
