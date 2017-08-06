@@ -69,11 +69,10 @@ static message_t *fill_message(void)
 	memset(m, 0, sizeof(message_t));
 
 	m->body = (message_body_t *)malloc(sizeof(message_body_t));
-	if (!m)
+	if (!m->body)
 	{
-		free(m);
-		m = NULL;
 		fprintf(stderr, "%s", strerror(errno));
+		free_message(m);
 		return NULL;
 	}
 	memset(m->body, 0, sizeof(message_body_t));
@@ -97,9 +96,8 @@ static message_t *fill_message(void)
 		m->attachments = (int *)malloc(sizeof(int) * count + 1);
 		if (!m->attachments)
 		{
-			free(m);
-			m = NULL;
 			fprintf(stderr, "%s", strerror(errno));
+			free_message(m);
 			return NULL;
 		}
 
@@ -109,9 +107,8 @@ static message_t *fill_message(void)
 
 			if (fd == -1)
 			{
-				free(m);
-				m = NULL;
 				fprintf(stderr, "%s", strerror(errno));
+				free_message(m);
 				return NULL;
 			}
 
@@ -123,12 +120,7 @@ static message_t *fill_message(void)
 	if (!fill_message_body(m))
 	{
 		fprintf(stderr, "Error: no message body given\n");
-		free(m->body);
-		m->body = NULL;
-		free(m->attachments);
-		m->attachments = NULL;
-		free(m);
-		m = NULL;
+		free_message(m);
 		return NULL;
 	}
 
@@ -179,12 +171,7 @@ static void process_send_email(void)
 		goto fail;
 	send_email(conn->sd, m, 0);
 
-	if (m->body)
-		free(m->body);
-	if (m->attachments)
-		free(m->attachments);
-	if (m)
-		free(m);
+	free_message(m);
 fail:
 	if (conn->error)
 		free((char *)conn->error);
