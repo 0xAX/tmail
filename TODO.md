@@ -2,7 +2,6 @@
 
 ## General
 
-  * Add `mfree()`.
   * Be more verbose in `fprintf`. For example pass a filename insterted
 of just `No such file or directory`.
 
