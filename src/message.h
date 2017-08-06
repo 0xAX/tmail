@@ -34,5 +34,6 @@ typedef struct
 } message_t;
 
 int fill_message_body(message_t *message);
+void free_message(message_t *message);
 
 #endif /* MESSAGE_H */

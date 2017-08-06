@@ -61,3 +61,27 @@ int fill_message_body(message_t *message)
 		return 1;
 	return 0;
 }
+
+/*
+ * Release memory under message.
+ */
+void free_message(message_t *message)
+{
+	if (!message)
+		return;
+
+	if (message->body)
+	{
+		free(message->body);
+		message->body = NULL;
+	}
+
+	if (message->attachments)
+	{
+		free(message->attachments);
+		message->attachments = NULL;
+	}
+
+	free(message);
+	message = NULL;
+}
