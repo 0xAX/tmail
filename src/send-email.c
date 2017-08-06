@@ -59,8 +59,6 @@ static void print_help(void)
 static message_t *fill_message(void)
 {
 	message_t *m = (message_t *)malloc(sizeof(message_t));
-	m->body = NULL;
-
 	if (!m)
 	{
 		fprintf(stderr, "%s", strerror(errno));
