@@ -70,6 +70,51 @@ static int send_date(int socket)
 	return 1;
 }
 
+static int send_body(int socket)
+{
+	/* send utf8 by default */
+	send(socket, "Content-Type: text/plain; charset=utf-8\r\n", 41, 0);
+
+	/* send CR/LF after headers */
+	send(socket, "\r\n", 2, 0);
+
+	/* send message body */
+	memset(body, 0, 4096);
+	while ((n = read(message->body->message_fd, body, 4096)) > 0)
+	{
+		send(socket, body, n, 0);
+		memset(body, 0, 4096);
+	}
+
+	if (message->body->source != STDIN)
+		close(message->body->message_fd);
+
+	if (n == -1)
+	{
+		fprintf(stderr, "Error: can't read message body");
+		return 0;
+	}
+
+	/* finsih message body */
+	send(socket, "\r\n.\r\n", 5, 0);
+
+	if ((n = recv(socket, buffer, 1024, 0) == -1))
+	{
+		fprintf(stderr,
+			"Error: Can\'t get response from message BODY\n");
+		return 0;
+	}
+
+	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
+	{
+		fprintf(stderr, "Error: wrong response for message body: %s\n",
+			buffer);
+		return 0;
+	}
+
+	return 1;
+}
+
 int send_message_body(int socket, message_t *message, char *buffer)
 {
 	int n = 0;
@@ -117,45 +162,8 @@ int send_message_body(int socket, message_t *message, char *buffer)
 	if (!send_date(socket))
 		return 0;
 
-	/* send utf8 by default */
-	send(socket, "Content-Type: text/plain; charset=utf-8\r\n", 41, 0);
-
-	/* send CR/LF after headers */
-	send(socket, "\r\n", 2, 0);
-
-	/* send message body */
-	memset(body, 0, 4096);
-	while ((n = read(message->body->message_fd, body, 4096)) > 0)
-	{
-		send(socket, body, n, 0);
-		memset(body, 0, 4096);
-	}
-
-	if (message->body->source != STDIN)
-		close(message->body->message_fd);
-
-	if (n == -1)
-	{
-		fprintf(stderr, "Error: can't read message body");
+	if (!send_body(socket))
 		return 0;
-	}
-
-	/* finsih message body */
-	send(socket, "\r\n.\r\n", 5, 0);
-
-	if ((n = recv(socket, buffer, 1024, 0) == -1))
-	{
-		fprintf(stderr,
-			"Error: Can\'t get response from message BODY\n");
-		return 0;
-	}
-
-	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
-	{
-		fprintf(stderr, "Error: wrong response for message body: %s\n",
-			buffer);
-		return 0;
-	}
 
 	memset(buffer, 0, 1024);
 
