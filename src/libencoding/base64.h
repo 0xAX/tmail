@@ -7,8 +7,8 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#ifndef LIB_SMTP_H
-#define LIB_SMTP_H
+#ifndef LIB_BASE_64_H
+#define LIB_BASE_64_H
 
 #include <stdlib.h>
 #include <string.h>
