@@ -19,6 +19,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#include <base64.h>
 #include <gethostname.h>
 
 #define SMTP_PORT 25

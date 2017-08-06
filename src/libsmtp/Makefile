@@ -11,6 +11,7 @@ include ../../mk/Build.mk
 INCLUDES += -I../
 INCLUDES += -I../libutils/
 INCLUDES += -I../libsys/
+INCLUDES += -I../libencoding/
 
 LIB_SMTP_OBJS += ehlo.o
 LIB_SMTP_OBJS += rcpt_to.o
@@ -23,8 +24,11 @@ LIB_SMTP_OBJS += smtp.o
 # some SMTP code uses libsys code
 LIB_SYS_OBJS += ../libsys/gethostname.o
 
+# some SMTP code uses libencoding code
+LIB_ENCODING_OBJS += ../libencoding/base64.o
+
 $(TMAIL_SMTP_LIB): $(LIB_SMTP_OBJS)
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CC_SHLIB_FLAGS) $@ $< $(LIB_SYS_OBJS)
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CC_SHLIB_FLAGS) $@ $< $(LIB_SYS_OBJS) $(LIB_ENCODING_OBJS)
 
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_LIBS) $(BUILD_LIB_FLAGS) $<

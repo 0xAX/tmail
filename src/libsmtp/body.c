@@ -58,7 +58,8 @@ static int send_date(socket_t socket)
 		return 0;
 	}
 
-	if (!strftime(timebuf, sizeof(timebuf), "%a, %d %h %Y %H:%M:%S %z", tm))
+	if (!strftime(timebuf, sizeof(timebuf), "%a, %d %h %Y %H:%M:%S %z\r\n",
+		      tm))
 	{
 		fprintf(stderr, "Error: can't format current date/time\n");
 		return 0;
@@ -79,6 +80,25 @@ static int send_body(socket_t socket, message_t *message, char *buffer)
 	if (!message->attachments)
 		send(socket, "Content-Type: text/plain; charset=utf-8\r\n", 41,
 		     0);
+	else
+	{
+		char boundary[100];
+		char *uid = base64_encode(message->from, strlen(message->from));
+		time_t timestamp = time(NULL);
+		char timestamp_buffer[32];
+
+		snprintf(timestamp_buffer, 10, "%lu", timestamp);
+		memset(boundary, 0, 100);
+
+		strncat(boundary, uid, strlen(uid) + 1);
+		strncat(boundary, "-", 1);
+		strncat(boundary, timestamp_buffer, strlen(timestamp_buffer));
+
+		send(socket, "Content-Type: multipart/mixed; boundary=", 40, 0);
+		send(socket, boundary, strlen(boundary), 0);
+		send(socket, "\r\n", 2, 0);
+		free(uid);
+	}
 
 	/* send CR/LF after headers */
 	send(socket, "\r\n", 2, 0);
