@@ -10,6 +10,7 @@
 #define MESSAGE_H
 
 #include <sys/select.h>
+#include <unistd.h>
 
 #include <basic.h>
 #include <list.h>

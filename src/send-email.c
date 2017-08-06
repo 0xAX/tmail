@@ -93,7 +93,7 @@ static message_t *fill_message(void)
 		list_t *entry = NULL;
 		int count = list_length(attachments);
 
-		m->attachments = (int *)malloc(sizeof(int) * count + 1);
+		m->attachments = (int *)calloc(count + 1, sizeof(int));
 		if (!m->attachments)
 		{
 			fprintf(stderr, "%s", strerror(errno));

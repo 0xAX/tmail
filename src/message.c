@@ -74,7 +74,13 @@ void free_message(message_t *message)
 		mfree(message->body);
 
 	if (message->attachments)
+	{
+		for (unsigned long i = 0; i < ARRAY_SIZE(message->attachments);
+		     i++)
+			if (message->attachments[i] != 0)
+				close(message->attachments[i]);
 		mfree(message->attachments);
+	}
 
 	mfree(message);
 }
