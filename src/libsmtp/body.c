@@ -77,7 +77,8 @@ static int send_body(socket_t socket, message_t *message, char *buffer)
 
 	/* send utf8 by default */
 	if (!message->attachments)
-		send(socket, "Content-Type: text/plain; charset=utf-8\r\n", 41, 0);
+		send(socket, "Content-Type: text/plain; charset=utf-8\r\n", 41,
+		     0);
 
 	/* send CR/LF after headers */
 	send(socket, "\r\n", 2, 0);

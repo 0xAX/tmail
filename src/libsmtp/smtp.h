@@ -79,7 +79,8 @@ void *send_email(socket_t socket, message_t *message, bitmap_t opts);
 __attribute__((pure)) unsigned long parse_smtp_caps(char *r);
 __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap);
 int build_ehlo_msg(char *buffer);
-int send_ehlo_message(socket_t socket, char *request, char *buffer, bitmap_t opts);
+int send_ehlo_message(socket_t socket, char *request, char *buffer,
+		      bitmap_t opts);
 
 /* rcpt_to.c */
 int send_rcpt_to_message(socket_t socket, message_t *message, char *buffer);
