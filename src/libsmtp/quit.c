@@ -8,7 +8,7 @@
 
 #include "smtp.h"
 
-int send_quit_message(int socket, char *buffer)
+int send_quit_message(socket_t socket, char *buffer)
 {
 	int n = 0;
 

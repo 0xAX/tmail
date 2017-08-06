@@ -9,6 +9,8 @@
 #ifndef SYS_CONNECT_H
 #define SYS_CONNECT_H
 
+#include <basic.h>
+
 #define TCP_PROTO 6
 
 #if defined(__APPLE__) && defined(__MACH__)
@@ -24,8 +26,6 @@
 #else
 #define AI_FLAGS AI_ADDRCONFIG | AI_CANONNAME
 #endif
-
-typedef int socket_t;
 
 struct connection
 {

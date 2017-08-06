@@ -8,7 +8,7 @@
 
 #include "smtp.h"
 
-static int send_rcpt_to(int socket, char *buffer, list_t *recipients,
+static int send_rcpt_to(socket_t socket, char *buffer, list_t *recipients,
 			list_t *entry)
 {
 	for_each_list_item(recipients, entry)
@@ -66,7 +66,7 @@ static int send_rcpt_to(int socket, char *buffer, list_t *recipients,
 	return 1;
 }
 
-int send_rcpt_to_message(int socket, message_t *message, char *buffer)
+int send_rcpt_to_message(socket_t socket, message_t *message, char *buffer)
 {
 	int ret = 1;
 	list_t *entry = NULL;

@@ -73,27 +73,27 @@ static inline __attribute__((pure)) void skip_cl_rl(char *str)
 }
 
 /* smtp.c */
-void *send_email(int socket, message_t *message, bitmap_t opts);
+void *send_email(socket_t socket, message_t *message, bitmap_t opts);
 
 /* ehlo.c */
 __attribute__((pure)) unsigned long parse_smtp_caps(char *r);
 __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap);
 int build_ehlo_msg(char *buffer);
-int send_ehlo_message(int socket, char *request, char *buffer, bitmap_t opts);
+int send_ehlo_message(socket_t socket, char *request, char *buffer, bitmap_t opts);
 
 /* rcpt_to.c */
-int send_rcpt_to_message(int socket, message_t *message, char *buffer);
+int send_rcpt_to_message(socket_t socket, message_t *message, char *buffer);
 
 /* mail_from.c */
-int send_mail_from_message(int socket, message_t *message, char *buffer);
+int send_mail_from_message(socket_t socket, message_t *message, char *buffer);
 
 /* quit.c */
-int send_quit_message(int socket, char *buffer);
+int send_quit_message(socket_t socket, char *buffer);
 
 /* data_msg.c */
-int send_data_message(int socket, char *buffer);
+int send_data_message(socket_t socket, char *buffer);
 
 /* body.c */
-int send_message_body(int socket, message_t *message, char *buffer);
+int send_message_body(socket_t socket, message_t *message, char *buffer);
 
 #endif /* __LIB_SMTP_H__ */

@@ -8,7 +8,7 @@
 
 #include "smtp.h"
 
-int send_data_message(int socket, char *buffer)
+int send_data_message(socket_t socket, char *buffer)
 {
 	int n = 0;
 

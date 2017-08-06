@@ -123,7 +123,7 @@ int build_ehlo_msg(char *buffer)
 	return 1;
 }
 
-int send_ehlo_message(int socket, char *request, char *buffer, bitmap_t opts)
+int send_ehlo_message(socket_t socket, char *request, char *buffer, bitmap_t opts)
 {
 	int n = 0;
 

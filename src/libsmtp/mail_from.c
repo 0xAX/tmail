@@ -8,7 +8,7 @@
 
 #include "smtp.h"
 
-int send_mail_from_message(int socket, message_t *message, char *buffer)
+int send_mail_from_message(socket_t socket, message_t *message, char *buffer)
 {
 	int n = 0;
 	size_t from_len = strlen(message->from);

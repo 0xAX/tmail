@@ -8,7 +8,7 @@
 
 #include "smtp.h"
 
-static int read_smtp_greetings(int socket, char *buffer)
+static int read_smtp_greetings(socket_t socket, char *buffer)
 {
 	int n = 0;
 
@@ -31,7 +31,7 @@ static int read_smtp_greetings(int socket, char *buffer)
 	return 1;
 }
 
-void *send_email(int socket, message_t *message, bitmap_t opts)
+void *send_email(socket_t socket, message_t *message, bitmap_t opts)
 {
 	char request[1024];
 	char response[1024];

@@ -20,7 +20,7 @@
 #define SUBJECT_CLAUSE "Subject: "
 #define SUBJECT_CLAUSE_LEN 9
 
-static int send_message_with_param(int socket, char *cmd, int cmd_len,
+static int send_message_with_param(socket_t socket, char *cmd, int cmd_len,
 				   char *data)
 {
 	char *msg = NULL;
@@ -46,7 +46,7 @@ static int send_message_with_param(int socket, char *cmd, int cmd_len,
 	return 1;
 }
 
-static int send_date(int socket)
+static int send_date(socket_t socket)
 {
 	char timebuf[128];
 	time_t current_time = time(NULL);
@@ -70,7 +70,7 @@ static int send_date(int socket)
 	return 1;
 }
 
-static int send_body(int socket, message_t *message, char *buffer)
+static int send_body(socket_t socket, message_t *message, char *buffer)
 {
 	int n = 0;
 	char body[4096];
@@ -118,7 +118,7 @@ static int send_body(int socket, message_t *message, char *buffer)
 	return 1;
 }
 
-int send_message_body(int socket, message_t *message, char *buffer)
+int send_message_body(socket_t socket, message_t *message, char *buffer)
 {
 	list_t *entry = NULL;
 
