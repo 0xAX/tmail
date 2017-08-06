@@ -20,8 +20,8 @@
 #define SUBJECT_CLAUSE "Subject: "
 #define SUBJECT_CLAUSE_LEN 9
 
-static int send_message_with_param(socket_t socket, char *cmd, int cmd_len,
-				   char *data)
+static int send_message_header(socket_t socket, char *cmd, int cmd_len,
+			       char *data)
 {
 	char *msg = NULL;
 	size_t msg_len = strlen(data);
@@ -71,39 +71,24 @@ static int send_date(socket_t socket)
 	return 1;
 }
 
-static int send_body(socket_t socket, message_t *message, char *buffer)
+static int send_attachmets(socket_t socket, message_t *message,
+			   char *mime_boundary, size_t mime_boundary_len)
+{
+	UNUSED(socket);
+	UNUSED(message);
+	UNUSED(mime_boundary);
+	UNUSED(mime_boundary_len);
+
+	return 1;
+}
+
+static int send_message_body(socket_t socket, message_t *message, char *buffer)
 {
 	int n = 0;
 	char body[4096];
 
-	/* send utf8 by default */
-	if (!message->attachments)
-		send(socket, "Content-Type: text/plain; charset=utf-8\r\n", 41,
-		     0);
-	else
-	{
-		char boundary[100];
-		char *uid = base64_encode(message->from, strlen(message->from));
-		time_t timestamp = time(NULL);
-		char timestamp_buffer[32];
+	send(socket, "Content-Type: text/plain; charset=UTF-8\r\n", 41, 0);
 
-		snprintf(timestamp_buffer, 10, "%lu", timestamp);
-		memset(boundary, 0, 100);
-
-		strncat(boundary, uid, strlen(uid) + 1);
-		strncat(boundary, "-", 1);
-		strncat(boundary, timestamp_buffer, strlen(timestamp_buffer));
-
-		send(socket, "Content-Type: multipart/mixed; boundary=", 40, 0);
-		send(socket, boundary, strlen(boundary), 0);
-		send(socket, "\r\n", 2, 0);
-		free(uid);
-	}
-
-	/* send CR/LF after headers */
-	send(socket, "\r\n", 2, 0);
-
-	/* send message body */
 	memset(body, 0, 4096);
 	while ((n = read(message->body->message_fd, body, 4096)) > 0)
 	{
@@ -140,7 +125,56 @@ static int send_body(socket_t socket, message_t *message, char *buffer)
 	return 1;
 }
 
-int send_message_body(socket_t socket, message_t *message, char *buffer)
+static int send_message_content(socket_t socket, message_t *message,
+				char *buffer)
+{
+	char mime_boundary[100];
+	size_t mime_boundary_len = 0;
+
+	memset(mime_boundary, 0, 100);
+
+	/* build and send initial MIME boundary */
+	if (message->attachments)
+	{
+		char *uid = base64_encode(message->from, strlen(message->from));
+		time_t timestamp = time(NULL);
+		char timestamp_buffer[32];
+
+		snprintf(timestamp_buffer, 10, "%lu", timestamp);
+
+		strncat(mime_boundary, uid, strlen(uid) + 1);
+		strncat(mime_boundary, "-", 1);
+		strncat(mime_boundary, timestamp_buffer,
+			strlen(timestamp_buffer));
+
+		send(socket, "Content-Type: multipart/mixed; boundary=", 40, 0);
+		send(socket, mime_boundary, strlen(mime_boundary), 0);
+		send(socket, "\r\n\r\n", 4, 0);
+		free(uid);
+	}
+
+	if (mime_boundary[0])
+		mime_boundary_len = strlen(mime_boundary);
+
+	/* send first boundary */
+	if (mime_boundary_len)
+	{
+		send(socket, "--", 2, 0);
+		send(socket, mime_boundary, mime_boundary_len, 0);
+		send(socket, "\r\n", 2, 0);
+	}
+
+	/* send message text and attachments */
+	if (!send_message_body(socket, message, buffer))
+		return 0;
+	if (mime_boundary_len &&
+	    !send_attachmets(socket, message, mime_boundary, mime_boundary_len))
+		return 0;
+
+	return 1;
+}
+
+int send_message(socket_t socket, message_t *message, char *buffer)
 {
 	list_t *entry = NULL;
 
@@ -148,17 +182,20 @@ int send_message_body(socket_t socket, message_t *message, char *buffer)
 	send(socket, "MIME-Version: 1.0\r\n", 19, 0);
 
 	/* send from header */
-	if (!send_message_with_param(socket, FROM_CLAUSE, FROM_CLAUSE_LEN,
-				     message->from))
+	if (!send_message_header(socket, FROM_CLAUSE, FROM_CLAUSE_LEN,
+				 message->from))
 		return 0;
 
 	/* send 'To:' headers */
 	if (message->to)
-		for_each_list_item(
-		    message->to,
-		    entry) if (!send_message_with_param(socket, TO_CLAUSE,
-							TO_CLAUSE_LEN,
-							entry->item)) return 0;
+	{
+		for_each_list_item(message->to, entry)
+		{
+			if (!send_message_header(socket, TO_CLAUSE,
+						 TO_CLAUSE_LEN, entry->item))
+				return 0;
+		}
+	}
 
 	/* send 'Cc:' headers */
 	if (message->cc)
@@ -176,16 +213,15 @@ int send_message_body(socket_t socket, message_t *message, char *buffer)
 
 	/* send subject */
 	if (message->subject)
-		if (!send_message_with_param(socket, SUBJECT_CLAUSE,
-					     SUBJECT_CLAUSE_LEN,
-					     message->subject))
+		if (!send_message_header(socket, SUBJECT_CLAUSE,
+					 SUBJECT_CLAUSE_LEN, message->subject))
 			return 0;
 
 	/* send 'Date' header */
 	if (!send_date(socket))
 		return 0;
 
-	if (!send_body(socket, message, buffer))
+	if (!send_message_content(socket, message, buffer))
 		return 0;
 
 	memset(buffer, 0, 1024);
