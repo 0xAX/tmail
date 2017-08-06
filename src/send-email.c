@@ -87,6 +87,7 @@ static message_t *fill_message(void)
 	if (bcc)
 		m->bcc = bcc;
 
+	/* open file descriptors for attachments */
 	if (attachments)
 	{
 		int i = 0;
