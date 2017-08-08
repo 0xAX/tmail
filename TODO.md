@@ -7,6 +7,7 @@ of just `No such file or directory`.
 
 ## Build
 
+  * Remove `BUILD_LIB_FLAGS`.
   * Add ` -Weverything` for clang build.
   * Add enumeration of what avaliable targets will be built with the
 `make all`.
