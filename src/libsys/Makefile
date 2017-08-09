@@ -20,7 +20,7 @@ $(TMAIL_SYS_LIB): $(LIB_SYS_OBJS)
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CC_SHLIB_FLAGS) $@ $<
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_LIBS) $(BUILD_LIB_FLAGS) $<
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_LIBS) $<
 
 $(CLEAN_TARGET):
 	@echo "./src/libsys"

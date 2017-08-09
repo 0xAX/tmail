@@ -18,7 +18,7 @@ $(TMAIL_UTILS_LIB): $(LIB_UTILS_OBJS)
 	$(QUIET_CC) $(TMAIL_CC) $(CC_SHLIB_FLAGS) $@ $<
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(CFLAGS_LIBS) $(BUILD_LIB_FLAGS) $<
+	$(QUIET_CC) $(TMAIL_CC) $(CFLAGS_LIBS) $<
 
 $(TEST_TARGET): $(TEST_EXECUTABLES)
 	@exec ./run_tests.pl
