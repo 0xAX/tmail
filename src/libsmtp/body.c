@@ -140,7 +140,13 @@ static int send_message_content(socket_t socket, message_t *message,
 		time_t timestamp = time(NULL);
 		char timestamp_buffer[32];
 
-		snprintf(timestamp_buffer, 10, "%lu", timestamp);
+		/*
+		 * Unix and POSIX-compliant systems implement the time_t type
+		 * as a signed integer (typically 32 or 64 bits wide) which
+		 * represents the number of seconds since the start of the Unix
+		 * epoch
+		 */
+		snprintf(timestamp_buffer, 10, "%ld", timestamp);
 
 		strncat(mime_boundary, uid, strlen(uid) + 1);
 		strncat(mime_boundary, "-", 1);
