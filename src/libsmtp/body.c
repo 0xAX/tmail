@@ -146,7 +146,7 @@ static int send_message_content(socket_t socket, message_t *message,
 		 * represents the number of seconds since the start of the Unix
 		 * epoch
 		 */
-		snprintf(timestamp_buffer, 10, "%ld", timestamp);
+		snprintf(timestamp_buffer, 10, TIME_FORMAT, timestamp);
 
 		strncat(mime_boundary, uid, strlen(uid) + 1);
 		strncat(mime_boundary, "-", 1);

@@ -21,6 +21,7 @@
 
 #include <base64.h>
 #include <gethostname.h>
+#include <time_utils.h>
 
 #define SMTP_PORT 25
 #define SMTP_PORT_TLS 587
