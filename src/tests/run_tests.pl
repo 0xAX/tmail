@@ -24,6 +24,8 @@ result_test_5 application/x-perl
 result_test_6 application/excel
 EOF
 
+print "Running: tmailc code tests \n";
+
 for my $test (@mime_tests) {
     my $result=`$test`;
 
