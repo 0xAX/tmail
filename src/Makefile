@@ -10,6 +10,7 @@ include ../mk/Build.mk
 
 # object files for
 TMAIL_OBJS += tmail.o
+TMAIL_OBJS += mime.o
 TMAIL_OBJS += message.o
 TMAIL_OBJS += send-email.o
 
@@ -38,6 +39,7 @@ LIB_ENCODING_OBJS += libencoding/base64.o
 
 # other apps
 SMTP_CAPS_OBJS += smtp-caps.o
+SMTP_CAPS_ADDITIONAL_OBJS += mime.o
 
 # set of directories with C headers needed for tmail
 INCLUDES+=-Ilibsys/
@@ -52,7 +54,8 @@ $(TMAIL_EXECUTABLE): $(TMAIL_OBJS)
 	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@	$(LIBSYS_OBJS) $(LIB_UTILS_OBJS) $(LIB_ENCODING_OBJS) $(LIB_SMTP_OBJS) $(TMAIL_OBJS) $(LIBS)
 
 $(SMTP_CAPS_EXECUTABLE): $(SMTP_CAPS_OBJS)
-	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@ $(LIBSYS_OBJS) $(LIB_UTILS_OBJS) $(LIB_ENCODING_OBJS) $(LIB_SMTP_OBJS) $(SMTP_CAPS_OBJS) $(LIBS)
+	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@ $(LIBSYS_OBJS) $(LIB_UTILS_OBJS) \
+        $(LIB_ENCODING_OBJS) $(LIB_SMTP_OBJS) $(SMTP_CAPS_OBJS) $(SMTP_CAPS_ADDITIONAL_OBJS) $(LIBS)
 
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_OBJS) $@ $<
@@ -64,5 +67,6 @@ $(CLEAN_TARGET):
 	@cd $(TMAIL_UTILS_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(CLEAN_TARGET)
 	@cd $(TMAIL_SMTP_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(CLEAN_TARGET)
 	@cd $(TMAIL_ENCODING_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(CLEAN_TARGET)
+	@cd ./tests && $(MAKE) $(MAKE_FLAGS) $(CLEAN_TARGET)
 
 .PHONY: $(CLEAN_TARGET)

@@ -67,6 +67,8 @@ int fill_message_body(message_t *message)
  */
 void free_message(message_t *message)
 {
+	list_t *entry = NULL;
+
 	if (!message)
 		return;
 
@@ -75,11 +77,16 @@ void free_message(message_t *message)
 
 	if (message->attachments)
 	{
-		for (unsigned long i = 0; i < ARRAY_SIZE(message->attachments);
-		     i++)
-			if (message->attachments[i] != 0)
-				close(message->attachments[i]);
-		mfree(message->attachments);
+		for_each_list_item(message->attachments, entry)
+		{
+			fd_t fd = ((message_attachment_t *)(entry->item))
+				      ->attachment_fd;
+			if (fd)
+				close(fd);
+			free(((message_attachment_t *)(entry->item))->path);
+		}
+		list_free_full(message->attachments);
+		message->attachments = NULL;
 	}
 
 	mfree(message);

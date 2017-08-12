@@ -88,11 +88,9 @@ static message_t *fill_message(void)
 	/* open file descriptors for attachments */
 	if (attachments)
 	{
-		int i = 0;
 		list_t *entry = NULL;
-		int count = list_length(attachments);
 
-		m->attachments = (int *)calloc(count + 1, sizeof(int));
+		m->attachments = list_new();
 		if (!m->attachments)
 		{
 			fprintf(stderr, "%s", strerror(errno));
@@ -102,6 +100,7 @@ static message_t *fill_message(void)
 
 		for_each_list_item(attachments, entry)
 		{
+			message_attachment_t *attachment = NULL;
 			fd_t fd = open((char *)entry->item, O_RDONLY);
 
 			if (fd == -1)
@@ -111,8 +110,18 @@ static message_t *fill_message(void)
 				return NULL;
 			}
 
-			m->attachments[i] = fd;
-			i++;
+			attachment = (message_attachment_t *)malloc(
+			    sizeof(message_attachment_t));
+			if (!attachment)
+			{
+				fprintf(stderr, "%s", strerror(errno));
+				free_message(m);
+				return NULL;
+			}
+
+			attachment->path = strdup(entry->item);
+			attachment->attachment_fd = fd;
+			list_append(m->attachments, attachment);
 		}
 	}
 

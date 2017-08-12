@@ -14,6 +14,8 @@ LIB_UTILS_OBJS += stack.o
 TEST_EXECUTABLES += list_test
 TEST_EXECUTABLES += stack_test
 
+TEST_OBJS = list_test.o stack_test.o
+
 $(TMAIL_UTILS_LIB): $(LIB_UTILS_OBJS)
 	$(QUIET_CC) $(TMAIL_CC) $(CC_SHLIB_FLAGS) $@ $<
 
@@ -37,5 +39,6 @@ $(CLEAN_TARGET):
 	$(QUIET_CLEAN_OBJECTS) $(RM) $(LIB_UTILS_OBJS)
 	$(QUIET_CLEAN_SHARED_LIBS) $(RM) $(TMAIL_UTILS_LIB)
 	@rm -rf $(TEST_EXECUTABLES)
+	@rm -rf $(TEST_OBJS)
 
 .PHONY: $(CLEAN_TARGET)

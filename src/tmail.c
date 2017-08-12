@@ -14,6 +14,7 @@
 #include <unistd.h>
 
 #include <at_exit.h>
+#include <mime.h>
 #include <send-email.h>
 
 static void print_help(void) __attribute__((noreturn));
@@ -63,7 +64,11 @@ static void parse_argv(int argc, char *argv[])
 	}
 }
 
-void exit_cb(void) { release_send_email_data(); }
+void exit_cb(void)
+{
+	mime_free();
+	release_send_email_data();
+}
 
 int main(int argc, char *argv[])
 {
@@ -78,6 +83,8 @@ int main(int argc, char *argv[])
 		print_help();
 
 	register_exit_cb(exit_cb);
+
+	load_mime_file("contrib/mime.types");
 
 	if (!setlocale(LC_ALL, "en_US.utf8"))
 		setlocale(LC_ALL, "");

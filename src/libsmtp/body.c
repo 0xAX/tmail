@@ -72,12 +72,58 @@ static int send_date(socket_t socket)
 }
 
 static int send_attachmets(socket_t socket, message_t *message,
-			   char *mime_boundary, size_t mime_boundary_len)
+			   char *mime_boundary, size_t mime_boundary_len,
+			   char *buffer)
 {
+	int n = 0;
+	list_t *entry = NULL;
+
+	for_each_list_item(message->attachments, entry)
+	{
+		// char *path = ((message_attachment_t *)(entry->item))->path;
+		// fd_t fd =
+		// ((message_attachment_t*)(entry->item))->attachment_fd;
+
+		/* send mime boundary */
+		// send(socket, "\r\n--", 4, 0);
+		// send(socket, mime_boundary, mime_boundary_len, 0);
+
+		/* send meta related to attachment */
+		// send("Content-Type: application/json;
+		// name=\"dashboard.json\"\r\n", 0, 0);
+		// send("Content-Disposition: attachment;
+		// filename=\"dashboard.json\"\r\n", strlen(path), 0);
+		// send("Content-Transfer-Encoding: base64\r\n", 35, 0);
+		// send(socket, "\r\n", 2, 0);
+
+		/* send file */
+	}
+
 	UNUSED(socket);
-	UNUSED(message);
 	UNUSED(mime_boundary);
 	UNUSED(mime_boundary_len);
+
+	/* send last mime-boundary */
+	send(socket, "\r\n--", 4, 0);
+	send(socket, mime_boundary, mime_boundary_len, 0);
+	send(socket, "--", 2, 0);
+
+	/* Send end of message */
+	send(socket, "\r\n.\r\n", 5, 0);
+
+	if ((n = recv(socket, buffer, 1024, 0) == -1))
+	{
+		fprintf(stderr,
+			"Error: Can\'t get response from message BODY\n");
+		return 0;
+	}
+
+	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
+	{
+		fprintf(stderr, "Error: wrong response for message body: %s\n",
+			buffer);
+		return 0;
+	}
 
 	return 1;
 }
@@ -87,7 +133,7 @@ static int send_message_body(socket_t socket, message_t *message, char *buffer)
 	int n = 0;
 	char body[4096];
 
-	send(socket, "Content-Type: text/plain; charset=UTF-8\r\n", 41, 0);
+	send(socket, "Content-Type: text/plain; charset=\"UTF-8\"\r\n", 43, 0);
 
 	memset(body, 0, 4096);
 	while ((n = read(message->body->message_fd, body, 4096)) > 0)
@@ -106,21 +152,28 @@ static int send_message_body(socket_t socket, message_t *message, char *buffer)
 	}
 
 	/* finsih message body */
-	send(socket, "\r\n.\r\n", 5, 0);
-
-	if ((n = recv(socket, buffer, 1024, 0) == -1))
+	if (!message->attachments)
 	{
-		fprintf(stderr,
-			"Error: Can\'t get response from message BODY\n");
-		return 0;
-	}
+		send(socket, "\r\n.\r\n", 5, 0);
 
-	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
-	{
-		fprintf(stderr, "Error: wrong response for message body: %s\n",
-			buffer);
-		return 0;
+		if ((n = recv(socket, buffer, 1024, 0) == -1))
+		{
+			fprintf(
+			    stderr,
+			    "Error: Can\'t get response from message BODY\n");
+			return 0;
+		}
+
+		if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
+		{
+			fprintf(stderr,
+				"Error: wrong response for message body: %s\n",
+				buffer);
+			return 0;
+		}
 	}
+	else
+		send(socket, "\r\n", 2, 0);
 
 	return 1;
 }
@@ -153,9 +206,10 @@ static int send_message_content(socket_t socket, message_t *message,
 		strncat(mime_boundary, timestamp_buffer,
 			strlen(timestamp_buffer));
 
-		send(socket, "Content-Type: multipart/mixed; boundary=", 40, 0);
+		send(socket, "Content-Type: multipart/mixed; boundary=\"", 41,
+		     0);
 		send(socket, mime_boundary, strlen(mime_boundary), 0);
-		send(socket, "\r\n\r\n", 4, 0);
+		send(socket, "\"\r\n\r\n", 5, 0);
 		free(uid);
 	}
 
@@ -174,7 +228,8 @@ static int send_message_content(socket_t socket, message_t *message,
 	if (!send_message_body(socket, message, buffer))
 		return 0;
 	if (mime_boundary_len &&
-	    !send_attachmets(socket, message, mime_boundary, mime_boundary_len))
+	    !send_attachmets(socket, message, mime_boundary, mime_boundary_len,
+			     buffer))
 		return 0;
 
 	return 1;
