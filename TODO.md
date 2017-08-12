@@ -68,6 +68,10 @@ like this.
   * Add `mail` structure which should contain prepared email
 to send.
 
+## MIME
+
+  * Make return value of the `get_mime_type()` - `const`.
+
 ## libutils
 
 ### list_t
