@@ -81,6 +81,7 @@ static int send_attachmets(socket_t socket, message_t *message,
 	for_each_list_item(message->attachments, entry)
 	{
 		char buf[4095];
+		struct stat st;
 		char *path = ((message_attachment_t *)(entry->item))->path;
 		char *base_name = basename(path);
 		fd_t fd = ((message_attachment_t*)(entry->item))->attachment_fd;
@@ -113,6 +114,10 @@ static int send_attachmets(socket_t socket, message_t *message,
 		send(socket, "Content-Transfer-Encoding: base64\r\n", 35, 0);
 		send(socket, "\r\n", 2, 0);
 
+		stat(path, &st);
+
+		printf("sise %lu\n", st.st_size);
+		
 		while ((n = read(fd, buf, 4095)) > 0)
 		{
 			/* TODO check memory here */
