@@ -82,6 +82,7 @@ static int send_attachmets(socket_t socket, message_t *message,
 	{
 		char buf[4095];
 		struct stat st;
+		unsigned long blk_count, blk_rem = 0;
 		char *path = ((message_attachment_t *)(entry->item))->path;
 		char *base_name = basename(path);
 		fd_t fd = ((message_attachment_t*)(entry->item))->attachment_fd;
@@ -114,14 +115,19 @@ static int send_attachmets(socket_t socket, message_t *message,
 		send(socket, "Content-Transfer-Encoding: base64\r\n", 35, 0);
 		send(socket, "\r\n", 2, 0);
 
+		/* to get file size */
 		stat(path, &st);
 
-		printf("sise %lu\n", st.st_size);
-		
-		while ((n = read(fd, buf, 4095)) > 0)
+		blk_count = st.st_size / 4095;
+		blk_rem = st.st_size % 4095;
+
+		while (blk_count)
 		{
+			char *base64_encoded_buf = NULL;
+			n = read(fd, buf, 4095);
+
 			/* TODO check memory here */
-			char *base64_encoded_buf = base64_encode(buf, n);
+			base64_encoded_buf = base64_encode(buf, n);
 
 			if (!base64_encoded_buf)
 			{
@@ -134,6 +140,32 @@ static int send_attachmets(socket_t socket, message_t *message,
 			send(socket, base64_encoded_buf, strlen(base64_encoded_buf), 0);
 			memset(buf, 0, 4095);
 			free(base64_encoded_buf);
+
+			blk_count--;
+		}
+
+		if (blk_rem)
+		{
+			char *base64_encoded_buf = NULL;
+
+			n = read(fd, buf, 4095);
+
+			/* TODO check memory here */
+			base64_encoded_buf = base64_encode(buf, n);
+
+			if (!base64_encoded_buf)
+			{
+				fprintf(stderr,
+					"Error: Can\'t allocate memory for base64 encoding\n");
+
+				return 0;
+			}
+
+			send(socket, base64_encoded_buf, strlen(base64_encoded_buf), 0);
+			memset(buf, 0, 4095);
+			free(base64_encoded_buf);
+
+			blk_count--;			
 		}
 
 		/* send an attachment */
