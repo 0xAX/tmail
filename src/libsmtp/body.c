@@ -126,10 +126,11 @@ static int send_attachmets(socket_t socket, message_t *message,
 				return 0;
 			}
 
-			send(socket, base64_encoded_buf, n, 0);
+			send(socket, base64_encoded_buf, strlen(base64_encoded_buf), 0);
 			memset(buf, 0, 4095);
 			free(base64_encoded_buf);
 		}
+
 		/* send an attachment */
 		free(mime_type);
 	}
