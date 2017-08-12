@@ -33,10 +33,10 @@ char *base64_encode(char *data, size_t len)
 	buf[1] = 0;
 	buf[2] = 0;
 
-	result = (char *)malloc(out_len + 1);
+	result = (char *)malloc(out_len + 2);
 	if (!result)
 		return NULL;
-	memset(result, 0, out_len + 1);
+	memset(result, 0, out_len + 2);
 
 	for (unsigned long long i = 0L; i < n; i += 3)
 	{
