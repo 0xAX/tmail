@@ -33,6 +33,11 @@ char *base64_encode(char *data, size_t len)
 	buf[1] = 0;
 	buf[2] = 0;
 
+	printf("base64_encode()\n");
+	printf("lines %d\n", lines);
+	printf("len %lu\n", len);
+	printf("out_len %lu\n", out_len);
+	
 	result = (char *)malloc(out_len + 2);
 	if (!result)
 		return NULL;
@@ -44,10 +49,9 @@ char *base64_encode(char *data, size_t len)
 		 * As described in RFC 2045:
 		 *
 		 * The encoded output stream must be represented in lines of no
-		 * more
-		 * than 76 characters each.
+		 * more than 76 characters each.
 		 */
-		if (i > 0 && (i / 3 * 4) % 76 == 0)
+		if (i > 0 && i % 76 == 1)
 		{
 			strncat(result, (char *)"\r\n", 2);
 			j += 2;
@@ -59,6 +63,9 @@ char *base64_encode(char *data, size_t len)
 
 		result[j] = alphabet[(buf[0] & 0xfc) >> 2];
 		result[j + 1] = alphabet[(buf[0] & 0x3) << 4 | (buf[1] >> 4)];
+
+		if (j >= out_len + 2)
+			printf("%llu\n", j);
 		result[j + 2] =
 		    alphabet[((buf[1] & 0x0f) << 2) | (buf[2] >> 6)];
 		result[j + 3] = alphabet[buf[2] & 0x3f];

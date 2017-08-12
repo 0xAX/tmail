@@ -14,6 +14,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <stdio.h>
+
 char *base64_encode(char *data, size_t len);
 
 #endif

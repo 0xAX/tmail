@@ -78,6 +78,8 @@ static int send_attachmets(socket_t socket, message_t *message,
 	int n = 0;
 	list_t *entry = NULL;
 
+	printf("-------we send attachment------\n");
+
 	for_each_list_item(message->attachments, entry)
 	{
 		char buf[4095];
@@ -110,6 +112,7 @@ static int send_attachmets(socket_t socket, message_t *message,
 		strncat(buf, base_name, strlen(base_name));
 		strncat(buf, "\"\r\n", 3);
 		send(socket, buf, strlen(buf), 0);
+		memset(buf, 0, 4095);
 
 		/* send Content-Transfer-Encoding header */
 		send(socket, "Content-Transfer-Encoding: base64\r\n", 35, 0);
@@ -121,11 +124,18 @@ static int send_attachmets(socket_t socket, message_t *message,
 		blk_count = st.st_size / 4095;
 		blk_rem = st.st_size % 4095;
 
+		printf("full size - %lu\n", st.st_size);
+		printf("blk_count %lu\n", blk_count);
+		printf("blk_rem %lu\n", blk_rem);
+
 		while (blk_count)
 		{
 			char *base64_encoded_buf = NULL;
+
 			n = read(fd, buf, 4095);
 
+			printf("read bytes - %d\n", n);
+			
 			/* TODO check memory here */
 			base64_encoded_buf = base64_encode(buf, n);
 
@@ -139,8 +149,9 @@ static int send_attachmets(socket_t socket, message_t *message,
 
 			send(socket, base64_encoded_buf, strlen(base64_encoded_buf), 0);
 			memset(buf, 0, 4095);
-			free(base64_encoded_buf);
 
+			if (base64_encoded_buf)
+				mfree(base64_encoded_buf);
 			blk_count--;
 		}
 
@@ -148,7 +159,7 @@ static int send_attachmets(socket_t socket, message_t *message,
 		{
 			char *base64_encoded_buf = NULL;
 
-			n = read(fd, buf, 4095);
+			n = read(fd, buf, blk_rem);
 
 			/* TODO check memory here */
 			base64_encoded_buf = base64_encode(buf, n);
@@ -163,9 +174,8 @@ static int send_attachmets(socket_t socket, message_t *message,
 
 			send(socket, base64_encoded_buf, strlen(base64_encoded_buf), 0);
 			memset(buf, 0, 4095);
-			free(base64_encoded_buf);
-
-			blk_count--;			
+			if (base64_encoded_buf)
+				mfree(base64_encoded_buf);
 		}
 
 		/* send an attachment */
@@ -281,7 +291,7 @@ static int send_message_content(socket_t socket, message_t *message,
 		     0);
 		send(socket, mime_boundary, strlen(mime_boundary), 0);
 		send(socket, "\"\r\n\r\n", 5, 0);
-		free(uid);
+		mfree(uid);
 	}
 
 	if (mime_boundary[0])
