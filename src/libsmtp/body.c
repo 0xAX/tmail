@@ -80,23 +80,41 @@ static int send_attachmets(socket_t socket, message_t *message,
 
 	for_each_list_item(message->attachments, entry)
 	{
-		// char *path = ((message_attachment_t *)(entry->item))->path;
-		// fd_t fd =
-		// ((message_attachment_t*)(entry->item))->attachment_fd;
+		char buf[256];
+		char *path = ((message_attachment_t *)(entry->item))->path;
+		char *base_name = basename(path);
+		fd_t fd = ((message_attachment_t*)(entry->item))->attachment_fd;
+
+		/* TODO check return value */
+		char *mime_type = get_mime_type(path);
 
 		/* send mime boundary */
-		// send(socket, "\r\n--", 4, 0);
-		// send(socket, mime_boundary, mime_boundary_len, 0);
+		send(socket, "\r\n--", 4, 0);
+		send(socket, mime_boundary, mime_boundary_len, 0);
+		send(socket, "\r\n--", 2, 0);
 
-		/* send meta related to attachment */
-		// send("Content-Type: application/json;
-		// name=\"dashboard.json\"\r\n", 0, 0);
-		// send("Content-Disposition: attachment;
-		// filename=\"dashboard.json\"\r\n", strlen(path), 0);
-		// send("Content-Transfer-Encoding: base64\r\n", 35, 0);
-		// send(socket, "\r\n", 2, 0);
+		/* build and send Content-Type header */
+		memset(buf, 0, 256);
+		strncat(buf, "Content-Type: ", 14);
+		strncat(buf, mime_type, strlen(mime_type));
+		strncat(buf, "; name=\"", 8);
+		strncat(buf, base_name, strlen(base_name));
+		strncat(buf, "\"\r\n", 3);
+		send(socket, buf, strlen(buf), 0);
 
-		/* send file */
+		/* build and send content dispostion buffer */
+		memset(buf, 0, 256);
+		strncat(buf, "Content-Disposition: attachment; filename=\"", 43);
+		strncat(buf, base_name, strlen(base_name));
+		strncat(buf, "\"\r\n", 3);
+		send(socket, buf, strlen(buf), 0);
+
+		/* send Content-Transfer-Encoding header */
+		send(socket, "Content-Transfer-Encoding: base64\r\n", 35, 0);
+		send(socket, "\r\n", 2, 0);
+
+		/* send an attachment */
+		free(mime_type);
 	}
 
 	UNUSED(socket);

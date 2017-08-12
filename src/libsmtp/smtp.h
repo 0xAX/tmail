@@ -11,6 +11,7 @@
 
 #include <assert.h>
 #include <basic.h>
+#include <libgen.h>
 #include <message.h>
 #include <stdbool.h>
 #include <stdio.h>
