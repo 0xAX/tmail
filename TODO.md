@@ -32,9 +32,11 @@ like this.
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
   * Support for colorful error messages.
   * Return non-zero error code if we exit during failure case.
+  * Move openning of a `mime.types` into tmail. To open it only once.
 
 ## send-email
 
+  * Catch `SIGINT` to release memory;
   * Add `--from-file` command line option.
   * If from file wasn't given and stdin is empty (select/poll), open editor.
   * Move to builtins directory.
