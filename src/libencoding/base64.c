@@ -12,92 +12,78 @@
 static char alphabet[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-char *base64_encode(char *data, size_t len)
+base64_data_t *base64_encode(char *data, size_t len)
 {
-	char *result = NULL;
+	base64_data_t *result = NULL;
+	size_t out_len = 4 * (len / 3);
+	int lines_count = out_len / 76 + 1;
+	size_t c = len % 3;
+	char padding[3];
 
-	char buf[3];
-	size_t n = (len / 3) * 3;
-
-	/* maximum line length - 76 characters */
-	int lines = len / 76;
-
-	size_t out_len = 4 * ((len + 2) / 3) + (lines * 2);
-	int rest = len - n;
-	unsigned long long j = 0L;
+	/* besides length of data, we need to add CR\LF to each line */
+	out_len += lines_count * 2 + 2;
 
 	if (len == 0)
 		return NULL;
 
-	buf[0] = 0;
-	buf[1] = 0;
-	buf[2] = 0;
+	/* fill message with padding */
+	memset(padding, 0, 3);
+	if (c > 0)
+		for (; c < 3; c++)
+			strncat(padding, "=", 1);
 
-	printf("base64_encode()\n");
-	printf("lines %d\n", lines);
-	printf("len %lu\n", len);
-	printf("out_len %lu\n", out_len);
-	
-	result = (char *)malloc(out_len + 2);
+	/* allocate space for encoded buffer */
+	result = (base64_data_t *)malloc(sizeof(base64_data_t));
 	if (!result)
 		return NULL;
-	memset(result, 0, out_len + 2);
-
-	for (unsigned long long i = 0L; i < n; i += 3)
+	memset(result, 0, sizeof(base64_data_t));
+	result->out_len = out_len;
+	result->data = (char *)malloc(out_len + 1);
+	if (!result->data)
 	{
+		free(result);
+		return NULL;
+	}
+	memset(result->data, 0, out_len + 1);
+
+	/* encoding process */
+	for (unsigned long long i = 0L; i < len; i += 3)
+	{
+		int n0 = 0;
+		int n1 = 0;
+		int n2 = 0;
+		int n3 = 0;
+		int n4 = 0;
+
 		/*
 		 * As described in RFC 2045:
 		 *
 		 * The encoded output stream must be represented in lines of no
 		 * more than 76 characters each.
 		 */
-		if (i > 0 && i % 76 == 1)
-		{
-			strncat(result, (char *)"\r\n", 2);
-			j += 2;
-		}
+		if (i > 0 && (i / 3 * 4) % 76 == 0)
+			strncat(result->data, (char *)"\r\n", 2);
 
-		buf[0] = data[i];
-		buf[1] = data[i + 1];
-		buf[2] = data[i + 2];
+		n0 = ((unsigned char)(data)[i] << 16) +
+		     ((unsigned char)(data)[i + 1] << 8) +
+		     (unsigned char)(data)[i + 2];
 
-		result[j] = alphabet[(buf[0] & 0xfc) >> 2];
-		result[j + 1] = alphabet[(buf[0] & 0x3) << 4 | (buf[1] >> 4)];
+		n1 = (n0 >> 18) & 63;
+		n2 = (n0 >> 12) & 63;
+		n3 = (n0 >> 6) & 63;
+		n4 = n0 & 63;
 
-		if (j >= out_len + 2)
-			printf("%llu\n", j);
-		result[j + 2] =
-		    alphabet[((buf[1] & 0x0f) << 2) | (buf[2] >> 6)];
-		result[j + 3] = alphabet[buf[2] & 0x3f];
-		j += 4;
-
-		buf[0] = 0;
-		buf[1] = 0;
-		buf[2] = 0;
+		strncat(result->data, alphabet + n1, (size_t)1);
+		strncat(result->data, alphabet + n2, (size_t)1);
+		strncat(result->data, alphabet + n3, (size_t)1);
+		strncat(result->data, alphabet + n4, (size_t)1);
 	}
 
-	/* we no need in padding characters */
-	if (rest == 0)
-		return result;
-
-	/* fill the rest */
-	for (int i = 0; i < rest; i++)
-		buf[i] = data[len - rest + i];
-	result[out_len - 4] = alphabet[buf[0] >> 2];
-	result[out_len - 3] = alphabet[(buf[0] & 0x3) << 4 | (buf[1] >> 4)];
-
 	/* fill with padding or last characters */
-	if (buf[1] == 0)
-		result[out_len - 2] = '=';
-	else
-		result[out_len - 2] =
-		    alphabet[((buf[1] & 0x0f) << 2) | (buf[2] >> 6)];
-
-	if (buf[2] == 0)
-		result[out_len - 1] = '=';
-	else
-		result[out_len - 1] =
-		    alphabet[((buf[1] & 0x0f) << 2) | (buf[2] >> 6)];
+	if (padding[0])
+		result->data[out_len - 1] = '=';
+	if (padding[1])
+		result->data[out_len - 2] = '=';
 
 	return result;
 }

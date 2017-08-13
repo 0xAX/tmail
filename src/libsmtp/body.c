@@ -78,19 +78,24 @@ static int send_attachmets(socket_t socket, message_t *message,
 	int n = 0;
 	list_t *entry = NULL;
 
-	printf("-------we send attachment------\n");
-
 	for_each_list_item(message->attachments, entry)
 	{
 		char buf[4095];
+		// char *file_buf;
 		struct stat st;
 		unsigned long blk_count, blk_rem = 0;
 		char *path = ((message_attachment_t *)(entry->item))->path;
 		char *base_name = basename(path);
-		fd_t fd = ((message_attachment_t*)(entry->item))->attachment_fd;
+		fd_t fd =
+		    ((message_attachment_t *)(entry->item))->attachment_fd;
 
-		/* TODO check return value */
 		char *mime_type = get_mime_type(path);
+		if (!mime_type)
+		{
+			fprintf(stderr,
+				"Error: Can\'t get MIME type for a data\n");
+			return 0;
+		}
 
 		/* send mime boundary */
 		send(socket, "\r\n--", 4, 0);
@@ -108,7 +113,8 @@ static int send_attachmets(socket_t socket, message_t *message,
 
 		/* build and send content dispostion buffer */
 		memset(buf, 0, 4095);
-		strncat(buf, "Content-Disposition: attachment; filename=\"", 43);
+		strncat(buf, "Content-Disposition: attachment; filename=\"",
+			43);
 		strncat(buf, base_name, strlen(base_name));
 		strncat(buf, "\"\r\n", 3);
 		send(socket, buf, strlen(buf), 0);
@@ -121,65 +127,39 @@ static int send_attachmets(socket_t socket, message_t *message,
 		/* to get file size */
 		stat(path, &st);
 
+		/* send an attachment */
 		blk_count = st.st_size / 4095;
 		blk_rem = st.st_size % 4095;
 
-		printf("full size - %lu\n", st.st_size);
-		printf("blk_count %lu\n", blk_count);
-		printf("blk_rem %lu\n", blk_rem);
-
 		while (blk_count)
 		{
-			char *base64_encoded_buf = NULL;
+			base64_data_t *base64_encoded_buf;
 
 			n = read(fd, buf, 4095);
-
-			printf("read bytes - %d\n", n);
-			
-			/* TODO check memory here */
 			base64_encoded_buf = base64_encode(buf, n);
-
-			if (!base64_encoded_buf)
-			{
-				fprintf(stderr,
-					"Error: Can\'t allocate memory for base64 encoding\n");
-
-				return 0;
-			}
-
-			send(socket, base64_encoded_buf, strlen(base64_encoded_buf), 0);
-			memset(buf, 0, 4095);
-
-			if (base64_encoded_buf)
-				mfree(base64_encoded_buf);
+			send(socket, base64_encoded_buf->data,
+			     base64_encoded_buf->out_len - 4, 0);
+			send(socket, "\r\n", 2, 0);
+			free(base64_encoded_buf->data);
+			free(base64_encoded_buf);
 			blk_count--;
 		}
 
 		if (blk_rem)
 		{
-			char *base64_encoded_buf = NULL;
+			base64_data_t *base64_encoded_buf;
 
 			n = read(fd, buf, blk_rem);
-
-			/* TODO check memory here */
 			base64_encoded_buf = base64_encode(buf, n);
 
-			if (!base64_encoded_buf)
-			{
-				fprintf(stderr,
-					"Error: Can\'t allocate memory for base64 encoding\n");
-
-				return 0;
-			}
-
-			send(socket, base64_encoded_buf, strlen(base64_encoded_buf), 0);
-			memset(buf, 0, 4095);
-			if (base64_encoded_buf)
-				mfree(base64_encoded_buf);
+			send(socket, base64_encoded_buf->data,
+			     base64_encoded_buf->out_len, 0);
+			free(base64_encoded_buf->data);
+			free(base64_encoded_buf);
 		}
 
-		/* send an attachment */
 		free(mime_type);
+		close(fd);
 	}
 
 	n = 0;
@@ -270,7 +250,8 @@ static int send_message_content(socket_t socket, message_t *message,
 	/* build and send initial MIME boundary */
 	if (message->attachments)
 	{
-		char *uid = base64_encode(message->from, strlen(message->from));
+		base64_data_t *uid =
+		    base64_encode(message->from, strlen(message->from));
 		time_t timestamp = time(NULL);
 		char timestamp_buffer[32];
 
@@ -282,7 +263,7 @@ static int send_message_content(socket_t socket, message_t *message,
 		 */
 		snprintf(timestamp_buffer, 10, TIME_FORMAT, timestamp);
 
-		strncat(mime_boundary, uid, strlen(uid) + 1);
+		strncat(mime_boundary, uid->data, uid->out_len);
 		strncat(mime_boundary, "-", 1);
 		strncat(mime_boundary, timestamp_buffer,
 			strlen(timestamp_buffer));
@@ -291,6 +272,7 @@ static int send_message_content(socket_t socket, message_t *message,
 		     0);
 		send(socket, mime_boundary, strlen(mime_boundary), 0);
 		send(socket, "\"\r\n\r\n", 5, 0);
+		free(uid->data);
 		mfree(uid);
 	}
 

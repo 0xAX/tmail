@@ -23,6 +23,7 @@ result_test_encoding_4 YWJjZA==
 result_test_encoding_5 VGhlIHRlc3Qgb2YgdGhlIGxvbmcgbG9uZywgdmVyeSBsb25nIGxpbmUsIGEgbGl0dGxlIGJpdCBsb25nZXIgdGhhbiBzZXZlbnR5IHNpeCBieXRlcyBsZW5ndGg=
 EOF
 
+
 print "Running: libencoding tests:\n";
 
 for my $test (@libencoding_tests) {

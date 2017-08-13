@@ -16,6 +16,12 @@
 
 #include <stdio.h>
 
-char *base64_encode(char *data, size_t len);
+typedef struct
+{
+	size_t out_len;
+	char *data;
+} base64_data_t;
+
+base64_data_t *base64_encode(char *data, size_t len);
 
 #endif
