@@ -7,6 +7,7 @@ of just `No such file or directory`.
 
 ## Build
 
+  * `make clean` does not work in `libencoding`. Maybe in other libs.
   * Add ` -Weverything` for clang build.
   * Add enumeration of what avaliable targets will be built with the
 `make all`.

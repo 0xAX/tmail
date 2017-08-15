@@ -137,7 +137,7 @@ static int send_attachmets(socket_t socket, message_t *message,
 			n = read(fd, buf, 4560);
 			base64_encoded_buf = base64_encode(buf, n);
 			send(socket, base64_encoded_buf->data,
-			     base64_encoded_buf->out_len - 4, 0);
+			     base64_encoded_buf->out_len, 0); // -4
 
 			send(socket, "\r\n", 2, 0);
 
