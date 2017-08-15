@@ -20,11 +20,13 @@ base64_data_t *base64_encode(char *data, size_t len)
 	size_t c = len % 3;
 	char padding[3];
 
-	/* besides length of data, we need to add CR\LF to each line */
-	out_len += lines_count * 2 + 2;
-
+	//if (!out_len)
+	//	out_len = 4;
 	if (len == 0)
 		return NULL;
+
+	/* besides length of data, we need to add CR\LF to each line */
+	out_len += lines_count * 2 + 2;
 
 	/* fill message with padding */
 	memset(padding, 0, 3);
@@ -79,11 +81,18 @@ base64_data_t *base64_encode(char *data, size_t len)
 		strncat(result->data, alphabet + n4, (size_t)1);
 	}
 
+	//printf("result->data %s\n", result->data);
+	if (strlen(result->data) != out_len)
+		result->out_len = strlen(result->data);
+	//printf("padding %s\n", padding);
+	
 	/* fill with padding or last characters */
 	if (padding[0])
-		result->data[out_len - 1] = '=';
+		result->data[result->out_len - 1] = '=';
 	if (padding[1])
-		result->data[out_len - 2] = '=';
+		result->data[result->out_len - 2] = '=';
 
+	//printf("%s\n", result->data);
+	
 	return result;
 }

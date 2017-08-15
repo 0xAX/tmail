@@ -54,6 +54,7 @@ like this.
 
 ## libsmtp
 
+  * specify `MAX_ATTACHMENT_SIZE` during build.
   * Specify blind copies in RCPT TO.
   * Add send message in the separate thread.
   * Get correct argument for `EHLO` command.

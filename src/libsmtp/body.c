@@ -80,8 +80,7 @@ static int send_attachmets(socket_t socket, message_t *message,
 
 	for_each_list_item(message->attachments, entry)
 	{
-		char buf[4095];
-		// char *file_buf;
+		char buf[4560];
 		struct stat st;
 		unsigned long blk_count, blk_rem = 0;
 		char *path = ((message_attachment_t *)(entry->item))->path;
@@ -103,7 +102,7 @@ static int send_attachmets(socket_t socket, message_t *message,
 		send(socket, "\r\n--", 2, 0);
 
 		/* build and send Content-Type header */
-		memset(buf, 0, 4095);
+		memset(buf, 0, 4560);
 		strncat(buf, "Content-Type: ", 14);
 		strncat(buf, mime_type, strlen(mime_type));
 		strncat(buf, "; name=\"", 8);
@@ -112,13 +111,13 @@ static int send_attachmets(socket_t socket, message_t *message,
 		send(socket, buf, strlen(buf), 0);
 
 		/* build and send content dispostion buffer */
-		memset(buf, 0, 4095);
+		memset(buf, 0, 4560);
 		strncat(buf, "Content-Disposition: attachment; filename=\"",
 			43);
 		strncat(buf, base_name, strlen(base_name));
 		strncat(buf, "\"\r\n", 3);
 		send(socket, buf, strlen(buf), 0);
-		memset(buf, 0, 4095);
+		memset(buf, 0, 4560);
 
 		/* send Content-Transfer-Encoding header */
 		send(socket, "Content-Transfer-Encoding: base64\r\n", 35, 0);
@@ -128,18 +127,20 @@ static int send_attachmets(socket_t socket, message_t *message,
 		stat(path, &st);
 
 		/* send an attachment */
-		blk_count = st.st_size / 4095;
-		blk_rem = st.st_size % 4095;
+		blk_count = st.st_size / 4560;
+		blk_rem = st.st_size % 4560;
 
 		while (blk_count)
 		{
 			base64_data_t *base64_encoded_buf;
 
-			n = read(fd, buf, 4095);
+			n = read(fd, buf, 4560);
 			base64_encoded_buf = base64_encode(buf, n);
 			send(socket, base64_encoded_buf->data,
 			     base64_encoded_buf->out_len - 4, 0);
+
 			send(socket, "\r\n", 2, 0);
+
 			free(base64_encoded_buf->data);
 			free(base64_encoded_buf);
 			blk_count--;
