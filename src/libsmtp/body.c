@@ -93,6 +93,7 @@ static int send_attachmets(socket_t socket, message_t *message,
 		{
 			fprintf(stderr,
 				"Error: Can\'t get MIME type for a data\n");
+			close(fd);
 			return 0;
 		}
 
@@ -124,39 +125,69 @@ static int send_attachmets(socket_t socket, message_t *message,
 		send(socket, "\r\n", 2, 0);
 
 		/* to get file size */
-		stat(path, &st);
+		if (stat(path, &st) == -1)
+		{
+			fprintf(stderr, "Error: can't get stat for a file %s\n",
+				path);
+			free(mime_type);
+			close(fd);
+			return 0;
+		}
 
 		/* send an attachment */
 		blk_count = st.st_size / 4560;
 		blk_rem = st.st_size % 4560;
 
-		while (blk_count)
+		while (blk_count > 0)
 		{
-			base64_data_t *base64_encoded_buf;
+			base64_data_t *base64_encoded_buf = NULL;
 
 			n = read(fd, buf, 4560);
 			base64_encoded_buf = base64_encode(buf, n);
-			send(socket, base64_encoded_buf->data,
-			     base64_encoded_buf->out_len, 0); // -4
 
+			if (!base64_encoded_buf)
+			{
+				fprintf(stderr,
+					"Error: can't allocate memory for "
+					"base64 encoding\n");
+				free(mime_type);
+				close(fd);
+				return 0;
+			}
+			send(socket, base64_encoded_buf->data,
+			     base64_encoded_buf->out_len, 0);
 			send(socket, "\r\n", 2, 0);
 
 			free(base64_encoded_buf->data);
-			free(base64_encoded_buf);
+			mfree(base64_encoded_buf);
+
+			memset(buf, 0, 4560);
 			blk_count--;
 		}
 
 		if (blk_rem)
 		{
+			char buf_rem[blk_rem + 1];
 			base64_data_t *base64_encoded_buf;
 
-			n = read(fd, buf, blk_rem);
-			base64_encoded_buf = base64_encode(buf, n);
+			memset(buf_rem, 0, blk_rem + 2);
+			n = read(fd, buf_rem, blk_rem);
+
+			base64_encoded_buf = base64_encode(buf_rem, blk_rem);
+			if (!base64_encoded_buf)
+			{
+				fprintf(stderr,
+					"Error: can't allocate memory for "
+					"base64 encoding\n");
+				free(mime_type);
+				close(fd);
+				return 0;
+			}
 
 			send(socket, base64_encoded_buf->data,
 			     base64_encoded_buf->out_len, 0);
 			free(base64_encoded_buf->data);
-			free(base64_encoded_buf);
+			mfree(base64_encoded_buf);
 		}
 
 		free(mime_type);

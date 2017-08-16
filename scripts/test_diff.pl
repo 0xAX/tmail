@@ -2,7 +2,7 @@
 #
 # Copyright (c) 2017, Alexander Kuleshov <kuleshovmail at gmail dot com>
 #
-# This file is part of tmail application and released under the BSD license, 
+# This file is part of libands application and released under the BSD license, 
 # see the COPYING file
 
 use strict;
@@ -20,11 +20,10 @@ sub print_diff {
                    print "ERROR:\n";
                    print "  expected: $expected_splitted[$res]\n";
                    print "  got: $result_splitted[$res]\n";
+		   print POPCOLOR;
+		   exit 1;
             }
     }
-
-    print POPCOLOR;
-    exit 1;
 }
 
 1;
