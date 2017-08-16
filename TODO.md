@@ -2,6 +2,7 @@
 
 ## General
 
+  * Add `uchar_t` to `<basic.h>`.
   * Be more verbose in `fprintf`. For example pass a filename insterted
 of just `No such file or directory`.
 
@@ -55,6 +56,7 @@ like this.
 
 ## libsmtp
 
+  * Move and refactor `send_attachments()` to `libsmtp/attachment.c`.
   * specify `MAX_ATTACHMENT_SIZE` during build.
   * Specify blind copies in RCPT TO.
   * Add send message in the separate thread.
