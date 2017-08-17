@@ -56,13 +56,13 @@ int main(int argc, char *argv[])
 	printf("\n");
 
 	printf("list remove test: ");
-	list = list_remove(list, (list_item *)5, false);
+	list = list_remove(list, (list_item *)5);
 	for_each_list_item(list, entry)
 	{
 		printf("%lu ", (unsigned long)entry->item);
 	}
 
-	list = list_remove(list, (list_item *)2, false);
+	list = list_remove(list, (list_item *)2);
 	for_each_list_item(list, entry)
 	{
 		printf("%lu ", (unsigned long)entry->item);

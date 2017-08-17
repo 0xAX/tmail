@@ -40,7 +40,7 @@ void *list_lookup(list_t *list, void *item);
 list_t *list_append(list_t *list, void *item);
 void *list_nth(list_t *list, unsigned long n);
 list_t *list_prepend(list_t *list, void *item);
-list_t *list_remove(list_t *list, void *item, bool release_item);
+list_t *list_remove(list_t *list, void *item);
 
 /**
  * list_empty - check is ther an empty list or not.

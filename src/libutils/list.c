@@ -112,10 +112,8 @@ fail:
  *
  * @list - list where from the given item will be removed.
  * @item - item to remove from list.
- * @release_item - boolean value that shows do we need to release
- * memory under list item or not.
  */
-list_t *list_remove(list_t *list, void *item, bool release_item)
+list_t *list_remove(list_t *list, void *item)
 {
 	list_t *prev = NULL;
 	list_t *entry = NULL;
@@ -130,8 +128,6 @@ list_t *list_remove(list_t *list, void *item, bool release_item)
 			if (prev)
 			{
 				prev->next = entry->next;
-				if (release_item)
-					free(entry->item);
 				free(entry);
 				entry = NULL;
 			}
@@ -142,8 +138,6 @@ list_t *list_remove(list_t *list, void *item, bool release_item)
 				 * of a list.
 				 */
 				list_t *new_head = list->next;
-				if (release_item)
-					free(entry->item);
 				free(entry);
 				list = new_head;
 			}
@@ -151,7 +145,6 @@ list_t *list_remove(list_t *list, void *item, bool release_item)
 		}
 		prev = entry;
 	}
-
 	return NULL;
 }
 
