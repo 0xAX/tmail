@@ -20,7 +20,7 @@ int send_mail_from_message(socket_t socket, message_t *message, char *buffer)
 	 * 2        - length of \r\n
 	 * 1        - \0 byte
 	 */
-	char *mail_from_msg = (char *)malloc(10 + from_len + 2 + 1);
+	char *mail_from_msg = malloc(10 + from_len + 2 + 1);
 	memset(mail_from_msg, 0, 10 + from_len + 2 + 1);
 	if (!mail_from_msg)
 	{

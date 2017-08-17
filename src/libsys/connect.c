@@ -36,7 +36,7 @@ static connection_t *connect_to_ip(const char *addr, connection_t *conn,
 		char *err = strerror(errno);
 		size_t err_len = strlen(err) + 1;
 
-		conn->error = (char *)malloc(err_len);
+		conn->error = malloc(err_len);
 		snprintf((char *)conn->error, err_len, "%s", err);
 
 		return conn;
@@ -56,7 +56,7 @@ static connection_t *connect_to_ip(const char *addr, connection_t *conn,
 		char *err = strerror(errno);
 		size_t err_len = strlen(err) + 1;
 
-		conn->error = (char *)malloc(err_len);
+		conn->error = malloc(err_len);
 		snprintf((char *)conn->error, err_len, "%s", err);
 
 		return conn;
@@ -90,7 +90,7 @@ connection_t *connect_to_service(const char *addr, const char *service)
 	int ret;
 	struct addrinfo hints;
 	struct addrinfo *rp, *serv_info;
-	connection_t *conn = (connection_t *)malloc(sizeof(connection_t));
+	connection_t *conn = malloc(sizeof(connection_t));
 
 	if (!conn)
 		return NULL;
@@ -120,7 +120,7 @@ connection_t *connect_to_service(const char *addr, const char *service)
 			char *err = strerror(errno);
 			size_t err_len = strlen(err) + 1;
 
-			conn->error = (char *)malloc(err_len);
+			conn->error = malloc(err_len);
 			snprintf((char *)conn->error, err_len, "%s", err);
 		}
 		else
@@ -128,7 +128,7 @@ connection_t *connect_to_service(const char *addr, const char *service)
 			const char *err = gai_strerror(ret);
 			size_t err_len = strlen(err) + 1;
 
-			conn->error = (char *)malloc(err_len);
+			conn->error = malloc(err_len);
 			snprintf((char *)conn->error, err_len, "%s", err);
 		}
 		return conn;
@@ -150,7 +150,7 @@ connection_t *connect_to_service(const char *addr, const char *service)
 		char *err = strerror(errno);
 		size_t err_len = strlen(err) + 1;
 
-		conn->error = (char *)malloc(err_len);
+		conn->error = malloc(err_len);
 		snprintf((char *)conn->error, err_len, "%s", err);
 	}
 

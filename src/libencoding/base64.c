@@ -33,12 +33,12 @@ base64_data_t *base64_encode(char *data, size_t len)
 			strncat(padding, "=", 1);
 
 	/* allocate space for encoded buffer */
-	result = (base64_data_t *)malloc(sizeof(base64_data_t));
+	result = malloc(sizeof(base64_data_t));
 	if (!result)
 		return NULL;
 	memset(result, 0, sizeof(base64_data_t));
 	result->out_len = out_len;
-	result->data = (char *)malloc(out_len + 2);
+	result->data = malloc(out_len + 2);
 	if (!result->data)
 	{
 		free(result);

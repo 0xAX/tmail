@@ -15,7 +15,7 @@
  */
 stack_t *stack_new(void)
 {
-	stack_t *new_stack = (stack_t *)malloc(sizeof(stack_t));
+	stack_t *new_stack = malloc(sizeof(stack_t));
 
 	if (!new_stack)
 		return NULL;

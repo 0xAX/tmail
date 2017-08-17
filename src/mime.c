@@ -38,7 +38,7 @@ void load_mime_file(const char *filepath)
 		exit(EXIT_FAILURE);
 	}
 
-	mime_file_content = (char *)malloc(st.st_size + 1);
+	mime_file_content = malloc(st.st_size + 1);
 	if (!mime_file_content)
 	{
 		close(mime_file);

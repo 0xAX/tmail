@@ -24,7 +24,7 @@ static int send_rcpt_to(socket_t socket, char *buffer, list_t *recipients,
 		 * 2      - length of \r\n
 		 * 1      - \0 byte
 		 */
-		char *rcpt_to_msg = (char *)malloc(8 + to_len + 2 + 1);
+		char *rcpt_to_msg = malloc(8 + to_len + 2 + 1);
 		memset(rcpt_to_msg, 0, 8 + to_len + 2 + 1);
 		if (!rcpt_to_msg)
 		{

@@ -26,7 +26,7 @@ static int send_message_header(socket_t socket, char *cmd, int cmd_len,
 	char *msg = NULL;
 	size_t msg_len = strlen(data);
 
-	msg = (char *)malloc(cmd_len + msg_len + 2 + 1);
+	msg = malloc(cmd_len + msg_len + 2 + 1);
 	if (!msg)
 	{
 		fprintf(stderr,

@@ -58,7 +58,7 @@ static void print_help(void)
 
 static message_t *fill_message(void)
 {
-	message_t *m = (message_t *)malloc(sizeof(message_t));
+	message_t *m = malloc(sizeof(message_t));
 	if (!m)
 	{
 		fprintf(stderr, "%s", strerror(errno));
@@ -66,7 +66,7 @@ static message_t *fill_message(void)
 	}
 	memset(m, 0, sizeof(message_t));
 
-	m->body = (message_body_t *)malloc(sizeof(message_body_t));
+	m->body = malloc(sizeof(message_body_t));
 	if (!m->body)
 	{
 		fprintf(stderr, "%s", strerror(errno));
@@ -110,8 +110,7 @@ static message_t *fill_message(void)
 				return NULL;
 			}
 
-			attachment = (message_attachment_t *)malloc(
-			    sizeof(message_attachment_t));
+			attachment = malloc(sizeof(message_attachment_t));
 			if (!attachment)
 			{
 				fprintf(stderr, "%s", strerror(errno));
@@ -166,7 +165,7 @@ static void process_send_email(void)
 	}
 
 	/* connect to SMTP server */
-	conn = connect_to_service("172.17.0.4", "25");
+	conn = connect_to_service("172.17.0.5", "25");
 	if (conn->error)
 	{
 		fprintf(stderr, "%s", conn->error);

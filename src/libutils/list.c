@@ -19,7 +19,7 @@
  */
 list_t *list_new(void)
 {
-	list_t *new_list = (list_t *)malloc(sizeof(list_t));
+	list_t *new_list = malloc(sizeof(list_t));
 
 	if (!new_list)
 	{
@@ -55,8 +55,7 @@ list_t *list_append(list_t *list, void *item)
 		{
 			if (current->next == NULL)
 			{
-				list_t *new_item =
-				    (list_t *)malloc(sizeof(list_t));
+				list_t *new_item = malloc(sizeof(list_t));
 
 				if (!new_item)
 					goto fail;
@@ -93,7 +92,7 @@ list_t *list_prepend(list_t *list, void *item)
 	}
 	else
 	{
-		list_t *new_item = (list_t *)malloc(sizeof(list_t));
+		list_t *new_item = malloc(sizeof(list_t));
 
 		if (!new_item)
 			goto fail;
