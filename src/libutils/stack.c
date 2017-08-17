@@ -59,7 +59,7 @@ int push(stack_t *stack, void *item)
 /**
  * pop - removes top element and returns it.
  *
- * @stack - stackt where from the given item will be removed.
+ * @stack - stack where from the given item will be removed.
  *
  * Note: memory under element will not be freed. Caller should
  * do it by itself.
@@ -72,7 +72,7 @@ void *pop(stack_t *stack)
 
 	item = list_nth(stack->l, (unsigned long)0);
 
-	stack->l = list_remove(stack->l, item, false);
+	stack->l = list_remove(stack->l, item);
 
 	return item;
 }
