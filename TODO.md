@@ -80,12 +80,12 @@ to send.
 
 ### list_t
 
-  * Implement `list_insert_after()`.
-  * Implement `list_insert_before()`.
-  * Add `test` + valgrind tests.
-  * Describe `list_t` usage in a header of the source code file.
-  * Implement `list_merge()`.
-  
+  * Replace it with `slist` from `libands`.
+
+### stack_t
+
+  * Remove it as we don't use it.
+
 ### bitmap_t
 
   * Add initial implementation.
