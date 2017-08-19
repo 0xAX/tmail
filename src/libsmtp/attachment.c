@@ -64,25 +64,21 @@ int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
 
 		/* build and send Content-Type header */
 		memset(buf, 0, BUFFER_SIZE);
-		strncat(buf, "Content-Type: ", 14);
-		strncat(buf, mime_type, strlen(mime_type));
-		strncat(buf, "; name=\"", 8);
-		strncat(buf, base_name, strlen(base_name));
-		strncat(buf, "\"\r\n", 3);
+		snprintf(buf, 25 + strlen(mime_type) + strlen(base_name),
+			 "Content-Type :%s; name=\"%s\"\r\n", mime_type,
+			 base_name);
 		send(socket, buf, strlen(buf), 0);
 
 		/* build and send content dispostion buffer */
 		memset(buf, 0, BUFFER_SIZE);
-		strncat(buf, "Content-Disposition: attachment; filename=\"",
-			43);
-		strncat(buf, base_name, strlen(base_name));
-		strncat(buf, "\"\r\n", 3);
+		snprintf(buf, 46 + strlen(base_name),
+			 "Content-Disposition: attachment; filename=\"%s\"\r\n",
+			 base_name);
 		send(socket, buf, strlen(buf), 0);
 		memset(buf, 0, BUFFER_SIZE);
 
 		/* send Content-Transfer-Encoding header */
-		send(socket, "Content-Transfer-Encoding: base64\r\n", 35, 0);
-		send(socket, "\r\n", 2, 0);
+		send(socket, "Content-Transfer-Encoding: base64\r\n\r\n", 37, 0);
 
 		/* to get file size */
 		if (stat(path, &st) == -1)
@@ -130,10 +126,7 @@ int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
 	/* send last mime-boundary */
 	send(socket, "\r\n--", 4, 0);
 	send(socket, mime_boundary, mime_boundary_len, 0);
-	send(socket, "--", 2, 0);
-
-	/* Send end of message */
-	send(socket, "\r\n.\r\n", 5, 0);
+	send(socket, "--\r\n.\r\n", 7, 0);
 
 	if ((n = recv(socket, buffer, 1024, 0) == -1))
 	{
