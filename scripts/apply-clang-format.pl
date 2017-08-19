@@ -24,7 +24,6 @@ my ($tmail_dir) = @ARGV;
 if (! -d $tmail_dir) {
     print PUSHCOLOR RED "apply-clang-format.pl: path to tmail root dir should be passed.";
     print POPCOLOR;
-    
     exit 1;
 }
 
@@ -41,7 +40,6 @@ if (basename($tmail_dir) eq "tmail" || basename($tmail_dir) eq "src") {
     my $source_dir = $tmail_dir . "/src/tmail.c";
     my $main_c_file = $tmail_dir . "/tmail.c";
     if (-e $source_dir || -e $main_c_file) {
-	print $tmail_dir . "\n";
 	find(\&traverse_files, $tmail_dir);
 	exit 0;
     }
