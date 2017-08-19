@@ -136,6 +136,8 @@ and
 1. Add information about make parameters
 2. Add information about variables that can be overwritten (defined with `?=`).
 
+  * Add `STANDARDS` section to man pages. (See OpenBSD).
+
 ## Testing
 
   * Add tests for `hostname()`.
