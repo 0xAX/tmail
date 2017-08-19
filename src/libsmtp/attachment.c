@@ -9,6 +9,31 @@
 
 #include "smtp.h"
 
+/* this size is convinient for MIME base64 encoding */
+#define BUFFER_SIZE 4560
+
+static int read_and_send(socket_t socket, fd_t fd, char *buf, size_t len)
+{
+	int n = 0;
+	base64_data_t *base64_encoded_buf = NULL;
+
+	n = read(fd, buf, len);
+	base64_encoded_buf = base64_encode(buf, n);
+	if (!base64_encoded_buf)
+	{
+		fprintf(stderr,
+			"Error: can't allocate memory for "
+			"base64 encoding\n");
+		return 0;
+	}
+
+	send(socket, base64_encoded_buf->data,
+	     base64_encoded_buf->out_len, 0);
+	mfree(base64_encoded_buf->data);
+	mfree(base64_encoded_buf);
+	return 1;
+}
+
 int send_attachments(socket_t socket, message_t *message,
 		     char *mime_boundary, size_t mime_boundary_len,
 		     char *buffer)
@@ -18,7 +43,7 @@ int send_attachments(socket_t socket, message_t *message,
 
 	for_each_list_item(message->attachments, entry)
 	{
-		char buf[4560];
+		char buf[BUFFER_SIZE];
 		struct stat st;
 		unsigned long blk_count, blk_rem = 0;
 		char *path = ((message_attachment_t *)(entry->item))->path;
@@ -41,7 +66,7 @@ int send_attachments(socket_t socket, message_t *message,
 		send(socket, "\r\n--", 2, 0);
 
 		/* build and send Content-Type header */
-		memset(buf, 0, 4560);
+		memset(buf, 0, BUFFER_SIZE);
 		strncat(buf, "Content-Type: ", 14);
 		strncat(buf, mime_type, strlen(mime_type));
 		strncat(buf, "; name=\"", 8);
@@ -50,13 +75,13 @@ int send_attachments(socket_t socket, message_t *message,
 		send(socket, buf, strlen(buf), 0);
 
 		/* build and send content dispostion buffer */
-		memset(buf, 0, 4560);
+		memset(buf, 0, BUFFER_SIZE);
 		strncat(buf, "Content-Disposition: attachment; filename=\"",
 			43);
 		strncat(buf, base_name, strlen(base_name));
 		strncat(buf, "\"\r\n", 3);
 		send(socket, buf, strlen(buf), 0);
-		memset(buf, 0, 4560);
+		memset(buf, 0, BUFFER_SIZE);
 
 		/* send Content-Transfer-Encoding header */
 		send(socket, "Content-Transfer-Encoding: base64\r\n", 35, 0);
@@ -78,27 +103,13 @@ int send_attachments(socket_t socket, message_t *message,
 
 		while (blk_count > 0)
 		{
-			base64_data_t *base64_encoded_buf = NULL;
-
-			n = read(fd, buf, 4560);
-			base64_encoded_buf = base64_encode(buf, n);
-
-			if (!base64_encoded_buf)
+			if (!read_and_send(socket, fd, buf, (size_t)4560))
 			{
-				fprintf(stderr,
-					"Error: can't allocate memory for "
-					"base64 encoding\n");
 				free(mime_type);
 				close(fd);
 				return 0;
 			}
-			send(socket, base64_encoded_buf->data,
-			     base64_encoded_buf->out_len, 0);
 			send(socket, "\r\n", 2, 0);
-
-			free(base64_encoded_buf->data);
-			mfree(base64_encoded_buf);
-
 			memset(buf, 0, 4560);
 			blk_count--;
 		}
@@ -106,33 +117,18 @@ int send_attachments(socket_t socket, message_t *message,
 		if (blk_rem)
 		{
 			char buf_rem[blk_rem + 1];
-			base64_data_t *base64_encoded_buf;
 
 			memset(buf_rem, 0, blk_rem + 2);
-			n = read(fd, buf_rem, blk_rem);
-
-			base64_encoded_buf = base64_encode(buf_rem, blk_rem);
-			if (!base64_encoded_buf)
+			if (!read_and_send(socket, fd, buf_rem, blk_rem))
 			{
-				fprintf(stderr,
-					"Error: can't allocate memory for "
-					"base64 encoding\n");
 				free(mime_type);
 				close(fd);
 				return 0;
 			}
-
-			send(socket, base64_encoded_buf->data,
-			     base64_encoded_buf->out_len, 0);
-			free(base64_encoded_buf->data);
-			mfree(base64_encoded_buf);
 		}
-
 		free(mime_type);
 		close(fd);
 	}
-
-	n = 0;
 
 	/* send last mime-boundary */
 	send(socket, "\r\n--", 4, 0);
@@ -155,6 +151,5 @@ int send_attachments(socket_t socket, message_t *message,
 			buffer);
 		return 0;
 	}
-
 	return 1;
 }
