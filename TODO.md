@@ -56,7 +56,6 @@ like this.
 
 ## libsmtp
 
-  * Move and refactor `send_attachments()` to `libsmtp/attachment.c`.
   * specify `MAX_ATTACHMENT_SIZE` during build.
   * Specify blind copies in RCPT TO.
   * Add send message in the separate thread.
