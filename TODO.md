@@ -106,7 +106,6 @@ current dir.
 
 ## Scripts (misc)
 
-  * replace `*.sh` scripts with perl.
   * Add valgrind script.
   * Add `version.sh` to generate version.
   * Add bash completion.
