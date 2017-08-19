@@ -26,6 +26,7 @@ LIB_UTILS_OBJS += libutils/list.o
 LIB_UTILS_OBJS += libutils/stack.o
 
 # object files for smtp lib
+LIB_SMTP_OBJS += libsmtp/attachment.o
 LIB_SMTP_OBJS += libsmtp/ehlo.o
 LIB_SMTP_OBJS += libsmtp/mail_from.o
 LIB_SMTP_OBJS += libsmtp/rcpt_to.o
