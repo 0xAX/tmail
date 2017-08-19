@@ -21,22 +21,19 @@ static int read_and_send(socket_t socket, fd_t fd, char *buf, size_t len)
 	base64_encoded_buf = base64_encode(buf, n);
 	if (!base64_encoded_buf)
 	{
-		fprintf(stderr,
-			"Error: can't allocate memory for "
-			"base64 encoding\n");
+		fprintf(stderr, "Error: can't allocate memory for "
+				"base64 encoding\n");
 		return 0;
 	}
 
-	send(socket, base64_encoded_buf->data,
-	     base64_encoded_buf->out_len, 0);
+	send(socket, base64_encoded_buf->data, base64_encoded_buf->out_len, 0);
 	mfree(base64_encoded_buf->data);
 	mfree(base64_encoded_buf);
 	return 1;
 }
 
-int send_attachments(socket_t socket, message_t *message,
-		     char *mime_boundary, size_t mime_boundary_len,
-		     char *buffer)
+int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
+		     size_t mime_boundary_len, char *buffer)
 {
 	int n = 0;
 	list_t *entry = NULL;

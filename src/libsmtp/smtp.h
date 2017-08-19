@@ -87,9 +87,8 @@ int send_ehlo_message(socket_t socket, char *request, char *buffer,
 		      bitmap_t opts);
 
 /* attachment.c */
-int send_attachments(socket_t socket, message_t *message,
-		     char *mime_boundary, size_t mime_boundary_len,
-		     char *buffer);
+int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
+		     size_t mime_boundary_len, char *buffer);
 
 /* rcpt_to.c */
 int send_rcpt_to_message(socket_t socket, message_t *message, char *buffer);
