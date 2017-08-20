@@ -60,6 +60,13 @@
 		}                                                              \
 	} while (false)
 
+/* SMTP context describes a server configuration client connected to */
+typedef struct
+{
+	char *smtp_server;
+	unsigned long smtp_port;
+} smtp_ctx_t;
+
 /* check if a `msg` contains CR LF at the end */
 static inline bool smtp_eof(char *msg, int length)
 {
