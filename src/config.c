@@ -12,12 +12,12 @@
  * tmail_conf_path - tries to determine where tmail
  * configuration file is.
  *
- * Retruns `NULL` in a failure case or `filename`
+ * Retruns `0` in a failure case or a file descriptor
  * of tmail configuration file.
  */
-const char *tmail_conf_path(void)
+fd_t *tmail_conf_path(void)
 {
-	return NULL;
+	return 0;
 }
 
 /**
