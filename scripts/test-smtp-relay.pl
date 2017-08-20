@@ -29,16 +29,16 @@ if ($test_docker ne "docker") {
     exit 1;
 }
 
-my $exim_relay_launched = `docker inspect exim-gmail-relay`;
-
-if ($exim_relay_launched =~ "running") {
-    system("docker", "stop", "exim-gmail-relay");
-    system("docker", "rm", "exim-gmail-relay");
-}
-
 my $email = "EXIM_GMAIL_LOGIN=" . $ARGV[0];
 my $password = "EXIM_GMAIL_PASSWORD=" . $ARGV[1];
 
+my $exim_relay_launched = `docker inspect exim-gmail-relay 2>/dev/null`;
+
+if ($exim_relay_launched =~ "running") {
+    system("docker", "stop", "exim-gmail-relay");
+}
+
+system("docker", "rm", "exim-gmail-relay");
 system("docker", "run", "--name", "exim-gmail-relay", "-e", $email, "-e", $password, "-d", "selim13/exim-gmail-relay:latest");
 
 exit 0;
