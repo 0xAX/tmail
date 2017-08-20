@@ -25,21 +25,18 @@ static int send_message_header(socket_t socket, char *cmd, int cmd_len,
 {
 	char *msg = NULL;
 	size_t msg_len = strlen(data);
+	size_t len = cmd_len + msg_len + 2 + 1;
 
-	msg = malloc(cmd_len + msg_len + 2 + 1);
+	msg = malloc(len);
 	if (!msg)
 	{
 		fprintf(stderr,
 			"Error: Can't allocate memory for 'From:' field\n");
 		return 0;
 	}
-	memset(msg, 0, cmd_len + msg_len + 2 + 1);
-
-	/* build SMTP message and send it*/
-	strncat(msg, cmd, cmd_len);
-	strncat(msg, data, msg_len);
-	strncat(msg, "\r\n", 2);
-	send(socket, msg, cmd_len + msg_len + 2, 0);
+	memset(msg, 0, len);
+	snprintf(msg, len, "%s%s\r\n", cmd, data);
+	send(socket, msg, len - 1, 0);
 
 	free(msg);
 
