@@ -142,11 +142,9 @@ static int send_message_content(socket_t socket, message_t *message,
 		 */
 		snprintf(timestamp_buffer, 10, TIME_FORMAT, timestamp);
 
-		strncat(mime_boundary, uid->data, uid->out_len);
-		strncat(mime_boundary, "-", 1);
-		strncat(mime_boundary, timestamp_buffer,
-			strlen(timestamp_buffer));
-
+		snprintf(mime_boundary,
+			 uid->out_len + 1 + strlen(timestamp_buffer) + 1,
+			 "%s-%s", uid->data, timestamp_buffer);
 		send(socket, "Content-Type: multipart/mixed; boundary=\"", 41,
 		     0);
 		send(socket, mime_boundary, strlen(mime_boundary), 0);
