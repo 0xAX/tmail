@@ -11,6 +11,10 @@
 
 #include <basic.h>
 
+#define DEFAULT_USER_TMAIL_CONF "~/.tmailrc"
+#define DEFAULT_SYSTEM_TMAIL_CONF "/etc/tmailrc"
+#define TMAIL_CONF_PATH_ENV "TMAIL_CONF"
+
 int parse_config(fd_t fd);
 
 #endif
