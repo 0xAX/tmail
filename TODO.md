@@ -50,7 +50,7 @@ like this.
 
   * Add base64 `base64_encode()`.
 
-## libconfig
+## config
 
   * Add initial version and think about configuration syntax.
 
