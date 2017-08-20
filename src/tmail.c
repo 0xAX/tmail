@@ -84,6 +84,7 @@ int main(int argc, char *argv[])
 
 	register_exit_cb(exit_cb);
 
+	/* no need to check this, because of early exit */
 	load_mime_file("contrib/mime.types");
 
 	if (!setlocale(LC_ALL, "en_US.utf8"))
