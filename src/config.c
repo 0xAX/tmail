@@ -8,6 +8,18 @@
 
 #include "config.h"
 
+/**
+ * tmail_conf_path - tries to determine where tmail
+ * configuration file is.
+ *
+ * Retruns `NULL` in a failure case or `filename`
+ * of tmail configuration file.
+ */
+const char *tmail_conf_path(void)
+{
+	return NULL;
+}
+
 int parse_config(fd_t fd)
 {
 	UNUSED(fd);
