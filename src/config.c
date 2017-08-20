@@ -9,13 +9,13 @@
 #include "config.h"
 
 /**
- * tmail_conf_path - tries to determine where tmail
+ * get_tmail_conf_fd - tries to determine where tmail
  * configuration file is.
  *
  * Retruns `0` in a failure case or a file descriptor
  * of tmail configuration file.
  */
-fd_t *tmail_conf_path(void)
+fd_t *get_tmail_conf_fd(void)
 {
 	return 0;
 }

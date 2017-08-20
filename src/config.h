@@ -15,7 +15,7 @@
 #define DEFAULT_SYSTEM_TMAIL_CONF "/etc/tmailrc"
 #define TMAIL_CONF_PATH_ENV "TMAIL_CONF"
 
-fd_t *tmail_conf_path(void);
+fd_t *get_tmail_conf_fd(void);
 const char *tmail_conf_path(void);
 
 #endif
