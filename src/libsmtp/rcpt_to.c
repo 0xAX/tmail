@@ -34,11 +34,8 @@ static int send_rcpt_to(socket_t socket, char *buffer, list_t *recipients,
 			return 0;
 		}
 
-		strncat(rcpt_to_msg, "RCPT TO:", 8);
-		strncat(rcpt_to_msg, entry->item, to_len);
-		strncat(rcpt_to_msg, "\r\n", 2);
-
 		/*send RCPT TO message */
+		snprintf(rcpt_to_msg, 8 + to_len + 2 + 1, "RCPT TO:%s\r\n", (char *)entry->item);
 		send(socket, rcpt_to_msg, strlen(rcpt_to_msg), 0);
 
 		if ((n = recv(socket, buffer, 1024, 0) == -1))
