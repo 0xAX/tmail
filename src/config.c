@@ -20,6 +20,13 @@ const char *tmail_conf_path(void)
 	return NULL;
 }
 
+/**
+ * parse_config - read the tmail configuration file
+ * and tries to parse it.
+ *
+ * Retruns `0` in a case of failre and `1` if everything
+ * is ok.
+ */
 int parse_config(fd_t fd)
 {
 	UNUSED(fd);
