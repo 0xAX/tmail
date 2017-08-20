@@ -53,6 +53,8 @@ like this.
 ## config
 
   * Add initial version and think about configuration syntax.
+  * Dump configuration in a pretty way in a case of `tmail config`
+without configuration.
 
 ## libsmtp
 
