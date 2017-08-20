@@ -32,9 +32,9 @@ TEST_TARGET=test
 INSTALL_TARGET=install
 # A target to remove tmail from the system
 UNINSTALL_TARGET=uninstall
-# targe to build libtmail-sys.so
+# target to build libtmail-sys.so
 BUILD_SYS_LIB_TARGET = libtmail_sys
-# targe to build libtmail-smtp.so
+# target to build libtmail-smtp.so
 BUILD_SMTP_LIB_TARGET = libtmail_smtp
 # target to build libtmail-utils.so
 BUILD_UTILS_LIB_TARGET = libtmail_utils
@@ -78,6 +78,8 @@ AS ?= as
 INSTALL ?= install
 # use this one to strip binaries and libraries
 STRIP ?= strip
+# default parser generator
+BISON ?= bison
 
 # Make flags
 # Supress Entering/Leaving messages
