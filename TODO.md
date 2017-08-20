@@ -77,7 +77,8 @@ to send.
 ## MIME
 
   * Make return value of the `get_mime_type()` - `const`.
-
+  * Do not hard-code "contrib/mime.types" in `tmail.c`
+  
 ## libutils
 
 ### list_t
