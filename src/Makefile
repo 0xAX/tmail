@@ -9,6 +9,7 @@ include ../mk/Common.mk
 include ../mk/Build.mk
 
 # object files for
+TMAIL_OBJS += config.o
 TMAIL_OBJS += tmail.o
 TMAIL_OBJS += mime.o
 TMAIL_OBJS += message.o
