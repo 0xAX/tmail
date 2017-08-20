@@ -20,23 +20,21 @@ int send_mail_from_message(socket_t socket, message_t *message, char *buffer)
 	 * 2        - length of \r\n
 	 * 1        - \0 byte
 	 */
-	char *mail_from_msg = malloc(10 + from_len + 2 + 1);
-	memset(mail_from_msg, 0, 10 + from_len + 2 + 1);
+	size_t msg_len = 10 + from_len + 2 + 1;
+	char *mail_from_msg = malloc(msg_len);
 	if (!mail_from_msg)
 	{
 		fprintf(stderr, "Error: Can't allocate memory for SMTP MAIL "
 				"FROM command\n");
 		return 0;
 	}
-	strncat(mail_from_msg, "MAIL FROM:", 10);
-	strncat(mail_from_msg, message->from, from_len);
-	strncat(mail_from_msg, "\r\n", 2);
-
-	/* send 'MAIL FROM' to smtp server */
-	send(socket, mail_from_msg, 10 + from_len + 2, 0);
+	memset(mail_from_msg, 0, msg_len);
+	snprintf(mail_from_msg, msg_len, "MAIL FROM:%s\r\n", message->from);
+	send(socket, mail_from_msg, msg_len - 1, 0);
 
 	if ((n = recv(socket, buffer, 1024, 0) == -1))
 	{
+		free(mail_from_msg);
 		fprintf(stderr,
 			"Error: Can't get response for MAIL FROM command\n");
 		return 0;
@@ -44,14 +42,13 @@ int send_mail_from_message(socket_t socket, message_t *message, char *buffer)
 
 	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
 	{
+		free(mail_from_msg);
 		fprintf(stderr, "Error: SMTP MAIL FROM wrong response: %s\n",
 			buffer);
 		return 0;
 	}
 
 	memset(buffer, 0, 1024);
-
 	free(mail_from_msg);
-
 	return 1;
 }
