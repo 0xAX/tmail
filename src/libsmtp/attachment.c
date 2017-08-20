@@ -78,7 +78,8 @@ int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
 		memset(buf, 0, BUFFER_SIZE);
 
 		/* send Content-Transfer-Encoding header */
-		send(socket, "Content-Transfer-Encoding: base64\r\n\r\n", 37, 0);
+		send(socket, "Content-Transfer-Encoding: base64\r\n\r\n", 37,
+		     0);
 
 		/* to get file size */
 		if (stat(path, &st) == -1)
