@@ -20,10 +20,36 @@ fd_t get_tmail_conf_fd(void)
 	fd_t config_fd = 0;
 	struct stat st;
 	const char *config_path = NULL;
+	struct passwd *pw;
+	uid_t euid = geteuid();
+	char *filepath = NULL;
+	size_t filepath_len = 0;
 
-	if (stat(DEFAULT_USER_TMAIL_CONF, &st) == 0 && st.st_mode && REG_FILE_R)
+	pw = getpwuid(euid);
+	if (!pw)
 	{
-		config_path = DEFAULT_USER_TMAIL_CONF;
+		fprintf(stderr, "Can't get current username. Error: %s",
+			strerror(errno));
+		return config_fd;
+	}
+
+	/* Length of: /home/ + username + /.tmailrc + NULL */
+	filepath_len = 6 + strlen(pw->pw_name) + 9 + 1;
+	filepath = malloc(filepath_len);
+	if (!filepath)
+	{
+		fprintf(stderr, "Can't allocate memory for configuration file "
+				"path. Error: %s",
+			strerror(errno));
+		return config_fd;
+	}
+	memset(filepath, 0, filepath_len);
+
+	snprintf(filepath, filepath_len, "/home/%s/.tmailrc", pw->pw_name);
+
+	if (stat(filepath, &st) == 0 && st.st_mode && REG_FILE_R)
+	{
+		config_path = filepath;
 		goto open;
 	}
 
@@ -49,10 +75,12 @@ open:
 		{
 			fprintf(stderr, "Can't open configuration file %s\n",
 				config_path);
+			mfree(filepath);
 			return 0;
 		}
 	}
 
+	mfree(filepath);
 	return config_fd;
 }
 

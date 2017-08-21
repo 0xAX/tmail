@@ -10,12 +10,15 @@
 #define TMAIL_CONFIG_H
 
 #include <basic.h>
+#include <errno.h>
 #include <fcntl.h>
+#include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
-#define DEFAULT_USER_TMAIL_CONF "~/.tmailrc"
 #define DEFAULT_SYSTEM_TMAIL_CONF "/etc/tmailrc"
 #define TMAIL_CONF_PATH_ENV "TMAIL_CONF"
 
