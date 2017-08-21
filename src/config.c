@@ -15,9 +15,45 @@
  * Retruns `0` in a failure case or a file descriptor
  * of tmail configuration file.
  */
-fd_t *get_tmail_conf_fd(void)
+fd_t get_tmail_conf_fd(void)
 {
-	return 0;
+	fd_t config_fd = 0;
+	struct stat st;
+	const char *config_path = NULL;
+
+	if (stat(DEFAULT_USER_TMAIL_CONF, &st) == 0 && st.st_mode == REG_FILE_R)
+	{
+		config_path = DEFAULT_USER_TMAIL_CONF;
+		goto open;
+	}
+
+	config_path = (const char *)getenv(TMAIL_CONF_PATH_ENV);
+	if (config_path)
+	{
+		if (stat(config_path, &st) == 0 && st.st_mode == REG_FILE_R)
+			goto open;
+	}
+
+	if (stat(DEFAULT_SYSTEM_TMAIL_CONF, &st) == 0 &&
+	    st.st_mode == REG_FILE_R)
+	{
+		config_path = DEFAULT_SYSTEM_TMAIL_CONF;
+		goto open;
+	}
+open:
+	if (config_path)
+	{
+		config_fd = open(config_path, O_RDONLY);
+
+		if (config_fd == -1)
+		{
+			fprintf(stderr, "Can't open configuration file %s\n",
+				config_path);
+			return 0;
+		}
+	}
+
+	return config_fd;
 }
 
 /**
