@@ -21,7 +21,7 @@ fd_t get_tmail_conf_fd(void)
 	struct stat st;
 	const char *config_path = NULL;
 
-	if (stat(DEFAULT_USER_TMAIL_CONF, &st) == 0 && st.st_mode == REG_FILE_R)
+	if (stat(DEFAULT_USER_TMAIL_CONF, &st) == 0 && st.st_mode && REG_FILE_R)
 	{
 		config_path = DEFAULT_USER_TMAIL_CONF;
 		goto open;
