@@ -14,8 +14,12 @@
 #include <unistd.h>
 
 #include <at_exit.h>
+#include <config.h>
 #include <mime.h>
 #include <send-email.h>
+
+/* file descriptor of tmail configuration file */
+static fd_t config = 0;
 
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
@@ -84,6 +88,13 @@ int main(int argc, char *argv[])
 
 	register_exit_cb(exit_cb);
 
+	/* read tmail's configuration file */
+	config = get_tmail_conf_fd();
+	if (!config)
+	{
+		exit(EXIT_FAILURE);
+	}
+
 	/* no need to check this, because of early exit */
 	load_mime_file("contrib/mime.types");
 
@@ -96,5 +107,7 @@ int main(int argc, char *argv[])
 	else
 		parse_argv(argc, argv);
 
+	if (config)
+		close(config);
 	exit(EXIT_SUCCESS);
 }
