@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 /* Help us to suppress unused errors/warnings during compilation */
 #define UNUSED(x) (void)(x)
@@ -28,6 +29,9 @@
 #ifndef NULL
 #define NULL (void *)0
 #endif
+
+/* file modes */
+#define REG_FILE_R (S_IFREG | S_IRUSR)
 
 /* type synonyms that can be usefule everywhere */
 typedef int fd_t;
