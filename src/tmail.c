@@ -19,7 +19,7 @@
 #include <send-email.h>
 
 /* file descriptor of tmail configuration file */
-static fd_t config = 0;
+static fd_t config_fd = 0;
 
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
@@ -89,9 +89,16 @@ int main(int argc, char *argv[])
 	register_exit_cb(exit_cb);
 
 	/* read tmail's configuration file */
-	config = get_tmail_conf_fd();
-	if (!config)
+	config_fd = get_tmail_conf_fd();
+	if (!config_fd)
 	{
+		exit(EXIT_FAILURE);
+	}
+	if (!parse_config(config_fd))
+	{
+		fprintf(stderr,
+			"Error occurs during tmail configuration parsing\n");
+		close(config_fd);
 		exit(EXIT_FAILURE);
 	}
 
@@ -107,7 +114,7 @@ int main(int argc, char *argv[])
 	else
 		parse_argv(argc, argv);
 
-	if (config)
-		close(config);
+	if (config_fd)
+		close(config_fd);
 	exit(EXIT_SUCCESS);
 }

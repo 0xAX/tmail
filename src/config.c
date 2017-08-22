@@ -28,28 +28,36 @@ fd_t get_tmail_conf_fd(void)
 	pw = getpwuid(euid);
 	if (!pw)
 	{
-		fprintf(stderr, "Can't get current username. Error: %s",
+		fprintf(stderr, "Error: Can't get current username. Error: %s",
 			strerror(errno));
 		return config_fd;
 	}
 
-	/* Length of: /home/ + username + /.tmailrc + NULL */
-	filepath_len = 6 + strlen(pw->pw_name) + 9 + 1;
+	/* Length of: /home/.tmail/ + username + /.tmailrc + NULL */
+	filepath_len = 13 + strlen(pw->pw_name) + 9 + 1;
 	filepath = malloc(filepath_len);
 	if (!filepath)
 	{
-		fprintf(stderr, "Can't allocate memory for configuration file "
-				"path. Error: %s",
+		fprintf(stderr,
+			"Error: Can't allocate memory for configuration file "
+			"path. Error: %s",
 			strerror(errno));
 		return config_fd;
 	}
 	memset(filepath, 0, filepath_len);
+	snprintf(filepath, filepath_len, "/home/%s/.tmail/.tmailrc",
+		 pw->pw_name);
 
-	snprintf(filepath, filepath_len, "/home/%s/.tmailrc", pw->pw_name);
-
-	if (stat(filepath, &st) == 0 && st.st_mode && REG_FILE_R)
+	if (stat(filepath, &st) == 0 && st.st_mode & REG_FILE_R)
 	{
 		config_path = filepath;
+		goto open;
+	}
+
+	if (stat(DEFAULT_SYSTEM_TMAIL_CONF, &st) == 0 &&
+	    st.st_mode == REG_FILE_R)
+	{
+		config_path = DEFAULT_SYSTEM_TMAIL_CONF;
 		goto open;
 	}
 
@@ -58,13 +66,6 @@ fd_t get_tmail_conf_fd(void)
 	{
 		if (stat(config_path, &st) == 0 && st.st_mode == REG_FILE_R)
 			goto open;
-	}
-
-	if (stat(DEFAULT_SYSTEM_TMAIL_CONF, &st) == 0 &&
-	    st.st_mode == REG_FILE_R)
-	{
-		config_path = DEFAULT_SYSTEM_TMAIL_CONF;
-		goto open;
 	}
 open:
 	if (config_path)
@@ -93,7 +94,35 @@ open:
  */
 int parse_config(fd_t fd)
 {
-	UNUSED(fd);
+	struct stat config_stat;
+	char *configuration = NULL;
 
-	return 0;
+	/* read configuration file */
+	if (fstat(fd, &config_stat) == -1)
+	{
+		fprintf(stderr,
+			"Error: tmail confiugration file fstat(2) problem\n");
+		return 0;
+	}
+
+	configuration = malloc(config_stat.st_size + 1);
+	if (!configuration)
+	{
+		fprintf(
+		    stderr,
+		    "Error: can't allocate memory for tmail configuration\n");
+		return 0;
+	}
+
+	if (read(fd, configuration, config_stat.st_size) == -1)
+	{
+		fprintf(stderr,
+			"Error: tmail configuration file read error. Error: %s",
+			strerror(errno));
+		free(configuration);
+		return 0;
+	}
+
+	/* start to parse configuration file */
+	return 1;
 }

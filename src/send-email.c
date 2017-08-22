@@ -165,7 +165,7 @@ static void process_send_email(void)
 	}
 
 	/* connect to SMTP server */
-	conn = connect_to_service("172.17.0.2", "25");
+	conn = connect_to_service("172.17.0.4", "25");
 	if (conn->error)
 	{
 		fprintf(stderr, "%s", conn->error);
