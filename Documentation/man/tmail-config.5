@@ -1,0 +1,137 @@
+'\" t
+.\" Copyright (c) 2017, Alexander Kuleshov <kuleshovmail at gmail dot com>
+.\"
+.\" All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without modification,
+.\" are permitted provided that the following conditions are met:
+.\"
+.\" * Redistributions of source code must retain the above copyright notice,
+.\"   this list of conditions and the following disclaimer.
+.\"
+.\" * Redistributions in binary form must reproduce the above copyright notice,
+.\"   this list of conditions and the following disclaimer in the documentation
+.\"   and/or other materials provided with the distribution.
+.\"
+.\" * Neither the name of tmail nor the names of its contributors may be used to
+.\"   endorse or promote products derived from this software without specific prior
+.\"   written permission.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+.\" WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+.\" IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+.\" INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+.\" NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+.\" OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+.\" WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+.\" ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+.\" POSSIBILITY OF SUCH DAMAGE.
+.TH TMAIL-CONFIGURATION 5 "2017-08-22" "tmail configuration" "tmail configuration"
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" disable hyphenation
+.nh
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH NAME
+tmail configuration \- Describes tmail configuration syntax.
+.SH "SYNOPSIS"
+.sp
+\fBtmail\fR uses following configuration files:
+
+* \fB/\&etc/tmail/.tmailrc\fR \- System-wide tmail configuration file.
+.br
+* \fB$HOME/\&.tmail/.tmailrc\fR \- Per-User tmail configuration file.
+.br
+* \fB$TMAIL_CONF\fR - Configuration file denoted by the env.
+.br
+
+Priority is following: First of all user's file will be read. The next configuration file is denoted by the \fB$TMAIL_CONF\fR environment variable and the last system-wide configuration file.
+
+Besides these \fBcore\fR confiugration files, \fBtmail\fR uses separate configuration files for separate accounts:
+
+* \fBusername@address.smtprc\fR - Per-Account \fBSMTP\fR configuration.
+.br
+* \fBusername@address.pop3rc\fR - Per-Account \fBPOP3\fR configuration.
+.br
+* \fBusername@address.imaprc\fR - Per-Account \fBIMAP4\fR configuration.
+.br
+
+All of these files should be located near \fB.tmailrc\fR configuration file.
+.br
+
+.SS "Miscellaneous configuration files"
+\fBtmail\fR uses additional configuration files for different purposes:
+
+* \fB$HOME/.tmail/.tmail-aliases\fR - Alias file.
+
+.SS "Configuration commands"
+\fBtmail\fR configuration consists from set of commands. Following commands are supported
+
+* \fBset\fR key value \- Specifies \fBvalue\fR for a \fBkey\fR configuration option. 
+.br
+
+.SS "Comments"
+
+Text beginning with \fB#\fR symbol causes that text on that line to be ignored.
+
+.SS "SMTP configuration"
+\fBtmail\fR uses \fBusername@address.smtprc\fR configuration file to interact with SMTP servers via SMTP protocol. \fBtmail\fR supports multiple SMTP accounts. An SMTP configuration file will be selected by \fBtmail\fR depends on currently running session. \fBtmail\fR can find an SMTP configuration file in a different ways: it can be got from a \fBFrom:\fR value and etc.
+
+Following options are supported by \fBtmail\fR:
+
+* \fBsmtp.server\fR \- Specifies address of an SMTP server.
+.br
+Example:
+    \fBset smtp.server = smtp.gmail.com\fR
+.br
+
+* \fBsmtp.port\fR \- Specifies an SMTP server port.
+.br
+Example:
+    \fBset smtp.port = 587\fR
+.br
+
+* \fBsmtp.password\fR \- Specifies password of an SMTP user.
+.br
+Example:
+    \fBset smtp.password = qwerty\fR
+.br
+
+* \fBsmtp.realname\fR \- Specifies name of a user.
+.br
+Example:
+    \fBset smtp.realname = "John Smith"\fR
+.br
+
+* \fBsmtp.from\fR \- Specifies an email addres of a user.
+.br
+Example:
+    \fBset smtp.from = username@gmail.com\fR
+.br
+
+* \fBemail.signature\fR \- Specifies text of signature that will be sent with each email.
+.br
+Example:
+    \fBemail.signature = "Best regards!"\fR
+.br
+
+* \fBemail.signautre_from_file\fR \- Specifies an email signature that will be read from the given file.
+.br
+Example:
+    \fBset email.signature_from_file = $HOME/.tmail/signature\fR
+
+.SS "POP3 configuration"
+TODO
+.SS "IMAP configuration"
+TODO
+
+.sp
+.SH "SEE ALSO"
+.sp
+\fBtmail\fR(1), \fBsmtp-caps\fR(5)
+.SH "TMAIL"
+.sp
+Part of the \fBtmail\fR(1) suite
