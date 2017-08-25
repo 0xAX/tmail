@@ -65,6 +65,11 @@ typedef struct
 {
 	char *smtp_server;
 	unsigned long smtp_port;
+	char *realname;
+	char *passwd;
+	char *from;
+	char *signature;
+	fd_t signature_fd;
 } smtp_ctx_t;
 
 /* check if a `msg` contains CR LF at the end */
