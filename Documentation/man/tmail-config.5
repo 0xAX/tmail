@@ -41,14 +41,12 @@ tmail configuration \- Describes tmail configuration syntax.
 .sp
 \fBtmail\fR uses following configuration files:
 
-* \fB/\&etc/tmail/.tmailrc\fR \- System-wide tmail configuration file.
-.br
 * \fB$HOME/\&.tmail/.tmailrc\fR \- Per-User tmail configuration file.
 .br
 * \fB$TMAIL_CONF\fR - Configuration file denoted by the env.
 .br
 
-Priority is following: First of all user's file will be read. The next configuration file is denoted by the \fB$TMAIL_CONF\fR environment variable and the last system-wide configuration file.
+Priority is following: First of all user's file will be read. The next configuration file is denoted by the \fB$TMAIL_CONF\fR environment variable.
 
 Besides these \fBcore\fR confiugration files, \fBtmail\fR uses separate configuration files for separate accounts:
 
@@ -66,6 +64,8 @@ All of these files should be located near \fB.tmailrc\fR configuration file.
 \fBtmail\fR uses additional configuration files for different purposes:
 
 * \fB$HOME/.tmail/.tmail-aliases\fR - Alias file.
+
+All configuration files should be located in the \fB.tmail\fR directory.
 
 .SS "Configuration commands"
 \fBtmail\fR configuration consists from set of commands. Following commands are supported
