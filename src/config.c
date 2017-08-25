@@ -9,15 +9,15 @@
 #include "config.h"
 
 /**
- * get_tmail_conf_fd - tries to determine where tmail
+ * get_tmail_conf_dir - tries to determine where tmail
  * configuration file is.
  *
  * Retruns `0` in a failure case or a file descriptor
  * of tmail configuration file.
  */
-fd_t get_tmail_conf_fd(void)
+DIR *get_tmail_conf_dir(void)
 {
-	fd_t config_fd = 0;
+	DIR *config_dir = NULL;
 	struct stat st;
 	const char *config_path = NULL;
 	struct passwd *pw;
@@ -30,11 +30,11 @@ fd_t get_tmail_conf_fd(void)
 	{
 		fprintf(stderr, "Error: Can't get current username. Error: %s",
 			strerror(errno));
-		return config_fd;
+		return NULL;
 	}
 
-	/* Length of: /home/.tmail/ + username + /.tmailrc + NULL */
-	filepath_len = 13 + strlen(pw->pw_name) + 9 + 1;
+	/* Length of: /home/ + username + /.tmail/ + NULL */
+	filepath_len = 6 + strlen(pw->pw_name) + 8 + 1;
 	filepath = malloc(filepath_len);
 	if (!filepath)
 	{
@@ -42,47 +42,51 @@ fd_t get_tmail_conf_fd(void)
 			"Error: Can't allocate memory for configuration file "
 			"path. Error: %s",
 			strerror(errno));
-		return config_fd;
+		return NULL;
 	}
 	memset(filepath, 0, filepath_len);
-	snprintf(filepath, filepath_len, "/home/%s/.tmail/.tmailrc",
+	snprintf(filepath, filepath_len, "/home/%s/.tmail/",
 		 pw->pw_name);
 
-	if (stat(filepath, &st) == 0 && st.st_mode & REG_FILE_R)
+	if (stat(filepath, &st) == 0 && st.st_mode & DIR_R)
 	{
 		config_path = filepath;
-		goto open;
-	}
-
-	if (stat(DEFAULT_SYSTEM_TMAIL_CONF, &st) == 0 &&
-	    st.st_mode == REG_FILE_R)
-	{
-		config_path = DEFAULT_SYSTEM_TMAIL_CONF;
 		goto open;
 	}
 
 	config_path = (const char *)getenv(TMAIL_CONF_PATH_ENV);
 	if (config_path)
 	{
+		if (strcmp(basename((char *)config_path), ".tmail") != 0)
+		{
+			fprintf(stderr, "$TMAIL_CONF_DIR should point to .tmail directory\n");
+			mfree(filepath);
+			return NULL;
+		}
 		if (stat(config_path, &st) == 0 && st.st_mode == REG_FILE_R)
 			goto open;
 	}
 open:
 	if (config_path)
 	{
-		config_fd = open(config_path, O_RDONLY);
-
-		if (config_fd == -1)
+		config_dir = opendir(config_path);
+		if (!config_dir)
 		{
 			fprintf(stderr, "Can't open configuration file %s\n",
 				config_path);
 			mfree(filepath);
-			return 0;
+			return NULL;
 		}
 	}
 
+	if (!config_dir)
+	{
+		fprintf(stderr, "Error: Can't find configuration file for tmail\n");
+		return NULL;
+	}
+
 	mfree(filepath);
-	return config_fd;
+	return config_dir;
 }
 
 /**
@@ -92,37 +96,43 @@ open:
  * Retruns `0` in a case of failre and `1` if everything
  * is ok.
  */
-int parse_config(fd_t fd)
+int parse_config(void)
 {
-	struct stat config_stat;
-	char *configuration = NULL;
-
-	/* read configuration file */
-	if (fstat(fd, &config_stat) == -1)
-	{
-		fprintf(stderr,
-			"Error: tmail confiugration file fstat(2) problem\n");
+	DIR *config_dir = get_tmail_conf_dir();
+	struct dirent *dent = NULL;
+	char *ext = NULL;
+	
+	if (!config_dir)
 		return 0;
-	}
 
-	configuration = malloc(config_stat.st_size + 1);
-	if (!configuration)
+	/* go through all files in a configuration directory and parse */
+	while ((dent = readdir(config_dir)) != NULL)
 	{
-		fprintf(
-		    stderr,
-		    "Error: can't allocate memory for tmail configuration\n");
-		return 0;
-	}
+		if (!strcmp(dent->d_name, ".") ||
+		    !strcmp(dent->d_name, ".."))
+			continue;
 
-	if (read(fd, configuration, config_stat.st_size) == -1)
-	{
-		fprintf(stderr,
-			"Error: tmail configuration file read error. Error: %s",
-			strerror(errno));
-		free(configuration);
-		return 0;
-	}
+		if (dent->d_type & DT_REG)
+		{
+			ext = strrchr(dent->d_name, '.');
 
-	/* start to parse configuration file */
+			/* just skip files without extension */
+			if (ext == NULL)
+				continue;
+
+			/* parse SMTP configuration */
+			if (strcmp(ext, ".smtprc") == 0)
+			{
+				continue;
+			}
+
+			/* parse main tmail's configuration file */
+			if (strcmp(ext, ".tmailrc") == 0)
+			{
+				continue;
+			}
+		}
+	}
+	closedir(config_dir);	
 	return 1;
 }

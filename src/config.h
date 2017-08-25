@@ -10,8 +10,10 @@
 #define TMAIL_CONFIG_H
 
 #include <basic.h>
+#include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <libgen.h>
 #include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,10 +21,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define DEFAULT_SYSTEM_TMAIL_CONF "/etc/tmail/tmailrc"
-#define TMAIL_CONF_PATH_ENV "TMAIL_CONF"
+#define TMAIL_CONF_PATH_ENV "TMAIL_CONF_DIR"
 
-fd_t get_tmail_conf_fd(void);
-int parse_config(fd_t fd);
+DIR *get_tmail_conf_dir(void);
+int parse_config(void);
 
 #endif
