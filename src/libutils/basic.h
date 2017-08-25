@@ -32,6 +32,7 @@
 
 /* file modes */
 #define REG_FILE_R (S_IFREG | S_IRUSR)
+#define DIR_R (S_IFDIR | S_IRUSR)
 
 /* type synonyms that can be usefule everywhere */
 typedef int fd_t;
