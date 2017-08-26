@@ -23,7 +23,13 @@
 
 #define TMAIL_CONF_PATH_ENV "TMAIL_CONF_DIR"
 
-DIR *get_tmail_conf_dir(void);
+typedef struct
+{
+	DIR *config_dir;
+	char *config_dir_path;
+} conf_path_t;
+
+conf_path_t *get_tmail_conf_dir(void);
 int parse_config(void);
 
 #endif
