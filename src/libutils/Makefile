@@ -10,11 +10,13 @@ include ../../mk/Build.mk
 
 LIB_UTILS_OBJS += list.o
 LIB_UTILS_OBJS += stack.o
+LIB_UTILS_OBJS += hashmap.o
 
 TEST_EXECUTABLES += list_test
 TEST_EXECUTABLES += stack_test
+TEST_EXECUTABLES += hashmap_test
 
-TEST_OBJS = list_test.o stack_test.o
+TEST_OBJS = list_test.o stack_test.o hashmap_test.o
 
 $(TMAIL_UTILS_LIB): $(LIB_UTILS_OBJS)
 	$(QUIET_CC) $(TMAIL_CC) $(CC_SHLIB_FLAGS) $@ $<
@@ -33,6 +35,10 @@ list_test:
 stack_test:
 	$(TMAIL_CC) $(DEBUG_FLAGS) -c stack_test.c
 	$(TMAIL_CC) $(DEBUG_FLAGS) list.o stack.o stack_test.o -o stack_test
+
+hashmap_test:
+	$(TMAIL_CC) $(DEBUG_FLAGS) -c hashmap_test.c
+	$(TMAIL_CC) $(DEBUG_FLAGS) hashmap.o hashmap_test.o -o hashmap_test
 
 $(CLEAN_TARGET):
 	@echo "./src/libutils"

@@ -14,6 +14,7 @@ require "../../scripts/test_diff.pl";
 my @libutils_tests = qw(
     ./list_test
     ./stack_test
+    ./hashmap_test
 );
 
 my $list_test_result = <<EOF;
@@ -32,6 +33,16 @@ stack pop test #1: string5
 stack pop test #2: string4
 stack push `string4` and pop again test #3: string4
 stack size test: 3
+EOF
+
+my $hashmap_test_result = <<EOF;
+hashmap created successfully
+hashmap put test 1
+hashmap_get test 1 OK
+hashmap_get test 2 OK
+hashmap_get test 5 OK
+hashmap_get test 6 OK
+hashmap_remove test 1 OK
 EOF
 
 print "Running: libutils tests:\n";
@@ -59,6 +70,17 @@ for my $test (@libutils_tests) {
                
                if ($result ne $stack_test_result) {
                       print_diff($result, $stack_test_result);
+               }
+
+               print PUSHCOLOR GREEN "ok\n";
+               print POPCOLOR;
+        }
+
+	if ($test eq "./hashmap_test") {
+               print "hashmap_test.............";
+               
+               if ($result ne $hashmap_test_result) {
+                      print_diff($result, $hashmap_test_result);
                }
 
                print PUSHCOLOR GREEN "ok\n";
