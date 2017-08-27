@@ -129,7 +129,7 @@ conf_path_t *get_tmail_conf_dir(void)
 	snprintf(config->config_dir_path, filepath_len, "/home/%s/.tmail/",
 		 pw->pw_name);
 
-	if (stat(config->config_dir_path, &st) == 0 && st.st_mode & DIR_R)
+	if (stat(config->config_dir_path, &st) != -1 && st.st_mode & DIR_R)
 	{
 		config_path = config->config_dir_path;
 		goto open;
@@ -162,9 +162,12 @@ open:
 			mfree(config);
 			return NULL;
 		}
+		return config;
 	}
 
-	return config;
+	mfree(config->config_dir_path);
+	mfree(config);
+	return NULL;
 }
 
 /**
@@ -183,8 +186,12 @@ int parse_config(void)
 	char *ext = NULL;
 
 	if (!config)
-		goto ret;
+	{
+		fprintf(stderr, "Error: can't find configuration file\n");
+		goto failure;
+	}
 
+	printf("fff\n");
 	/* go through all files in a configuration directory and parse */
 	while ((dent = readdir(config->config_dir)) != NULL)
 	{
@@ -204,7 +211,7 @@ int parse_config(void)
 			{
 				if (!read_configuration(config->config_dir_path,
 							dent->d_name))
-					goto ret;
+					goto failure;
 				continue;
 			}
 
@@ -217,10 +224,13 @@ int parse_config(void)
 	}
 
 	ret = 1;
-ret:
-	closedir(config->config_dir);
-	mfree(config->config_dir_path);
-	mfree(config);
+failure:
+	if (config)
+	{
+		closedir(config->config_dir);
+		mfree(config->config_dir_path);
+		mfree(config);
+	}
 
 	return ret;
 }
