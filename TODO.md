@@ -53,6 +53,7 @@ like this.
 
 ## config
 
+  * Rename `extern hashmap_t *conf;` to `conf_map` or something like this.
   * Add initial version and think about configuration syntax.
   * Dump configuration in a pretty way in a case of `tmail config`
 without configuration.
