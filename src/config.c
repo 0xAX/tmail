@@ -179,7 +179,6 @@ open:
  */
 int parse_config(void)
 {
-
 	int ret = 0;
 	conf_path_t *config = get_tmail_conf_dir();
 	struct dirent *dent = NULL;
@@ -191,7 +190,6 @@ int parse_config(void)
 		goto failure;
 	}
 
-	printf("fff\n");
 	/* go through all files in a configuration directory and parse */
 	while ((dent = readdir(config->config_dir)) != NULL)
 	{
