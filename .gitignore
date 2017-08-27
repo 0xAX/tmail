@@ -68,3 +68,6 @@ log.*
 
 # core files
 *.core
+
+# generated files by bison
+*.output
