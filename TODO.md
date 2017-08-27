@@ -56,6 +56,7 @@ like this.
   * Add initial version and think about configuration syntax.
   * Dump configuration in a pretty way in a case of `tmail config`
 without configuration.
+  * Add `smpt.encoding` configuration parameter.
 
 ## libsmtp
 
