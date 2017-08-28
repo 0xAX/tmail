@@ -71,3 +71,5 @@ log.*
 
 # generated files by bison
 *.output
+*.tab.c
+*.tab.h
