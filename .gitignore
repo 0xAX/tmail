@@ -69,7 +69,8 @@ log.*
 # core files
 *.core
 
-# generated files by bison
+# generated files by flex & bison
 *.output
 *.tab.c
 *.tab.h
+*.yy.c
