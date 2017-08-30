@@ -2,6 +2,7 @@
 
 ## General
 
+  * pass IP to exim
   * Add `uchar_t` to `<basic.h>`.
   * Be more verbose in `fprintf`. For example pass a filename insterted
 of just `No such file or directory`.
@@ -45,7 +46,6 @@ like this.
   * Move to builtins directory.
   * Check that only one `from` is passed.
   * Support for message preview.
-  * Documentation!
 
 ## libencoding
 
@@ -53,11 +53,14 @@ like this.
 
 ## config
 
+  * Verbose errors in parser.
+  * Trim values in the `fill_smtp_conf()`.
   * Rename `extern hashmap_t *conf;` to `conf_map` or something like this.
   * Add initial version and think about configuration syntax.
   * Dump configuration in a pretty way in a case of `tmail config`
 without configuration.
   * Add `smpt.encoding` configuration parameter.
+  * Release everything in `at_exit()` callback.
 
 ## libsmtp
 
@@ -95,6 +98,10 @@ to send.
 ### bitmap_t
 
   * Add initial implementation.
+
+### hashmap_t
+
+  * Provide documentation.
 
 ## Scripts
 
@@ -143,9 +150,11 @@ and
 2. Add information about variables that can be overwritten (defined with `?=`).
 
   * Add `STANDARDS` section to man pages. (See OpenBSD).
+  * Add info about `bison` to `README.dm`.
 
 ## Testing
 
   * Add tests for `hostname()`.
   * Add tests for `fd_valid()`.
   * Add tests for `is_valid_ip_address()`.
+  * Add tests for configuration parser.
