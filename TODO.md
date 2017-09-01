@@ -53,6 +53,11 @@ like this.
 
 ## config
 
+  * Remake `get_config_entry()`:
+
+1. make it return `void*`;
+2. add second parameter to append extension like `.smtprc` and etc.
+
   * Verbose errors in parser.
   * Trim values in the `fill_smtp_conf()`.
   * Rename `extern hashmap_t *conf;` to `conf_map` or something like this.
@@ -144,6 +149,7 @@ and
 
 ## Documentation
 
+  * Describe that `smtp.signature` is path to file with a signature.
   * Update `Documentation/INSTALL.md`:
 
 1. Add information about make parameters
