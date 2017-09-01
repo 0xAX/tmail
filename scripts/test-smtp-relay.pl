@@ -38,7 +38,24 @@ if ($exim_relay_launched =~ "running") {
     system("docker", "stop", "exim-gmail-relay");
 }
 
+# check is smtp-net network exists or not
+my $network = `docker network inspect smtp-net 2>/dev/null`;
+if ($network =~ "100.100.0.0/16") {
+    system("docker", "network", "rm", "smtp-net");
+}
+
+# create network
+system("docker", "network", "create",
+       "--subnet", "100.100.0.0/16",
+       "--driver", "bridge",
+       "smtp-net");
+
+# start container
 system("docker", "rm", "exim-gmail-relay");
-system("docker", "run", "--name", "exim-gmail-relay", "-e", $email, "-e", $password, "-d", "selim13/exim-gmail-relay:latest");
+system("docker", "run", "--name", "exim-gmail-relay",
+       "--net", "smtp-net",
+       "-e", $email,
+       "-e", $password,
+       "-d", "selim13/exim-gmail-relay:latest");
 
 exit 0;
