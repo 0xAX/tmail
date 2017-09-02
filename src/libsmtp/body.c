@@ -175,14 +175,17 @@ static int send_message_content(socket_t socket, message_t *message,
 	return 1;
 }
 
-int send_message(socket_t socket, message_t *message, char *buffer)
+int send_message(socket_t socket, smtp_ctx_t *smtp,
+		 message_t *message, char *buffer)
 {
 	list_t *entry = NULL;
 
+	UNUSED(smtp);
+	
 	/* send MIME version header */
 	send(socket, "MIME-Version: 1.0\r\n", 19, 0);
 
-	/* send from header */
+	/* send 'From:' header */
 	if (!send_message_header(socket, FROM_CLAUSE, FROM_CLAUSE_LEN,
 				 message->from))
 		return 0;
