@@ -134,14 +134,25 @@ void fill_smtp_conf(char *name, char *val)
 		smtp_conf->passwd = strdup(val);
 	else if (strcmp(name, "smtp.signature") == 0)
 	{
-		fd_t signature_fd = open(val, O_RDONLY);
+		char *signature_path = NULL;
+		fd_t signature_fd = 0;
 
+		signature_path = trim(val);
+		if (!signature_path)
+		{
+			fprintf(stderr, "Error: Can't allocate memory for trimming of %s\n", val);
+			exit(EXIT_FAILURE);
+		}
+
+		signature_fd = open(signature_path, O_RDONLY);
 		if (signature_fd == -1)
 		{
+			free(signature_path);
 			fprintf(stderr, "Error: Can't open signature file %s\n", val);
 			exit(EXIT_FAILURE);
 		}
 		smtp_conf->signature_fd = signature_fd;
+		free(signature_path);
 	}
 	
 	free(name);
