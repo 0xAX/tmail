@@ -16,7 +16,7 @@
  */
 static int read_configuration(const char *config_file_path, int type)
 {
-	int ret, n = 0;
+	int ret = 0, n = 0;
 	fd_t config_fd = 0;
 	struct stat st;
 	char *data = NULL;
