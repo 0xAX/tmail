@@ -125,13 +125,13 @@ void fill_smtp_conf(char *name, char *val)
 	if (strcmp(name, "smtp.realname") == 0)
 		set_val(&smtp_conf->realname, val);
 	else if (strcmp(name, "smtp.server") == 0)
-		smtp_conf->smtp_server = strdup(val);
+		set_val(&smtp_conf->smtp_server, val);
 	else if (strcmp(name, "smtp.port") == 0)
-		smtp_conf->smtp_port = strdup(val);
+		set_val(&smtp_conf->smtp_port, val);
 	else if (strcmp(name, "smtp.passwd") == 0)
-		smtp_conf->passwd = strdup(val);
+		set_val(&smtp_conf->passwd, val);
 	else if (strcmp(name, "smtp.from") == 0)
-		smtp_conf->passwd = strdup(val);
+		set_val(&smtp_conf->from, val);
 	else if (strcmp(name, "smtp.signature") == 0)
 	{
 		char *signature_path = NULL;
