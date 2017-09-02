@@ -63,7 +63,6 @@ without configuration.
 
 ## libsmtp
 
-  * Use realname and other stuff from configuration.
   * specify `MAX_ATTACHMENT_SIZE` during build.
   * Add send message in the separate thread.
   * Add comments to describe SMTP capabilties in the smtp.h

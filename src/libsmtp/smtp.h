@@ -107,7 +107,8 @@ int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
 int send_rcpt_to_message(socket_t socket, message_t *message, char *buffer);
 
 /* mail_from.c */
-int send_mail_from_message(socket_t socket, message_t *message, char *buffer);
+int send_mail_from_message(socket_t socket, smtp_ctx_t *smtp,
+			   message_t *message, char *buffer);
 
 /* quit.c */
 int send_quit_message(socket_t socket, char *buffer);

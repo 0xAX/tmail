@@ -70,7 +70,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 	}
 	memset(response, 0, 1024);
 
-	if (!send_mail_from_message(conn->sd, message, response))
+	if (!send_mail_from_message(conn->sd, smtp, message, response))
 		goto fail;
 	if (!send_rcpt_to_message(conn->sd, message, response))
 		goto fail;
