@@ -53,6 +53,7 @@ matrix:
 before_install:
   - test -n $CC && unset CC
   - 'if [[ "$TRAVIS_OS_NAME" == "osx" && "$TMAIL_CC" == "gcc" ]]; then TMAIL_CC=$(ls -t /usr/local/bin/gcc-?.*); fi'
+  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install flex; brew link --force flex; brew install bison; brew link --force bison; fi'
 
 git:
   depth: 1
