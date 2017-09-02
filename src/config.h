@@ -15,12 +15,25 @@
 #include <fcntl.h>
 #include <libgen.h>
 #include <pwd.h>
+#include <search.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include <hashmap.h>
+#include <smtp.h>
+
+/* types of configuration */
+#define TMAIL_CORE_CONF (1 << 0)
+#define SMTP_CONF (1 << 1)
+#define POP3_CONF (1 << 2)
+#define IMAP4_CONF (1 << 4)
+
+#define CONFIGURATION_HASHMAP_SIZE 128
+
+/* tmail configuration related environment variables */
 #define TMAIL_CONF_PATH_ENV "TMAIL_CONF_DIR"
 
 typedef struct
@@ -30,6 +43,14 @@ typedef struct
 } conf_path_t;
 
 conf_path_t *get_tmail_conf_dir(void);
-int parse_config(void);
+int init_config(void);
+ENTRY *get_config_entry(char *name);
+
+/* config_parser.y */
+int parse_tmail_configuration(char *filename, char *configuration, int type);
+void release_config(void);
+
+/* configuration data from a configuration file. Used in lexer.*/
+char *configuration_data;
 
 #endif

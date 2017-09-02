@@ -8,85 +8,71 @@
 
 #include "config.h"
 
-static int parse(const char *configuration)
-{
-	UNUSED(configuration);
-	return 1;
-}
-
 /**
- * read_configuration - reads given configuration file and returns
- * 1 if everything is OK, and 0 in a failure case.
+ * read_configuration() - reads given configuration file and pass its
+ * content into the parser.
+ *
+ * Returns 1 if everything is OK, and 0 in a failure case.
  */
-static int read_configuration(const char *basename, const char *config_path)
+static int read_configuration(const char *config_file_path, int type)
 {
-	int n = 0;
+	int ret, n = 0;
 	fd_t config_fd = 0;
 	struct stat st;
-	size_t dir_len = strlen(basename);
-	size_t filepath_len = strlen(config_path);
-	/* configuration directory + / + filename \0 */
-	char config_file[dir_len + 1 + filepath_len + 1];
-	char *configuration = NULL;
+	char *data = NULL;
 
-	memset(config_file, 0, dir_len + filepath_len + 1);
-	snprintf(config_file, dir_len + 1 + filepath_len + 1, "%s/%s", basename,
-		 config_path);
-
-	if ((config_fd = open(config_file, O_RDONLY)) == -1)
+	if ((config_fd = open(config_file_path, O_RDONLY)) == -1)
 	{
 		fprintf(stderr, "Error: Can't open configuration file - %s\n",
-			config_path);
+			config_file_path);
 		return 0;
 	}
 
 	if (fstat(config_fd, &st) == -1)
 	{
-		fprintf(stderr, "Error: can't get stat for %s\n", config_path);
-		close(config_fd);
-		return 0;
+		fprintf(stderr, "Error: can't get fstat for %s\n",
+			config_file_path);
+		goto failed_before_malloc;
 	}
 
-	configuration = malloc(st.st_size + 1);
-	if (!configuration)
+	/*
+	 * +1 - we need to put \n in the end
+	 * +1 - NULL byte
+	 */
+	data = calloc(st.st_size + 1 + 1, 1);
+	if (!data)
 	{
 		fprintf(stderr, "Error: Can't allocate memory for "
 				"configuration file reading\n");
-		close(config_fd);
-		return 0;
+		goto failed_before_malloc;
 	}
 
-	n = read(config_fd, configuration, st.st_size);
+	n = read(config_fd, data, st.st_size);
 	if (n == -1)
 	{
 		fprintf(stderr,
 			"Error: occurs during reading configuration file."
 			"\nError: %s",
 			strerror(errno));
-		free(configuration);
-		close(config_fd);
-		return 0;
+		goto failed;
 	}
 
-	if (!parse(configuration))
-	{
-		free(configuration);
-		close(config_fd);
-		return 0;
-	}
-
-	free(configuration);
+	if (!parse_tmail_configuration((char *)config_file_path, data, type))
+		goto failed;
+	ret = 1;
+failed:
+	mfree(data);
+failed_before_malloc:
 	close(config_fd);
-
-	return 1;
+	return ret;
 }
 
 /**
- * get_tmail_conf_dir - tries to determine where tmail
+ * get_tmail_conf_dir() - tries to determine where tmail
  * configuration file is.
  *
- * Retruns `0` in a failure case or a file descriptor
- * of tmail configuration file.
+ * Retruns `NULL` in a failure case or a allocated `conf_path_t`
+ * instance.
  */
 conf_path_t *get_tmail_conf_dir(void)
 {
@@ -142,9 +128,7 @@ conf_path_t *get_tmail_conf_dir(void)
 		{
 			fprintf(stderr, "$TMAIL_CONF_DIR should point to "
 					".tmail directory\n");
-			mfree(config->config_dir_path);
-			mfree(config);
-			return NULL;
+			goto failed;
 		}
 		if (stat(config_path, &st) == 0 && st.st_mode == REG_FILE_R)
 			goto open;
@@ -158,26 +142,25 @@ open:
 			fprintf(stderr,
 				"Can't open directory with configuration %s\n",
 				config_path);
-			mfree(config->config_dir_path);
-			mfree(config);
-			return NULL;
+			goto failed;
 		}
 		return config;
 	}
-
+failed:
 	mfree(config->config_dir_path);
 	mfree(config);
 	return NULL;
 }
 
 /**
- * parse_config - read the tmail configuration file
- * and tries to parse it.
+ * init_config() - goes through `.tmail` directory,
+ * reads configuration files and give them to configuration
+ * parser.
  *
  * Retruns `0` in a case of failure and `1` if everything
  * is ok.
  */
-int parse_config(void)
+int init_config(void)
 {
 	int ret = 0;
 	conf_path_t *config = get_tmail_conf_dir();
@@ -193,31 +176,35 @@ int parse_config(void)
 	/* go through all files in a configuration directory and parse */
 	while ((dent = readdir(config->config_dir)) != NULL)
 	{
-		if (!strcmp(dent->d_name, ".") || !strcmp(dent->d_name, ".."))
-			continue;
-
 		if (dent->d_type & DT_REG)
 		{
-			ext = strrchr(dent->d_name, '.');
+			/* path to configuration - /config/dir + / +
+			 * configuration + NULL */
+			size_t len = strlen(config->config_dir_path) + 1 +
+				     strlen(dent->d_name) + 1;
+			char config_file_path[len];
+
+			/* build configuration file path */
+			snprintf(config_file_path, len, "%s/%s",
+				 config->config_dir_path, dent->d_name);
 
 			/* just skip files without extension */
+			ext = strrchr(dent->d_name, '.');
 			if (ext == NULL)
 				continue;
 
 			/* parse SMTP configuration */
 			if (strcmp(ext, ".smtprc") == 0)
 			{
-				if (!read_configuration(config->config_dir_path,
-							dent->d_name))
+				if (!read_configuration(config_file_path,
+							SMTP_CONF))
 					goto failure;
 				continue;
 			}
 
 			/* parse main tmail's configuration file */
 			if (strcmp(ext, ".tmailrc") == 0)
-			{
 				continue;
-			}
 		}
 	}
 
@@ -231,4 +218,57 @@ failure:
 	}
 
 	return ret;
+}
+
+/**
+ * get_config_entry() - tries to search and return a structure
+ * associated with the given `name` in a global configuration
+ * hash table.
+ */
+ENTRY *get_config_entry(char *name)
+{
+	ENTRY e;
+
+	e.key = name;
+	return hsearch(e, FIND);
+}
+
+/**
+ * release_config() is a function to release all memory
+ * occupied by configuration related data.
+ *
+ * For this moment it is called only once - in exit_cb.
+ */
+void release_config(void)
+{
+	conf_path_t *config = get_tmail_conf_dir();
+	struct dirent *dent = NULL;
+
+	if (!config)
+	{
+		hdestroy();
+		return;
+	}
+
+	while ((dent = readdir(config->config_dir)) != NULL)
+	{
+		char *ext = strrchr(dent->d_name, '.');
+		ENTRY *ep = get_config_entry(dent->d_name);
+
+		if (ep)
+		{
+			if (ext && strcmp(ext, ".smtprc") == 0)
+			{
+				mfree(ep->key);
+				release_smtp_ctx((smtp_ctx_t *)ep->data);
+			}
+		}
+	}
+
+	closedir(config->config_dir);
+	mfree(config->config_dir_path);
+	mfree(config);
+
+	/* destroy global configuration hashtable */
+	hdestroy();
 }

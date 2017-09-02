@@ -8,6 +8,7 @@
 
 #include <getopt.h>
 #include <locale.h>
+#include <search.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -67,8 +68,14 @@ static void parse_argv(int argc, char *argv[])
 
 void exit_cb(void)
 {
+	/* release memory under mime data */
 	mime_free();
+
+	/* release memory under `send-email` data */
 	release_send_email_data();
+
+	/* release memory related to configuration */
+	release_config();
 }
 
 int main(int argc, char *argv[])
@@ -85,7 +92,9 @@ int main(int argc, char *argv[])
 
 	register_exit_cb(exit_cb);
 
-	if (!parse_config())
+	/* create hash table for configuration */
+	hcreate(CONFIGURATION_HASHMAP_SIZE);
+	if (!init_config())
 	{
 		fprintf(stderr,
 			"Error occurs during tmail configuration parsing\n");
