@@ -29,8 +29,6 @@ like this.
 
 ## tmail
 
-  * Parse configuration after `parse_argv()`.
-  * Move `options` outside of `parse_argv()`.
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
   * Support for colorful error messages.
   * Return non-zero error code if we exit during failure case.

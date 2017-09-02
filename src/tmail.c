@@ -22,6 +22,13 @@
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
 
+/* tmail core command line arguments */
+static const struct option options[] = {
+	{"help", no_argument, NULL, 'h'},
+	{"version", no_argument, NULL, 'v'},
+};
+
+
 static void print_help()
 {
 	printf("Usage: tmail [--version] [--help]\n");
@@ -45,11 +52,6 @@ static void print_version(void)
 static void parse_argv(int argc, char *argv[])
 {
 	int c;
-
-	static const struct option options[] = {
-	    {"help", no_argument, NULL, 'h'},
-	    {"version", no_argument, NULL, 'v'},
-	};
 
 	while ((c = getopt_long(argc, argv, "hv", options, NULL)) >= 0)
 	{
