@@ -67,6 +67,7 @@ without configuration.
 
 ## libsmtp
 
+  * Use realname and other stuff from configuration.
   * Fix error message in `send_message_header()`.
   * specify `MAX_ATTACHMENT_SIZE` during build.
   * Specify blind copies in RCPT TO.
