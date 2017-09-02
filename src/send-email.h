@@ -13,6 +13,7 @@
 #include <fcntl.h>
 #include <getopt.h>
 #include <locale.h>
+#include <search.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,6 +22,7 @@
 #include <unistd.h>
 
 #include <at_exit.h>
+#include <config.h>
 #include <connect.h>
 #include <gethostname.h>
 #include <list.h>
