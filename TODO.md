@@ -29,12 +29,8 @@ like this.
 
 ## tmail
 
-  * Parse configuration after `parse_argv()`.
-  * Move `options` outside of `parse_argv()`.
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
   * Support for colorful error messages.
-  * Return non-zero error code if we exit during failure case.
-  * Move openning of a `mime.types` into tmail. To open it only once.
 
 ## send-email
 
@@ -67,11 +63,9 @@ without configuration.
 
 ## libsmtp
 
-  * Fix error message in `send_message_header()`.
+  * Use realname and other stuff from configuration.
   * specify `MAX_ATTACHMENT_SIZE` during build.
-  * Specify blind copies in RCPT TO.
   * Add send message in the separate thread.
-  * Get correct argument for `EHLO` command.
   * Add comments to describe SMTP capabilties in the smtp.h
   * Generate Message-Id header.
   * Check message size if `SIZE` capability is supported.

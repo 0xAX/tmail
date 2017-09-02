@@ -45,6 +45,7 @@ typedef struct
 conf_path_t *get_tmail_conf_dir(void);
 int init_config(void);
 ENTRY *get_config_entry(char *name);
+char *build_config_name(char *name, int conf_type);
 
 /* config_parser.y */
 int parse_tmail_configuration(char *filename, char *configuration, int type);

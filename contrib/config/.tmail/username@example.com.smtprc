@@ -12,4 +12,4 @@ set smtp.server = smtp.example.com
 set smtp.port = 587
 
 # Signature options
-set signature = mysignature.sig
+set smtp.signature = mysignature.sig

@@ -138,6 +138,9 @@ static void process_send_email(void)
 {
 	message_t *m = NULL;
 	connection_t *conn = NULL;
+	ENTRY *ep = NULL;
+	smtp_ctx_t *smtp_opts = NULL;
+	char *smtp_config = NULL;
 
 	if (interactive)
 	{
@@ -164,22 +167,45 @@ static void process_send_email(void)
 		exit(EXIT_FAILURE);
 	}
 
+	/* compose email message */
+	m = fill_message();
+	if (!m)
+	{
+		fprintf(stderr, "Erorr: during fill_message()");
+		exit(EXIT_FAILURE);
+	}
+
+	/* get smtp configuration for current user */
+	smtp_config = build_config_name(m->from, SMTP_CONF);
+	if (!smtp_config)
+	{
+		fprintf(stderr,
+			"Error: Can't build configuration file entry\n");
+		exit(EXIT_FAILURE);
+	}
+	ep = get_config_entry(smtp_config);
+	if (!ep)
+	{
+		fprintf(stderr,
+			"Error: Configuration is not found for %s account\n",
+			m->from);
+		exit(EXIT_FAILURE);
+	}
+	free(smtp_config);
+	smtp_opts = (smtp_ctx_t *)ep->data;
+
 	/* connect to SMTP server */
-	conn = connect_to_service("172.17.0.4", "25");
+	conn = connect_to_service(smtp_opts->smtp_server, smtp_opts->smtp_port);
 	if (conn->error)
 	{
-		fprintf(stderr, "%s", conn->error);
+		fprintf(stderr, "%s\n", conn->error);
 		goto fail;
 	}
 
-	/* compose message and send it */
-	m = fill_message();
-	if (!m)
-		goto fail;
+	/* and finally send message */
 	send_email(conn->sd, m, 0);
-
-	free_message(m);
 fail:
+	free_message(m);
 	if (conn->error)
 		free((char *)conn->error);
 	close(conn->sd);

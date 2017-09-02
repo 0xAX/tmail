@@ -125,23 +125,34 @@ void fill_smtp_conf(char *name, char *val)
 	if (strcmp(name, "smtp.realname") == 0)
 		set_val(&smtp_conf->realname, val);
 	else if (strcmp(name, "smtp.server") == 0)
-		smtp_conf->smtp_server = strdup(val);
+		set_val(&smtp_conf->smtp_server, val);
 	else if (strcmp(name, "smtp.port") == 0)
-		smtp_conf->smtp_port = strdup(val);
+		set_val(&smtp_conf->smtp_port, val);
 	else if (strcmp(name, "smtp.passwd") == 0)
-		smtp_conf->passwd = strdup(val);
+		set_val(&smtp_conf->passwd, val);
 	else if (strcmp(name, "smtp.from") == 0)
-		smtp_conf->passwd = strdup(val);
+		set_val(&smtp_conf->from, val);
 	else if (strcmp(name, "smtp.signature") == 0)
 	{
-		fd_t signature_fd = open(val, O_RDONLY);
+		char *signature_path = NULL;
+		fd_t signature_fd = 0;
 
+		signature_path = trim(val);
+		if (!signature_path)
+		{
+			fprintf(stderr, "Error: Can't allocate memory for trimming of %s\n", val);
+			exit(EXIT_FAILURE);
+		}
+
+		signature_fd = open(signature_path, O_RDONLY);
 		if (signature_fd == -1)
 		{
+			free(signature_path);
 			fprintf(stderr, "Error: Can't open signature file %s\n", val);
 			exit(EXIT_FAILURE);
 		}
 		smtp_conf->signature_fd = signature_fd;
+		free(signature_path);
 	}
 	
 	free(name);
