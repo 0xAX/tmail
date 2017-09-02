@@ -17,7 +17,7 @@
  *
  *  username@email.com.smtprc
  */
-static inline char *build_config_name(char *name, int conf_type)
+char *build_config_name(char *name, int conf_type)
 {
 	char *config = NULL;
 	size_t len = 0;
