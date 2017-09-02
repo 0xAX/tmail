@@ -21,28 +21,28 @@ matrix:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['gcc-7']
+          packages: ['gcc-7', 'flex', 'bison']
     - os: linux
       env: TMAIL_CC=gcc-5
       compiler: gcc-5
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['gcc-5']
+          packages: ['gcc-5', 'flex', 'bison']
     - os: linux
       env: TMAIL_CC=gcc-6
       compiler: gcc-6
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['gcc-6']
+          packages: ['gcc-6', 'flex', 'bison']
     - os: linux
       env: TMAIL_CC=clang
       compiler: clang
       addons:
         apt:
           sources: ['llvm-toolchain-precise']
-          packages: ['clang-3.9']
+          packages: ['clang-3.9', 'flex', 'bison']
     - os: osx
       env: TMAIL_CC=clang
       compiler: clang
