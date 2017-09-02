@@ -195,6 +195,12 @@ static void process_send_email(void)
 	smtp_opts = (smtp_ctx_t *)ep->data;
 
 	/* connect to SMTP server */
+	if (!smtp_opts->smtp_server || !smtp_opts->smtp_port)
+	{
+		fprintf(stderr,
+			"Error: Can't find SMTP server address/port configuration\n");
+		goto fail;
+	}
 	conn = connect_to_service(smtp_opts->smtp_server, smtp_opts->smtp_port);
 	if (conn->error)
 	{
