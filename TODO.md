@@ -68,11 +68,8 @@ without configuration.
 ## libsmtp
 
   * Use realname and other stuff from configuration.
-  * Fix error message in `send_message_header()`.
   * specify `MAX_ATTACHMENT_SIZE` during build.
-  * Specify blind copies in RCPT TO.
   * Add send message in the separate thread.
-  * Get correct argument for `EHLO` command.
   * Add comments to describe SMTP capabilties in the smtp.h
   * Generate Message-Id header.
   * Check message size if `SIZE` capability is supported.
