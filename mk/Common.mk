@@ -80,6 +80,8 @@ INSTALL ?= install
 STRIP ?= strip
 # default parser generator
 BISON ?= bison
+# default lexer
+FLEX ?= flex
 
 # Make flags
 # Supress Entering/Leaving messages
