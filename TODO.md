@@ -2,14 +2,12 @@
 
 ## General
 
-  * pass IP to exim
   * Add `uchar_t` to `<basic.h>`.
   * Be more verbose in `fprintf`. For example pass a filename insterted
 of just `No such file or directory`.
 
 ## Build
 
-  * `make clean` does not work in `libencoding`. Maybe in other libs.
   * Add ` -Weverything` for clang build.
   * Add enumeration of what avaliable targets will be built with the
 `make all`.
@@ -156,7 +154,6 @@ and
 2. Add information about variables that can be overwritten (defined with `?=`).
 
   * Add `STANDARDS` section to man pages. (See OpenBSD).
-  * Add info about `bison` to `README.dm`.
 
 ## Testing
 
