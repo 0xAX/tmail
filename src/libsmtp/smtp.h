@@ -64,11 +64,10 @@
 typedef struct
 {
 	char *smtp_server;
-	unsigned long smtp_port;
+	char *smtp_port;
 	char *realname;
 	char *passwd;
 	char *from;
-	char *signature;
 	fd_t signature_fd;
 } smtp_ctx_t;
 
@@ -90,6 +89,7 @@ static inline __attribute__((pure)) void skip_cl_rl(char *str)
 
 /* smtp.c */
 void *send_email(socket_t socket, message_t *message, bitmap_t opts);
+void release_smtp_ctx(smtp_ctx_t *smtp);
 
 /* ehlo.c */
 __attribute__((pure)) unsigned long parse_smtp_caps(char *r);

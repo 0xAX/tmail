@@ -70,3 +70,31 @@ void *send_email(socket_t socket, message_t *message, bitmap_t opts)
 
 	return (void *)1;
 }
+
+void release_smtp_ctx(smtp_ctx_t *smtp)
+{
+	if (smtp)
+	{
+		if (smtp->realname)
+			mfree(smtp->realname);
+
+		if (smtp->from)
+			mfree(smtp->from);
+
+		if (smtp->passwd)
+			mfree(smtp->passwd);
+
+		if (smtp->smtp_port)
+			mfree(smtp->smtp_port);
+
+		if (smtp->smtp_server)
+			mfree(smtp->smtp_server);
+
+		if (smtp->signature_fd != 0)
+			close(smtp->signature_fd);
+
+		mfree(smtp);
+	}
+
+	return;
+}
