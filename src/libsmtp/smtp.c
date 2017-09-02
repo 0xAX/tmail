@@ -31,24 +31,37 @@ static int read_smtp_greetings(socket_t socket, char *buffer)
 	return 1;
 }
 
-void *send_email(socket_t socket, message_t *message, bitmap_t opts)
+void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 {
 	char request[1024];
 	char response[1024];
+	connection_t *conn = NULL;
 
-	assert(socket != -1);
+	conn = connect_to_service(smtp->smtp_server, smtp->smtp_port);
+	if (conn->error)
+	{
+		fprintf(stderr, "Error: %s\n", conn->error);
+		mfree((char *)conn->error);
+		goto fail;
+	}
 
+	memset(request, 0, 1024);
 	memset(response, 0, 1024);
 
 	if (!build_ehlo_msg(request))
-		return NULL;
-	if (!read_smtp_greetings(socket, response))
-		return NULL;
-	if (!send_ehlo_message(socket, request, response, opts))
-		return NULL;
+		goto fail;
+	if (!read_smtp_greetings(conn->sd, response))
+		goto fail;
+	if (!send_ehlo_message(conn->sd, request, response, opts))
+		goto fail;
 
+	/* at least smtp_caps(1) uses this */
 	if (opts & STOP_AFTER_CAPS)
+	{
+		close(conn->sd);
+		free(conn);
 		return strdup(response);
+	}
 
 	/* everything is ok, let's parse SMTP server capabilities */
 	if (parse_smtp_caps(response))
@@ -57,17 +70,25 @@ void *send_email(socket_t socket, message_t *message, bitmap_t opts)
 	}
 	memset(response, 0, 1024);
 
-	if (!send_mail_from_message(socket, message, response))
-		return NULL;
-	if (!send_rcpt_to_message(socket, message, response))
-		return NULL;
-	if (!send_data_message(socket, response))
-		return NULL;
-	if (!send_message(socket, message, response))
-		return NULL;
-	if (!send_quit_message(socket, response))
-		return NULL;
+	if (!send_mail_from_message(conn->sd, message, response))
+		goto fail;
+	if (!send_rcpt_to_message(conn->sd, message, response))
+		goto fail;
+	if (!send_data_message(conn->sd, response))
+		goto fail;
+	if (!send_message(conn->sd, message, response))
+		goto fail;
+	if (!send_quit_message(conn->sd, response))
+		goto fail;
 
+	goto ok;
+fail:
+	close(conn->sd);
+	free(conn);
+	return NULL;
+ok:
+	close(conn->sd);
+	free(conn);
 	return (void *)1;
 }
 

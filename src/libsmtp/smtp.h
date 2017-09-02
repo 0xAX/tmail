@@ -21,6 +21,7 @@
 #include <unistd.h>
 
 #include <base64.h>
+#include <connect.h>
 #include <gethostname.h>
 #include <mime.h>
 #include <time_utils.h>
@@ -88,7 +89,7 @@ static inline __attribute__((pure)) void skip_cl_rl(char *str)
 }
 
 /* smtp.c */
-void *send_email(socket_t socket, message_t *message, bitmap_t opts);
+void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts);
 void release_smtp_ctx(smtp_ctx_t *smtp);
 
 /* ehlo.c */

@@ -24,10 +24,8 @@ static void print_version(void) __attribute__((noreturn));
 
 /* tmail core command line arguments */
 static const struct option options[] = {
-	{"help", no_argument, NULL, 'h'},
-	{"version", no_argument, NULL, 'v'},
+    {"help", no_argument, NULL, 'h'}, {"version", no_argument, NULL, 'v'},
 };
-
 
 static void print_help()
 {

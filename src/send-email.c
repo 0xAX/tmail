@@ -137,7 +137,6 @@ static message_t *fill_message(void)
 static void process_send_email(void)
 {
 	message_t *m = NULL;
-	connection_t *conn = NULL;
 	ENTRY *ep = NULL;
 	smtp_ctx_t *smtp_opts = NULL;
 	char *smtp_config = NULL;
@@ -193,29 +192,17 @@ static void process_send_email(void)
 	}
 	free(smtp_config);
 	smtp_opts = (smtp_ctx_t *)ep->data;
-
-	/* connect to SMTP server */
 	if (!smtp_opts->smtp_server || !smtp_opts->smtp_port)
 	{
-		fprintf(stderr,
-			"Error: Can't find SMTP server address/port configuration\n");
-		goto fail;
-	}
-	conn = connect_to_service(smtp_opts->smtp_server, smtp_opts->smtp_port);
-	if (conn->error)
-	{
-		fprintf(stderr, "%s\n", conn->error);
+		fprintf(stderr, "Error: Can't find SMTP server address/port "
+				"configuration\n");
 		goto fail;
 	}
 
 	/* and finally send message */
-	send_email(conn->sd, m, 0);
+	send_email(smtp_opts, m, 0);
 fail:
 	free_message(m);
-	if (conn->error)
-		free((char *)conn->error);
-	close(conn->sd);
-	free(conn);
 finish:
 	return;
 }

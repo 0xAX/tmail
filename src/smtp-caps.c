@@ -53,7 +53,7 @@ static void parse_argv(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
 	char *ret;
-	connection_t *conn;
+	smtp_ctx_t *smtp;
 
 	if (argc <= 2)
 		print_help();
@@ -77,16 +77,20 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	conn = connect_to_service(smtp_server, smtp_server_port);
-	if (conn->error)
+	smtp = malloc(sizeof(smtp_ctx_t));
+	if (!smtp)
 	{
 		free(smtp_server_port);
 		free(smtp_server);
-		fprintf(stderr, "%s", conn->error);
+		fprintf(stderr,
+			"Error: Can't allocate memory for smtp context\n");
 		exit(EXIT_FAILURE);
 	}
+	memset(smtp, 0, sizeof(smtp_ctx_t));
+	smtp->smtp_server = smtp_server;
+	smtp->smtp_port = smtp_server_port;
 
-	ret = send_email(conn->sd, NULL, STOP_AFTER_CAPS);
+	ret = send_email(smtp, NULL, STOP_AFTER_CAPS);
 
 	if (ret)
 	{
@@ -106,7 +110,7 @@ int main(int argc, char *argv[])
 
 	free(smtp_server);
 	free(smtp_server_port);
-	free(conn);
+	free(smtp);
 
 	return 0;
 }
