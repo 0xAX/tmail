@@ -9,6 +9,50 @@
 #include "config.h"
 
 /**
+ * build_config_name() - builds configuration file name based on
+ * given `name` and `conf_type`.
+ *
+ * For example for the username@email.com and SMTP_CONF, result
+ * will be:
+ *
+ *  username@email.com.smtprc
+ */
+static inline char *build_config_name(char *name, int conf_type)
+{
+	char *config = NULL;
+	size_t len = 0;
+	char *ext = NULL;
+
+	switch (conf_type)
+	{
+	case SMTP_CONF:
+		ext = ".smtprc";
+		len += 7;
+		break;
+	case IMAP4_CONF:
+		ext = ".imaprc";
+		len += 7;
+		break;
+	case POP3_CONF:
+		ext = ".pop3rc";
+		len += 7;
+		break;
+	default:
+		return NULL;
+	}
+
+	len = strlen(name) + len + 1;
+	config = malloc(len);
+
+	if (!config)
+		return NULL;
+
+	snprintf(config, len, "%s%s", name, ext);
+
+	return config;
+}
+
+/**
  * read_configuration() - reads given configuration file and pass its
  * content into the parser.
  *
