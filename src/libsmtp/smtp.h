@@ -26,6 +26,16 @@
 #include <mime.h>
 #include <time_utils.h>
 
+#define TO_CLAUSE "To: "
+#define CC_CLAUSE "Cc: "
+#define FROM_CLAUSE "From: "
+#define SUBJECT_CLAUSE "Subject: "
+
+#define TO_CLAUSE_LEN 4
+#define CC_CLAUSE_LEN 4
+#define FROM_CLAUSE_LEN 6
+#define SUBJECT_CLAUSE_LEN 9
+
 #define SMTP_PORT 25
 #define SMTP_PORT_TLS 587
 

@@ -8,18 +8,6 @@
 
 #include "smtp.h"
 
-#define FROM_CLAUSE "From: "
-#define FROM_CLAUSE_LEN 6
-
-#define TO_CLAUSE "To: "
-#define TO_CLAUSE_LEN 4
-
-#define CC_CLAUSE "Cc: "
-#define CC_CLAUSE_LEN 4
-
-#define SUBJECT_CLAUSE "Subject: "
-#define SUBJECT_CLAUSE_LEN 9
-
 static int send_message_header(socket_t socket, char *cmd, int cmd_len,
 			       char *data)
 {
