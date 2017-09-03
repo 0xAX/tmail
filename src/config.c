@@ -130,7 +130,8 @@ conf_path_t *get_tmail_conf_dir(void)
 	pw = getpwuid(euid);
 	if (!pw)
 	{
-		fprintf(stderr, "Error: Can't get current username.\n Error: %s\n",
+		fprintf(stderr,
+			"Error: Can't get current username.\n Error: %s\n",
 			strerror(errno));
 		return NULL;
 	}

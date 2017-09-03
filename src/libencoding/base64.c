@@ -59,8 +59,7 @@ base64_data_t *base64_encode(char *data, size_t len)
 		if (i > 0 && (i / 3 * 4) % 76 == 0)
 			strncat(result->data, (char *)"\r\n", 2);
 
-		n0 = ((u_char)(data)[i] << 16) +
-		     ((u_char)(data)[i + 1] << 8) +
+		n0 = ((u_char)(data)[i] << 16) + ((u_char)(data)[i + 1] << 8) +
 		     ((u_char)(data)[i + 2]);
 
 		n1 = (n0 >> 18) & 63;
