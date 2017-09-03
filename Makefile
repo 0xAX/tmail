@@ -51,14 +51,18 @@ $(TEST_TARGET): $(BUILD_LIBS_TARGET)
 	@cd $(SRC_DIR)tests && $(MAKE) $(MAKE_FLAGS) $(TEST_TARGET)
 
 $(INSTALL_TARGET): $(BUILD_LIBS_TARGET)
+	@echo "Installing tmail..."
 	@$(INSTALL) $(TMAIL_EXECUTABLE) $(BIN_DIR)
+	@echo "Installing smtp-caps..."
 	@$(INSTALL) $(SMTP_CAPS_EXECUTABLE) $(BIN_DIR)
+	@echo "Installing libraries..."
 	@$(INSTALL) $(SRC_DIR)$(TMAIL_UTILS_LIB_DIR)/$(TMAIL_UTILS_LIB) $(LIB_DIR)
 	@$(INSTALL) $(SRC_DIR)$(TMAIL_SYS_LIB_DIR)/$(TMAIL_SYS_LIB) $(LIB_DIR)
 	@$(INSTALL) $(SRC_DIR)$(TMAIL_SMTP_LIB_DIR)/$(TMAIL_SMTP_LIB) $(LIB_DIR)
 	@$(INSTALL) $(SRC_DIR)$(TMAIL_ENCODING_LIB_DIR)/$(TMAIL_ENCODING_LIB) $(LIB_DIR)
 	@$(INSTALL) $(MAN_PAGES_1) $(MAN_DIR_1)
 	@$(INSTALL) $(MAN_PAGES_5) $(MAN_DIR_5)
+	@echo "Done."
 
 $(UNINSTALL_TARGET):
 	@rm -rf $(BIN_DIR)/$(TMAIL_EXECUTABLE)
@@ -70,6 +74,7 @@ $(UNINSTALL_TARGET):
 	@rm -rf $(MAN_DIR_1)/tmail*
 	@rm -rf $(MAN_DIR_1)/smtp-caps.1
 	@rm -rf $(MAN_DIR_5)/tmail*
+	@echo "Done."
 
 $(CLEAN_TARGET):
 	@echo "./"
