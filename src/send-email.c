@@ -49,7 +49,7 @@ static void print_help(void)
 	       "                           Multiply options are allowed\n");
 	printf("\n");
 	printf("Composing email mode:\n");
-	printf("  -e, --use-editor     use editor to compose a message\n");
+	printf("  -e, --use-editor         use editor to compose a message\n");
 	printf("  -i, --interactive        compose an email in interactive "
 	       "mode\n");
 
