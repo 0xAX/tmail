@@ -91,10 +91,6 @@ $(HELP_TARGET):
 	@echo  ''
 	@echo  'Libraries targets:'
 	@echo  '  * libs - build all shared libraries.'
-	@echo  '  * libtmail_smtp - build smtp shared library.'
-	@echo  '  * libtmail_sys  - build sys shared library.'
-	@echo  '  * libtmail_utils - build utils shared library.'
-	@echo  '  * libtmail_encoding - build encoding shared library.'
 	@echo  ''
 	@echo  'Cleaning targets:'
 	@echo  '  * clean     - Remove most generated files like object files, executables and etc.'
@@ -102,4 +98,4 @@ $(HELP_TARGET):
 	@echo  'Miscellaneous targets'
 	@echo  '  * help      - print this output.'
 
-.PHONY: $(CLEAN_TARGET) $(HELP_TARGET)
+.PHONY: $(CLEAN_TARGET) $(HELP_TARGET) $(INSTALL_TARGET) $(UNINSTALL_TARGET)
