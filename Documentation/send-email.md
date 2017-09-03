@@ -10,6 +10,7 @@ Usage:
 
 Sender/Receiver options:
   -f, --from=<address>     specify author of an email
+  -n, --realname=<name>    specify real name of an email author
   -s, --subject=<subj>     specify subject of an email
   -t, --to=<address>       specify the primary recipient of an
                            email. Multiply options are allowed

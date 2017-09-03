@@ -38,7 +38,7 @@ static void print_help(void)
 	printf("Sender/Receiver options:\n");
 	printf("  -f, --from=<address>     specify email address of an email "
 	       "author\n");
-	printf("  -r, --realname=<name>    specify real name of an email "
+	printf("  -n, --realname=<name>    specify real name of an email "
 	       "author\n");
 	printf("  -s, --subject=<subj>     specify subject of an email\n");
 	printf(
@@ -241,7 +241,7 @@ void send_email_cmd(int argc, char *argv[])
 	if (argc <= 1)
 		print_help();
 
-	while ((c = getopt_long(argc, argv, "a:b:hif:r:t:s:c:", options,
+	while ((c = getopt_long(argc, argv, "a:b:hif:n:t:s:c:", options,
 				NULL)) >= 0)
 	{
 		switch (c)
@@ -276,14 +276,14 @@ void send_email_cmd(int argc, char *argv[])
 		case 'f':
 			from = optarg;
 			break;
-		case 'r':
-			realname = optarg;
-			break;
 		case 'i':
 			interactive = true;
 			break;
 		case 'h':
 			print_help();
+			break;
+		case 'n':
+			realname = optarg;
 			break;
 		case 't':
 			if (!collect_list_args(&rcps, strdup(optarg)))
