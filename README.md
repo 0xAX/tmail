@@ -19,7 +19,7 @@ usage: tmail [--version] [--help]
 
 tmail provides following commands:
 
-    * [send-email](https://github.com/0xAX/tmail/blob/master/Documentation/send-email.md) - send an email
+    * send-email - send an email
     * config - manage tmail configuration
 
 Each command has own set of command line arguments.
@@ -27,7 +27,11 @@ Use: tmail command -h/--help to get help
 ```
 
 provides set of builtin commands like `send-email`, `config` and etc.
-Each sub-command has own help.
+Each sub-command has own help. Additionally you may find more info at:
+
+  * [send-email](https://github.com/0xAX/tmail/blob/master/Documentation/send-email.md)
+
+or in the man pages.
 
 ## Contributing
 
