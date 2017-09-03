@@ -65,7 +65,6 @@ void load_mime_file(const char *filepath)
  */
 char *get_mime_type(char *filename)
 {
-	char *mime = NULL;
 	char *extension = strrchr(filename, '.');
 
 	if (!mime_file_content)
@@ -77,12 +76,7 @@ char *get_mime_type(char *filename)
 
 	/* if a file does not have extenssion, return plain/text */
 	if (!extension || extension + 1 == 0)
-	{
-		/* TODO check strdup result */
-		mime = strdup(DEFAULT_MIME_TYPE);
-
-		return mime;
-	}
+		return strdup(DEFAULT_MIME_TYPE);
 
 	/* skip '.' */
 	extension = strdup(extension);
@@ -105,10 +99,8 @@ char *get_mime_type(char *filename)
 
 		if (!ptr)
 		{
-			/* TODO check strdup result */
-			mime = strdup(DEFAULT_MIME_TYPE);
 			free(extension);
-			return mime;
+			return strdup(DEFAULT_MIME_TYPE);
 		}
 
 		memset(buffer, 0, 50);
@@ -130,12 +122,8 @@ char *get_mime_type(char *filename)
 			i++;
 		}
 
-		/* TODO check result of strdup */
-		mime = strdup(buffer);
-
 		free(extension);
-
-		return mime;
+		return strdup(buffer);
 	}
 }
 
