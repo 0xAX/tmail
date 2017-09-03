@@ -37,10 +37,38 @@ tmail \- send/receive and manage Internet email
 .\" -----------------------------------------------------------------
 .\" * MAIN CONTENT STARTS HERE *
 .\" -----------------------------------------------------------------
+.SH SYNOPSIS
+.PD 0
+.HP
+.ad l
+\fBtmail [--version] [--help] [command]\fR
+.br
+.PD
+.ad b
+.SH DESCRIPTION
+\fBtmail\fR is an email client.
+.SH OPTIONS
+-v, --version
+.br
+    Print current version of \fBtmail\fR.
+.br
+
+-h, --help
+.br
+    Print help for \fBtmail\fR command.
+.br
+
+Besides these command line options, \fBtmail\fR provides set of commands:
+
+  * tmail send-email
+  * tmail config
+
+To get more information see man pages for these commands.
+
 .sp
 .SH "SEE ALSO"
 .sp
-\fBtmail-config\fR(5), \fBsmtp-caps\fR(1)
+\fBtmail-send-email\fR(1) \fBtmail-config\fR(5), \fBsmtp-caps\fR(1)
 .SH "TMAIL"
 .sp
 Part of the \fBtmail\fR(1) suite
