@@ -1,0 +1,136 @@
+'\" t
+.\" Copyright (c) 2017, Alexander Kuleshov <kuleshovmail at gmail dot com>
+.\"
+.\" All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without modification,
+.\" are permitted provided that the following conditions are met:
+.\"
+.\" * Redistributions of source code must retain the above copyright notice,
+.\"   this list of conditions and the following disclaimer.
+.\"
+.\" * Redistributions in binary form must reproduce the above copyright notice,
+.\"   this list of conditions and the following disclaimer in the documentation
+.\"   and/or other materials provided with the distribution.
+.\"
+.\" * Neither the name of tmail nor the names of its contributors may be used to
+.\"   endorse or promote products derived from this software without specific prior
+.\"   written permission.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+.\" WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+.\" IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+.\" INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+.\" NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+.\" OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+.\" WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+.\" ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+.\" POSSIBILITY OF SUCH DAMAGE.
+.TH TMAIL 1 "2017-09-03" "tmail send-email" "User Commands"
+.SH NAME
+tmail send-email \- send email messages.
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" disable hyphenation
+.nh
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH SYNOPSIS
+.PD 0
+.HP
+.ad l
+\fBtmail send-email [--version] [--help] [--from] [--subject]
+          [--to] [--cc] [--bcc] [--attachment]
+          <MESSAGE\fR
+.br
+.PD
+.ad b
+.SH DESCRIPTION
+This command provides ability to compose and send an email.
+.SH OPTIONS
+-v, --version
+.br
+    Print current version of \fBtmail\fR.
+.br
+
+-h, --help
+.br
+    Print help for \fBtmail send-email\fR command.
+.br
+
+-f, --from
+.br
+    Specify an email address of a sender of the emails.
+.br
+
+-r, --realname
+.br
+    Specify real name of a sender.
+.br
+
+-t, --to
+.br
+    Specify the primary recipient of the email.
+.br
+
+-c, --cc
+.br
+    Specify a starting "Cc:" value for an email. This option can be used multiple times.
+.br
+
+-b, --bcc
+.br
+    Specify a starting "Bcc:" value for an email. This option can be used multiple times. 
+.br
+
+-s, --subject
+.br
+    Specify the initial subject of the email thread. This option can be used multiple times.
+.br
+
+-a, --attachment
+.br
+    Specify path to an attachment that will be attached to the email. This option can be used multiple times.
+.br
+
+-e, --user-editor
+.br
+    Use editor to compose an email message.
+.br
+
+-i, --interactive
+.br
+    Compose an email in interactive mode.
+.br
+
+.SH "USAGE"
+.in +4n
+.nf
+.sp
+To send an email with the \fBtmail send-email\fR use it like:
+
+$ tmail send-email -f username@mail.com -t username2@mail.com \\
+.br
+                   -a /home/user/attachment.txt <FILE_WITH_MESSAGE_BODY
+
+or via \f\Bstdin\fR:
+
+$ echo "Message Body" | tmail send-email -f username@mail.com \\
+.br
+                                         -t username2@mail.com \\
+.br
+                                         -a /home/user/attachment.txt
+
+.P
+.SH EXIT STATUS
+\fB tmail send-email\fR exits with 0 return code on success and >0 if an error occurred.
+.sp
+.SH "SEE ALSO"
+.sp
+\fBtmail\fR(1) \fBtmail-config\fR(5), \fBsmtp-caps\fR(1)
+.SH "TMAIL"
+.sp
+Part of the \fBtmail\fR(1) suite
+
