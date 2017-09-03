@@ -173,6 +173,28 @@ static int send_message_content(socket_t socket, message_t *message,
 	return 1;
 }
 
+static char *build_from_clause(smtp_ctx_t *smtp, message_t *message)
+{
+	char *from_buf = NULL;
+	char *realname =
+	    message->realname == NULL ? smtp->realname : message->realname;
+	size_t realname_len = strlen(realname);
+	/* realname + space + <> + address + NULL */
+	size_t from_clause_len =
+	    realname_len + 1 + 2 + strlen(message->from) + 1;
+
+	from_buf = malloc(from_clause_len);
+	if (!from_buf)
+	{
+		fprintf(stderr, "Error: Can't allocate memory for "
+				"'FROM:' clause \n");
+		return NULL;
+	}
+
+	snprintf(from_buf, from_clause_len, "%s <%s>", realname, message->from);
+	return from_buf;
+}
+
 int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
 		 char *buffer)
 {
@@ -190,31 +212,18 @@ int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
 	}
 	else
 	{
-		char *from_buf = NULL;
-		char *realname = message->realname == NULL ? smtp->realname
-							   : message->realname;
-		size_t realname_len = strlen(realname);
-		/* realname + space + <> + address + NULL */
-		size_t from_clause_len =
-		    realname_len + 1 + 2 + strlen(message->from) + 1;
+		char *from = build_from_clause(smtp, message);
 
-		from_buf = malloc(from_clause_len);
-		if (!from_buf)
-		{
-			fprintf(stderr, "Error: Can't allocate memory for "
-				"'FROM:' clause \n");
+		if (!from)
 			return 0;
-		}
-		snprintf(from_buf, from_clause_len, "%s <%s>", realname,
-			 message->from);
 
 		if (!send_message_header(socket, FROM_CLAUSE, FROM_CLAUSE_LEN,
-					 from_buf))
+					 from))
 		{
-			mfree(from_buf);
+			mfree(from);
 			return 0;
 		}
-		mfree(from_buf);
+		mfree(from);
 	}
 
 	/* send 'To:' headers */
