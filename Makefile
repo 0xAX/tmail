@@ -10,7 +10,12 @@
 # Define DEBUG=1 to build tmail with debug info.
 #
 # Define NON_NATIVE_BINARY to disable -march=native
-
+#
+# Define LIBDIR to specify where to install tmail shared libraries
+#
+# Define BINDIR to specify where to install tmail executables
+#
+# Define MANDIR to specify where to install tmail man pages
 .DEFAULT_GOAL: $(DEFAULT_TARGET)
 
 include ./mk/Common.mk
