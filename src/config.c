@@ -96,7 +96,7 @@ static int read_configuration(const char *config_file_path, int type)
 	{
 		fprintf(stderr,
 			"Error: occurs during reading configuration file."
-			"\nError: %s",
+			"\nError: %s\n",
 			strerror(errno));
 		goto failed;
 	}
@@ -130,7 +130,7 @@ conf_path_t *get_tmail_conf_dir(void)
 	pw = getpwuid(euid);
 	if (!pw)
 	{
-		fprintf(stderr, "Error: Can't get current username. Error: %s",
+		fprintf(stderr, "Error: Can't get current username.\n Error: %s\n",
 			strerror(errno));
 		return NULL;
 	}
@@ -151,7 +151,7 @@ conf_path_t *get_tmail_conf_dir(void)
 		free(config);
 		fprintf(stderr,
 			"Error: Can't allocate memory for configuration file "
-			"path.\nError: %s",
+			"path.\nError: %s\n",
 			strerror(errno));
 		return NULL;
 	}

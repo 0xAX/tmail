@@ -27,14 +27,14 @@ void load_mime_file(const char *filepath)
 
 	if (mime_file == -1)
 	{
-		fprintf(stderr, "%s", strerror(errno));
+		fprintf(stderr, "%s\n", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 
 	if (stat(filepath, &st) != 0)
 	{
 		close(mime_file);
-		fprintf(stderr, "%s", strerror(errno));
+		fprintf(stderr, "%s\n", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 
@@ -42,7 +42,7 @@ void load_mime_file(const char *filepath)
 	if (!mime_file_content)
 	{
 		close(mime_file);
-		fprintf(stderr, "%s", strerror(errno));
+		fprintf(stderr, "%s\n", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 	memset(mime_file_content, 0, st.st_size);

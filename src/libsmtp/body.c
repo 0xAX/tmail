@@ -85,7 +85,7 @@ static int send_message_body(socket_t socket, message_t *message, char *buffer)
 
 	if (n == -1)
 	{
-		fprintf(stderr, "Error: can't read message body");
+		fprintf(stderr, "Error: can't read message body\n");
 		return 0;
 	}
 

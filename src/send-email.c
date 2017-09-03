@@ -65,7 +65,7 @@ static message_t *fill_message(void)
 	message_t *m = malloc(sizeof(message_t));
 	if (!m)
 	{
-		fprintf(stderr, "%s", strerror(errno));
+		fprintf(stderr, "%s\n", strerror(errno));
 		return NULL;
 	}
 	memset(m, 0, sizeof(message_t));
@@ -73,7 +73,7 @@ static message_t *fill_message(void)
 	m->body = malloc(sizeof(message_body_t));
 	if (!m->body)
 	{
-		fprintf(stderr, "%s", strerror(errno));
+		fprintf(stderr, "%s\n", strerror(errno));
 		free_message(m);
 		return NULL;
 	}
@@ -98,7 +98,7 @@ static message_t *fill_message(void)
 		m->attachments = list_new();
 		if (!m->attachments)
 		{
-			fprintf(stderr, "%s", strerror(errno));
+			fprintf(stderr, "%s\n", strerror(errno));
 			free_message(m);
 			return NULL;
 		}
@@ -110,7 +110,7 @@ static message_t *fill_message(void)
 
 			if (fd == -1)
 			{
-				fprintf(stderr, "%s", strerror(errno));
+				fprintf(stderr, "%s\n", strerror(errno));
 				free_message(m);
 				return NULL;
 			}
@@ -118,7 +118,7 @@ static message_t *fill_message(void)
 			attachment = malloc(sizeof(message_attachment_t));
 			if (!attachment)
 			{
-				fprintf(stderr, "%s", strerror(errno));
+				fprintf(stderr, "%s\n", strerror(errno));
 				free_message(m);
 				return NULL;
 			}
@@ -175,7 +175,7 @@ static void process_send_email(void)
 	m = fill_message();
 	if (!m)
 	{
-		fprintf(stderr, "Erorr: during fill_message()");
+		fprintf(stderr, "Erorr: during fill_message()\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -249,24 +249,24 @@ void send_email_cmd(int argc, char *argv[])
 		case 'a':
 			if (!collect_list_args(&attachments, strdup(optarg)))
 			{
-				fprintf(stderr, "%s",
-					"attachment list can't be allocated\n");
+				fprintf(stderr, "%s\n",
+					"attachment list can't be allocated");
 				goto allocation_failed;
 			}
 			break;
 		case 'b':
 			if (!collect_list_args(&bcc, strdup(optarg)))
 			{
-				fprintf(stderr, "%s",
-					"bcc list can't be allocated\n");
+				fprintf(stderr, "%s\n",
+					"bcc list can't be allocated");
 				goto allocation_failed;
 			}
 			break;
 		case 'c':
 			if (!collect_list_args(&cc, strdup(optarg)))
 			{
-				fprintf(stderr, "%s",
-					"cc list can't be allocated\n");
+				fprintf(stderr, "%s\n",
+					"cc list can't be allocated");
 				goto allocation_failed;
 			}
 			break;
@@ -288,8 +288,8 @@ void send_email_cmd(int argc, char *argv[])
 		case 't':
 			if (!collect_list_args(&rcps, strdup(optarg)))
 			{
-				fprintf(stderr, "%s",
-					"recepient list can't be allocated\n");
+				fprintf(stderr, "%s\n",
+					"recepient list can't be allocated");
 				goto allocation_failed;
 			}
 			break;
