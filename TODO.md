@@ -60,7 +60,6 @@ without configuration.
   * Add send message in the separate thread.
   * Add comments to describe SMTP capabilties in the smtp.h
   * Check message size if `SIZE` capability is supported.
-  * Send 'Reply-to:' if need (add a field to message struct).
 
 ## libmail
 

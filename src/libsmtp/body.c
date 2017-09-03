@@ -244,6 +244,12 @@ int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
 		if (!send_message_header(socket, SUBJECT_CLAUSE,
 					 SUBJECT_CLAUSE_LEN, message->subject))
 			return 0;
+	/* send 'In-Reply-To' header */
+	if (message->message_id)
+		if (!send_message_header(socket, REPLY_TO_CLAUSE,
+					 REPLY_TO_CLAUSE_LEN,
+					 message->message_id))
+			return 0;
 
 	/* send 'Date' header */
 	if (!send_date_header(socket))

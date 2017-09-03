@@ -20,6 +20,7 @@ Sender/Receiver options:
                            Multiply options are allowed
   -a, --attachment=<file>  add attachment to an email
                            Multiply options are allowed
+  -r, --in-reply-to=<id>   specify Message-Id of an email
 
 Composing email mode:
   -e, --use-editor     use editor to compose a message

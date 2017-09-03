@@ -34,6 +34,7 @@ typedef struct
 	char *from;
 	char *realname;
 	list_t *to;
+	char *message_id;
 	char *subject;
 	list_t *attachments;
 	list_t *cc;

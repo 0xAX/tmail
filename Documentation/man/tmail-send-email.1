@@ -43,6 +43,7 @@ tmail send-email \- send email messages.
 .ad l
 \fBtmail send-email [--version] [--help] [--from] [--subject]
           [--to] [--cc] [--bcc] [--realname] [--attachment]
+          [--in-reply-to]
           <MESSAGE\fR
 .br
 .PD
@@ -93,6 +94,11 @@ This command provides ability to compose and send an email.
 -a, --attachment
 .br
     Specify path to an attachment that will be attached to the email. This option can be used multiple times.
+.br
+
+-r, --in-reply-to
+.br
+    Specify a \fBMessage-Id\fR in the email.
 .br
 
 -e, --user-editor

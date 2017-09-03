@@ -30,11 +30,13 @@
 #define CC_CLAUSE "Cc: "
 #define FROM_CLAUSE "From: "
 #define SUBJECT_CLAUSE "Subject: "
+#define REPLY_TO_CLAUSE "In-Reply-To: "
 
 #define TO_CLAUSE_LEN 4
 #define CC_CLAUSE_LEN 4
 #define FROM_CLAUSE_LEN 6
 #define SUBJECT_CLAUSE_LEN 9
+#define REPLY_TO_CLAUSE_LEN 13
 
 #define SMTP_PORT 25
 #define SMTP_PORT_TLS 587

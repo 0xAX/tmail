@@ -8,6 +8,7 @@
 
 #include "send-email.h"
 
+static char *message_id = NULL;
 static char *from = NULL;
 static char *realname = NULL;
 static char *subject = NULL;
@@ -38,6 +39,7 @@ static void print_help(void)
 	printf("Sender/Receiver options:\n");
 	printf("  -f, --from=<address>     specify email address of an email "
 	       "author\n");
+	printf("  -r, --in-reply-to=<id>   specify Message-Id of an email");
 	printf("  -n, --realname=<name>    specify real name of an email "
 	       "author\n");
 	printf("  -s, --subject=<subj>     specify subject of an email\n");
@@ -82,6 +84,7 @@ static message_t *fill_message(void)
 	m->from = from;
 	m->realname = realname;
 	m->subject = subject;
+	m->message_id = message_id;
 
 	if (rcps)
 		m->to = rcps;
@@ -236,6 +239,7 @@ void send_email_cmd(int argc, char *argv[])
 	    {"bcc", required_argument, NULL, 'b'},
 	    {"use-editor", no_argument, NULL, 'e'},
 	    {"subject", required_argument, NULL, 's'},
+	    {"in-reply-to", required_argument, NULL, 'r'},
 	};
 
 	if (argc <= 1)
@@ -284,6 +288,9 @@ void send_email_cmd(int argc, char *argv[])
 			break;
 		case 'n':
 			realname = optarg;
+			break;
+		case 'r':
+			message_id = optarg;
 			break;
 		case 't':
 			if (!collect_list_args(&rcps, strdup(optarg)))
