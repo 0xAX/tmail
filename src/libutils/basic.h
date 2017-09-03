@@ -41,6 +41,7 @@ typedef int socket_t;
 typedef uint8_t byte_t;
 typedef uint32_t file_size_t;
 typedef uint64_t bitmap_t;
+typedef unsgined char u_char;
 
 static inline bool isempty(const char *s) { return !s || !s[0]; }
 

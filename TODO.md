@@ -1,9 +1,5 @@
 # TODO
 
-## General
-
-  * Add `uchar_t` to `<basic.h>`.
-
 ## Build
 
   * Add ` -Weverything` for clang build.
