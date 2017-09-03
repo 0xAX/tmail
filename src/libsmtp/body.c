@@ -20,26 +20,24 @@
 #define SUBJECT_CLAUSE "Subject: "
 #define SUBJECT_CLAUSE_LEN 9
 
-static int send_message_header(socket_t socket, char *cmd, int cmd_len,
-			       char *data)
+static int send_message_header(socket_t socket, char *cmd,
+			       int cmd_len, char *data)
 {
 	char *msg = NULL;
 	size_t msg_len = strlen(data);
 	size_t len = cmd_len + msg_len + 2 + 1;
 
-	msg = malloc(len);
+	msg = calloc(len, 1);
 	if (!msg)
 	{
 		fprintf(stderr,
 			"Error: Can't allocate memory for 'From:' field\n");
 		return 0;
 	}
-	memset(msg, 0, len);
 	snprintf(msg, len, "%s%s\r\n", cmd, data);
 	send(socket, msg, len - 1, 0);
 
-	free(msg);
-
+	mfree(msg);
 	return 1;
 }
 
@@ -149,7 +147,7 @@ static int send_message_content(socket_t socket, message_t *message,
 		     0);
 		send(socket, mime_boundary, strlen(mime_boundary), 0);
 		send(socket, "\"\r\n\r\n", 5, 0);
-		free(uid->data);
+		mfree(uid->data);
 		mfree(uid);
 	}
 
@@ -180,15 +178,37 @@ int send_message(socket_t socket, smtp_ctx_t *smtp,
 {
 	list_t *entry = NULL;
 
-	UNUSED(smtp);
-	
 	/* send MIME version header */
 	send(socket, "MIME-Version: 1.0\r\n", 19, 0);
 
 	/* send 'From:' header */
-	if (!send_message_header(socket, FROM_CLAUSE, FROM_CLAUSE_LEN,
-				 message->from))
-		return 0;
+	if (!smtp->realname)
+	{
+		if (!send_message_header(socket,
+					 FROM_CLAUSE,
+					 FROM_CLAUSE_LEN,
+					 message->from))
+			return 0;
+	}
+	else
+	{
+		char *from_buf = NULL;
+		size_t realname_len = strlen(smtp->realname);
+		size_t from_clause_len = realname_len + 1 + 2 + strlen(message->from) + 1;
+
+		from_buf = malloc(from_clause_len);
+		snprintf(from_buf, from_clause_len, "%s <%s>", smtp->realname, message->from);
+
+		if (!send_message_header(socket,
+					 FROM_CLAUSE,
+					 FROM_CLAUSE_LEN,
+					 from_buf))
+		{
+			mfree(from_buf);
+			return 0;
+		}
+		mfree(from_buf);
+	}
 
 	/* send 'To:' headers */
 	if (message->to)
