@@ -14,19 +14,21 @@ TEST_EXECUTABLES += base64_test
 
 TEST_OBJS += base64_test.o
 
+INCLUDES = -I../libutils
+
 $(TMAIL_ENCODING_LIB): $(LIB_ENCODING_OBJS)
-	$(QUIET_CC) $(TMAIL_CC) $(CC_SHLIB_FLAGS) $@ $<
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CC_SHLIB_FLAGS) $@ $<
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(CFLAGS_LIBS) $<
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_LIBS) $<
 
 $(TEST_TARGET): base64_test
 	@exec ./run_tests.pl
 	@rm -rf $(TEST_EXECUTABLES)
 
 base64_test:
-	$(TMAIL_CC) $(DEBUG_FLAGS) -c base64_test.c
-	$(TMAIL_CC) $(DEBUG_FLAGS) base64.o base64_test.o -o base64_test
+	$(TMAIL_CC) $(INCLUDES) $(DEBUG_FLAGS) -c base64_test.c
+	$(TMAIL_CC) $(INCLUDES) $(DEBUG_FLAGS) base64.o base64_test.o -o base64_test
 
 $(CLEAN_TARGET):
 	@echo "./src/libencoding"

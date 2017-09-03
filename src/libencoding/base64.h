@@ -10,11 +10,12 @@
 #ifndef LIB_BASE_64_H
 #define LIB_BASE_64_H
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#include <stdio.h>
+#include <basic.h>
 
 typedef struct
 {
