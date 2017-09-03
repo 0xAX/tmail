@@ -9,6 +9,7 @@
 #include "send-email.h"
 
 static char *from = NULL;
+static char *realname = NULL;
 static char *subject = NULL;
 static list_t *rcps = NULL;
 static list_t *attachments = NULL;
@@ -35,7 +36,10 @@ static void print_help(void)
 	printf("\nUsage:\n tmail send-email [options...]\n");
 	printf("\n");
 	printf("Sender/Receiver options:\n");
-	printf("  -f, --from=<address>     specify author of an email\n");
+	printf("  -f, --from=<address>     specify email address of an email "
+	       "author\n");
+	printf("  -r, --realname=<name>    specify real name of an email "
+	       "author\n");
 	printf("  -s, --subject=<subj>     specify subject of an email\n");
 	printf(
 	    "  -t, --to=<address>       specify the primary recipient of an\n"
@@ -76,6 +80,7 @@ static message_t *fill_message(void)
 	memset(m->body, 0, sizeof(message_body_t));
 
 	m->from = from;
+	m->realname = realname;
 	m->subject = subject;
 
 	if (rcps)
@@ -225,6 +230,7 @@ void send_email_cmd(int argc, char *argv[])
 	    {"interactive", no_argument, NULL, 'i'},
 	    {"help", no_argument, NULL, 'h'},
 	    {"from", required_argument, NULL, 'f'},
+	    {"realname", required_argument, NULL, 'r'},
 	    {"to", required_argument, NULL, 't'},
 	    {"cc", required_argument, NULL, 'c'},
 	    {"bcc", required_argument, NULL, 'b'},
@@ -235,8 +241,8 @@ void send_email_cmd(int argc, char *argv[])
 	if (argc <= 1)
 		print_help();
 
-	while ((c = getopt_long(argc, argv, "a:b:hif:t:s:c:", options, NULL)) >=
-	       0)
+	while ((c = getopt_long(argc, argv, "a:b:hif:r:t:s:c:", options,
+				NULL)) >= 0)
 	{
 		switch (c)
 		{
@@ -269,6 +275,9 @@ void send_email_cmd(int argc, char *argv[])
 			break;
 		case 'f':
 			from = optarg;
+			break;
+		case 'r':
+			realname = optarg;
 			break;
 		case 'i':
 			interactive = true;

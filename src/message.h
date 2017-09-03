@@ -32,6 +32,7 @@ typedef struct
 typedef struct
 {
 	char *from;
+	char *realname;
 	list_t *to;
 	char *subject;
 	list_t *attachments;

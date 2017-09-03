@@ -116,7 +116,7 @@ int send_quit_message(socket_t socket, char *buffer);
 int send_data_message(socket_t socket, char *buffer);
 
 /* body.c */
-int send_message(socket_t socket, smtp_ctx_t *smtp,
-		 message_t *message, char *buffer);
+int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
+		 char *buffer);
 
 #endif /* __LIB_SMTP_H__ */

@@ -20,8 +20,8 @@
 #define SUBJECT_CLAUSE "Subject: "
 #define SUBJECT_CLAUSE_LEN 9
 
-static int send_message_header(socket_t socket, char *cmd,
-			       int cmd_len, char *data)
+static int send_message_header(socket_t socket, char *cmd, int cmd_len,
+			       char *data)
 {
 	char *msg = NULL;
 	size_t msg_len = strlen(data);
@@ -173,8 +173,8 @@ static int send_message_content(socket_t socket, message_t *message,
 	return 1;
 }
 
-int send_message(socket_t socket, smtp_ctx_t *smtp,
-		 message_t *message, char *buffer)
+int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
+		 char *buffer)
 {
 	list_t *entry = NULL;
 
@@ -182,26 +182,27 @@ int send_message(socket_t socket, smtp_ctx_t *smtp,
 	send(socket, "MIME-Version: 1.0\r\n", 19, 0);
 
 	/* send 'From:' header */
-	if (!smtp->realname)
+	if (!smtp->realname && !message->realname)
 	{
-		if (!send_message_header(socket,
-					 FROM_CLAUSE,
-					 FROM_CLAUSE_LEN,
+		if (!send_message_header(socket, FROM_CLAUSE, FROM_CLAUSE_LEN,
 					 message->from))
 			return 0;
 	}
 	else
 	{
 		char *from_buf = NULL;
-		size_t realname_len = strlen(smtp->realname);
-		size_t from_clause_len = realname_len + 1 + 2 + strlen(message->from) + 1;
+		char *realname = message->realname == NULL ? smtp->realname
+							   : message->realname;
+		size_t realname_len = strlen(realname);
+		/* realname + space + <> + address + NULL */
+		size_t from_clause_len =
+		    realname_len + 1 + 2 + strlen(message->from) + 1;
 
 		from_buf = malloc(from_clause_len);
-		snprintf(from_buf, from_clause_len, "%s <%s>", smtp->realname, message->from);
+		snprintf(from_buf, from_clause_len, "%s <%s>", realname,
+			 message->from);
 
-		if (!send_message_header(socket,
-					 FROM_CLAUSE,
-					 FROM_CLAUSE_LEN,
+		if (!send_message_header(socket, FROM_CLAUSE, FROM_CLAUSE_LEN,
 					 from_buf))
 		{
 			mfree(from_buf);
