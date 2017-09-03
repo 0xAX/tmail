@@ -20,7 +20,8 @@ like this.
   * Use sanitizers during build.
   * Support for [bsd make](https://www.freebsd.org/cgi/man.cgi?make(1)).
   * Add `install_docs` target.
-
+  * Allow to override `LIBDIR` and `BINDIR`.
+  
 ## tmail
 
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
