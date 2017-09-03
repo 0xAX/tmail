@@ -199,6 +199,12 @@ int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
 		    realname_len + 1 + 2 + strlen(message->from) + 1;
 
 		from_buf = malloc(from_clause_len);
+		if (!from_buf)
+		{
+			fprintf(stderr, "Error: Can't allocate memory for "
+				"'FROM:' clause \n");
+			return 0;
+		}
 		snprintf(from_buf, from_clause_len, "%s <%s>", realname,
 			 message->from);
 
