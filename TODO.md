@@ -19,7 +19,6 @@ like this.
   * Make `make install` and `make uninstall` more verbose.
   * Use sanitizers during build.
   * Support for [bsd make](https://www.freebsd.org/cgi/man.cgi?make(1)).
-  * Add `install_docs` target.
   * Allow to override `LIBDIR` and `BINDIR`.
   
 ## tmail
