@@ -43,6 +43,14 @@ BUILD_ENCODING_LIB_TARGET = libtmail_encoding
 # Build tmail's shared libraries
 BUILD_LIBS_TARGET = libs
 
+#
+# Documentation related paths
+#
+MAN_PAGES_1 += Documentation/man/tmail.1
+MAN_PAGES_1 += Documentation/man/smtp-caps.1
+MAN_PAGES_1 += Documentation/man/tmail-send-email.1
+MAN_PAGES_5 += Documentation/man/tmail-config.5
+
 # Match all object files
 OBJECT_FILES=*.o
 # Match all shared libraries files
@@ -65,6 +73,10 @@ TMAIL_ENCODING_LIB_DIR=libencoding
 BIN_DIR ?= /usr/local/bin
 # Directory to install tmail(s) libraries
 LIB_DIR ?= /usr/lib
+# Path to man dir for programs
+MAN_DIR_1 ?= /usr/share/man/man1
+# Path to man dir for configuration files
+MAN_DIR_5 ?= /usr/share/man/man5
 
 # use it for cleanups
 RM ?= rm -rf
