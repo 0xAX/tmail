@@ -150,22 +150,10 @@ static void process_send_email(void)
 	char *smtp_config = NULL;
 
 	if (interactive)
-	{
-		/* TODO compose email interactively */
 		goto finish;
-	}
 
 	if (use_editor)
-	{
-		/*
-		 * TODO open editor that is specified by:
-		 *
-		 *  1. $EDITOR env
-		 *  2. $TMAIL_EDITOR env
-		 *  3. from configuration
-		 */
 		goto finish;
-	}
 
 	if (!rcps && !cc)
 	{
