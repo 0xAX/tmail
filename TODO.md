@@ -27,12 +27,21 @@ like this.
 
 ## send-email
 
-  * Catch `SIGINT` to release memory;
+  * Implement `-i/--interactive`.
+  * Implement `-e/--use-editor`.
+  * Add `--smtp-server`, `--smtp-server-address` and `--smtp-server-port`.
+  * Add `--smtp-password`.
+  * Catch `SIGINT` to release memory.
   * Add `--from-file` command line option.
   * If from file wasn't given and stdin is empty (select/poll), open editor.
   * Move to builtins directory.
   * Check that only one `from` is passed.
   * Support for message preview.
+
+This stuff should be implemented after `STARTTLS` support:
+
+  * Add `tls` related options.
+  * Add `--no-starttls`.
 
 ## libencoding
 
@@ -42,13 +51,9 @@ like this.
 
   * Remake `get_config_entry()`:
 
-1. make it return `void*`;
+1. make it return `void*`.
 2. add second parameter to append extension like `.smtprc` and etc.
 
-  * Verbose errors in parser.
-  * Trim values in the `fill_smtp_conf()`.
-  * Rename `extern hashmap_t *conf;` to `conf_map` or something like this.
-  * Add initial version and think about configuration syntax.
   * Dump configuration in a pretty way in a case of `tmail config`
 without configuration.
   * Add `smpt.encoding` configuration parameter.
@@ -61,17 +66,16 @@ without configuration.
   * Add comments to describe SMTP capabilties in the smtp.h
   * Check message size if `SIZE` capability is supported.
 
-## libmail
+## smtp-caps
 
-  * Add initial `libmail` template.
-  * Add `mail` structure which should contain prepared email
-to send.
+  * Move `smtp-caps` util into `tmail show-smtp-caps` command.
 
 ## MIME
 
   * Make return value of the `get_mime_type()` - `const`.
-  * Do not hard-code "contrib/mime.types" in `tmail.c`
-  
+  * Do not hard-code "contrib/mime.types" in `tmail.c`.
+  * Add mime type that you like.
+
 ## libutils
 
 ### list_t
