@@ -6,11 +6,6 @@
 # Name of main executable
 TMAIL_EXECUTABLE=tmail
 
-#
-# apps executables
-#
-SMTP_CAPS_EXECUTABLE = smtp-caps
-
 # Auxiliary sys library
 TMAIL_SYS_LIB=libtmail-sys.so
 # Auxiliary library with C utils
@@ -47,7 +42,7 @@ BUILD_LIBS_TARGET = libs
 # Documentation related paths
 #
 MAN_PAGES_1 += Documentation/man/tmail.1
-MAN_PAGES_1 += Documentation/man/smtp-caps.1
+MAN_PAGES_1 += Documentation/man/tmail-smtp-caps.1
 MAN_PAGES_1 += Documentation/man/tmail-send-email.1
 MAN_PAGES_5 += Documentation/man/tmail-config.5
 
@@ -108,14 +103,12 @@ ifndef V
 	QUIET_CC		   = @echo '   ' CC $@;
 	QUIET_CLEAN_OBJECTS	   = @echo '   ' RM $(OBJECT_FILES);
 	QUIET_CLEAN_TMAIL_EXEC	   = @echo '   ' RM $(TMAIL_EXECUTABLE);
-	QUIET_CLEAN_SMTP_CAPS_EXEC = @echo '   ' RM $(SMTP_CAPS_EXECUTABLE);
 	QUIET_CLEAN_SHARED_LIBS    = @echo '   ' RM $(SHARED_LIBS_FILES);
 	MAKE_FLAGS=$(SILENT) $(ELIMINATE_BUILTINS) $(ELIMINATE_BUILTIN_RULES)
 else
 	QUIET_CCS=
 	QUIET_CLEAN_OBJECTS=
 	QUIET_CLEAN_TMAIL_EXEC=
-	QUIET_CLEAN_SMTP_CAPS_EXEC=
 	QUIET_CLEAN_SHARED_LIBS=
 	MAKE_FLAGS=
 endif

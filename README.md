@@ -20,6 +20,7 @@ usage: tmail [--version] [--help]
 tmail provides following commands:
 
     * send-email - send an email
+    * smtp-caps - show SMTP server capabilities
     * config - manage tmail configuration
 
 Each command has own set of command line arguments.

@@ -17,7 +17,9 @@
 #include <at_exit.h>
 #include <config.h>
 #include <mime.h>
+
 #include <send-email.h>
+#include <smtp-caps.h>
 
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
@@ -34,6 +36,7 @@ static void print_help()
 	printf("tmail provides following commands:\n");
 	printf("\n");
 	printf("    * send-email - send an email\n");
+	printf("    * smtp-caps - show SMTP server capabilities\n");
 	printf("    * config - manage tmail configuration\n");
 	printf("\n");
 	printf("Each command has own set of command line arguments.\n");
@@ -110,6 +113,8 @@ int main(int argc, char *argv[])
 	/* parse command line arguments */
 	if (strcmp(argv[1], SEND_EMAIL) == 0)
 		send_email_cmd(--argc, ++argv);
+	else if (strcmp(argv[1], SMTP_CAPS) == 0)
+		smtp_caps_cmd(--argc, ++argv);
 	else
 		parse_argv(argc, argv);
 

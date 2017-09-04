@@ -29,7 +29,7 @@
 .\" POSSIBILITY OF SUCH DAMAGE.
 .TH SMTP-CAPS 1 "2017-07-29" "tmail smtp-caps" "User Commands"
 .SH NAME
-smtp-caps \- get SMTP server capabilities
+tmail smtp-caps \- get an SMTP server capabilities
 .\" disable justification (adjust text to left margin only)
 .ad l
 .\" disable hyphenation
@@ -41,23 +41,23 @@ smtp-caps \- get SMTP server capabilities
 .PD 0
 .HP
 .ad l
-\fBsmtp-caps\fR [\fB\--version/-v]
+\fBtmail smtp-caps\fR [\fB\--version/-v]
 .HP
 .ad l
-\fBsmtp-caps\fR [\fB\--help/-h]
+\fBtmail smtp-caps\fR [\fB\--help/-h]
 .HP
 .ad l
-\fBsmtp-caps\fR smtp-server port
+\fBtmail smtp-caps\fR smtp-server port
 .br
 .PD
 .ad b
 .SH DESCRIPTION
-\fIsmtp-caps\fR is a simple util to get capabilties of a SMTP server.
+\fItmail smtp-caps\fR is a simple util to get capabilties of a SMTP server.
 .PP
 The following options are accepted:
 .TP
 .BI \--version
-Prints current version of \fIsmtp-caps\fR util.
+Prints current version of \fItmail smtp-caps\fR util.
 .TP
 .BI \--help
 Prints help message.
@@ -65,9 +65,9 @@ Prints help message.
 .in +4n
 .nf
 .sp
-To get capabilties of a SMTP server, just execute \fIsmtp-caps\fR util with the given SMTP server address and port.
+To get capabilties of a SMTP server, just execute \fItmail smtp-caps\fR util with the given SMTP server address and port.
 
-$ smtp-caps smtp.gmail.com 587
+$ tmail smtp-caps smtp.gmail.com 587
 
 SIZE
 8BITMIME
@@ -80,7 +80,7 @@ SMTPUTF8
 .in
 .P
 .SH EXIT STATUS
-\fBsmtp-caps\fR exits with \fB0\fR return code on success and \fB>0\fR if an error occurred.
+\fBtmail smtp-caps\fR exits with \fB0\fR return code on success and \fB>0\fR if an error occurred.
 .sp
 .SH "SEE ALSO"
 .sp

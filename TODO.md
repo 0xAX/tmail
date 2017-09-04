@@ -66,10 +66,6 @@ without configuration.
   * Add comments to describe SMTP capabilties in the smtp.h
   * Check message size if `SIZE` capability is supported.
 
-## smtp-caps
-
-  * Move `smtp-caps` util into `tmail show-smtp-caps` command.
-
 ## MIME
 
   * Make return value of the `get_mime_type()` - `const`.

@@ -18,7 +18,7 @@ static char *smtp_server_port = NULL;
 
 static void print_help(void)
 {
-	printf("Usage: smtp-caps [--version] [--help] smtp_server port \n");
+	printf("Usage: tmail smtp-caps [--version] [--help] smtp_server port \n");
 	exit(EXIT_SUCCESS);
 }
 
@@ -50,7 +50,7 @@ static void parse_argv(int argc, char *argv[])
 	}
 }
 
-int main(int argc, char *argv[])
+void smtp_caps_cmd(int argc, char *argv[])
 {
 	char *ret;
 	smtp_ctx_t *smtp;
@@ -111,6 +111,4 @@ int main(int argc, char *argv[])
 	free(smtp_server);
 	free(smtp_server_port);
 	free(smtp);
-
-	return 0;
 }

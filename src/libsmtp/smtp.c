@@ -55,7 +55,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 	if (!send_ehlo_message(conn->sd, request, response, opts))
 		goto fail;
 
-	/* at least smtp_caps(1) uses this */
+	/* at least tmail-smtp-caps(1) uses this */
 	if (opts & STOP_AFTER_CAPS)
 	{
 		close(conn->sd);
