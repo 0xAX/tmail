@@ -45,7 +45,25 @@ And of course compilers
 
 Additionally following flags can be passed to make:
 
-*TODO*
+  * `TMAIL_CC` to override default compiler (by default `gcc` is used)
+  * `V=1` for a more verbose build
+  * `DEBUG=1` to build tmail with debug info.
+  * `NON_NATIVE_BINARY` to disable -march=native
+  * `LIBDIR` to specify where to install tmail shared libraries
+  * `BINDIR` to specify where to install tmail executables
+  * `MANDIR` to specify where to install tmail man pages
+
+For example:
+
+```
+$ sudo make install MANDIR=/usr/share
+```
+
+or
+
+```
+$ make DEBUG=1
+```
 
 After building is done, would be great to execute tests with:
 
