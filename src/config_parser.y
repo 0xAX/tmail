@@ -39,7 +39,7 @@ int current_type;
 		char *variable_val;
 	};
 }
-				
+
 %union
 {
 	struct var var;
@@ -114,7 +114,7 @@ char *trim(const char *str)
 	 * calculate and copy copy trimmed string
 	 * and add null terminator
 	 */
-	out_size = (end - str) < len-1 ? (end - str) : len-1;	
+	out_size = (end - str) < len-1 ? (end - str) : len-1;
 	memcpy(out, str, out_size);
 
 	return out;
@@ -154,7 +154,7 @@ void fill_smtp_conf(char *name, char *val)
 		smtp_conf->signature_fd = signature_fd;
 		free(signature_path);
 	}
-	
+
 	free(name);
 	free(val);
 }
@@ -198,7 +198,7 @@ int parse_tmail_configuration(char *filename,
 	 */
 	configuration_data = configuration;
 	configuration_data[strlen(configuration)] = '\n';
-	
+
 	switch (type)
 	{
 	case SMTP_CONF:
@@ -215,14 +215,13 @@ int parse_tmail_configuration(char *filename,
 		}
 		memset(smtp_conf, 0, sizeof(smtp_ctx_t));
 
-		
 		/* start to parse */
 		ret = yyparse();
 
 		/* store result */
 		ep.key = strdup(basename(filename));
 		ep.data = (void *)smtp_conf;
-		hsearch(ep, ENTER);		
+		hsearch(ep, ENTER);
 
 		if (ret == 1)
 		{
@@ -244,6 +243,6 @@ int parse_tmail_configuration(char *filename,
 	}
 
 	yylex_destroy();
-	
+
 	return 1;
 }
