@@ -56,7 +56,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 		goto fail;
 
 	/* at least tmail-smtp-caps(1) uses this */
-	if (opts & STOP_AFTER_CAPS)
+	if (opts & STOP_AFTER_EHLO)
 	{
 		close(conn->sd);
 		free(conn);
@@ -64,11 +64,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 	}
 
 	/* everything is ok, let's parse SMTP server capabilities */
-	if (parse_smtp_caps(response))
-	{
-		;
-	}
-	memset(response, 0, 1024);
+	smtp->smtp_extension = parse_smtp_caps(response);
 
 	if (!send_mail_from_message(conn->sd, message, response))
 		goto fail;

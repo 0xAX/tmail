@@ -12,31 +12,30 @@ __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap)
 {
 	if (cap & SIZE)
 		return "SIZE";
-
 	if (cap & EIGHT_BITMIME)
 		return "8BITMIME";
-
 	if (cap & HELP)
 		return "HELP";
-
 	if (cap & PIPELINING)
 		return "PIPELINING";
-
 	if (cap & PRDR)
 		return "PRDR";
-
 	if (cap & CHUNKING)
 		return "CHUNKING";
-
 	if (cap & SMTPTLS)
 		return "STARTTLS";
-
 	if (cap & ENHANCEDSTATUSCODES)
 		return "ENHANCEDSTATUSCODES";
-
 	if (cap & SMTPUTF8)
 		return "SMTPUTF8";
-
+	if (cap & DSN)
+		return "DSN";
+	if (cap & DELIVERBY)
+		return "DELIVERBY";
+	if (cap & ATRN)
+		return "ATRN";
+	if (cap & ETRN)
+		return "ETRN";
 	return NULL;
 }
 
@@ -92,11 +91,16 @@ __attribute__((pure)) unsigned long parse_smtp_caps(char *r)
 					   ENHANCEDSTATUSCODES);
 		ADD_SIMPLE_SMTP_CAPABILITY("STARTTLS", 8, r, SMTPTLS);
 		ADD_SIMPLE_SMTP_CAPABILITY("SMTPUTF8", 8, r, SMTPUTF8);
+		ADD_SIMPLE_SMTP_CAPABILITY("DSN", 3, r, DSN);
+		ADD_SIMPLE_SMTP_CAPABILITY("DELIVERBY", 9, r, DELIVERBY);
+		ADD_SIMPLE_SMTP_CAPABILITY("ATRN", 4, r, ETRN);
+		ADD_SIMPLE_SMTP_CAPABILITY("ETRN", 4, r, ETRN);
 
 		/* Go to the next line */
 		skip_cl_rl(r);
 	}
 
+	memset(r, 0, 1024);
 	return smtp_caps;
 }
 
@@ -135,7 +139,7 @@ int send_ehlo_message(socket_t socket, char *request, char *buffer,
 		return 0;
 	}
 
-	if (!(opts & STOP_AFTER_CAPS))
+	if (!(opts & STOP_AFTER_EHLO))
 		memset(buffer, 0, 1024);
 
 	return 1;

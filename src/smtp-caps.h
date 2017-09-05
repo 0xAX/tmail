@@ -9,6 +9,15 @@
 #ifndef SMTP_CAPS_H
 #define SMTP_CAPS_H
 
+#include <basic.h>
+#include <connect.h>
+#include <getopt.h>
+#include <smtp.h>
+#include <stdio.h>
+#include <string.h>
+
+#include <smtp.h>
+
 #define SMTP_CAPS "smtp-caps"
 
 void smtp_caps_cmd(int argc, char *argv[]);

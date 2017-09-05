@@ -6,19 +6,15 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include <basic.h>
-#include <connect.h>
-#include <getopt.h>
-#include <smtp.h>
-#include <stdio.h>
-#include <string.h>
+#include "smtp-caps.h"
 
 static char *smtp_server = NULL;
 static char *smtp_server_port = NULL;
 
 static void print_help(void)
 {
-	printf("Usage: tmail smtp-caps [--version] [--help] smtp_server port \n");
+	printf(
+	    "Usage: tmail smtp-caps [--version] [--help] smtp_server port \n");
 	exit(EXIT_SUCCESS);
 }
 
@@ -90,7 +86,7 @@ void smtp_caps_cmd(int argc, char *argv[])
 	smtp->smtp_server = smtp_server;
 	smtp->smtp_port = smtp_server_port;
 
-	ret = send_email(smtp, NULL, STOP_AFTER_CAPS);
+	ret = send_email(smtp, NULL, STOP_AFTER_EHLO);
 
 	if (ret)
 	{
