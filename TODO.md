@@ -1,5 +1,9 @@
 # TODO
 
+## General
+
+  * Use `strncmp(3)` instead of `strcmp(3)` when we know a length of a string.
+
 ## Build
 
   * Add ` -Weverything` for clang build.
@@ -22,8 +26,14 @@ like this.
 
 ## tmail
 
+  * Make `--version/-v` workable.
+  * Return from tmail's `main()` in a `*_cmd(argc, argv)`
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
   * Support for colorful error messages.
+
+## tmail daemon
+
+  * Add initial implementation.
 
 ## send-email
 
@@ -63,8 +73,8 @@ without configuration.
 
   * specify `MAX_ATTACHMENT_SIZE` during build.
   * Add send message in the separate thread.
-  * Add comments to describe SMTP capabilties in the smtp.h
   * Check message size if `SIZE` capability is supported.
+  * Implement SMTP extensions.
 
 ## MIME
 
@@ -131,13 +141,8 @@ and
 
 ## Documentation
 
+  * Provide information about supported SMTP extensions to man and md pages.
   * Describe that `smtp.signature` is path to file with a signature.
-  * Update `Documentation/INSTALL.md`:
-
-1. Add information about make parameters
-2. Add information about variables that can be overwritten (defined with `?=`).
-
-  * Add `STANDARDS` section to man pages. (See OpenBSD).
 
 ## Testing
 
