@@ -19,6 +19,7 @@ TMAIL_OBJS += mime.o
 TMAIL_OBJS += message.o
 TMAIL_OBJS += send-email.o
 TMAIL_OBJS += smtp-caps.o
+TMAIL_OBJS += smtp-commands.o
 
 # object files for sys lib
 LIBSYS_OBJS += libsys/at_exit.o
@@ -34,6 +35,7 @@ LIB_UTILS_OBJS += libutils/hashmap.o
 
 # object files for smtp lib
 LIB_SMTP_OBJS += libsmtp/attachment.o
+LIB_SMTP_OBJS += libsmtp/help.o
 LIB_SMTP_OBJS += libsmtp/ehlo.o
 LIB_SMTP_OBJS += libsmtp/mail_from.o
 LIB_SMTP_OBJS += libsmtp/rcpt_to.o
@@ -47,10 +49,6 @@ PARSER_OBJECTS = config_parser.tab.o lex.yy.o
 
 # object files for encoding lib
 LIB_ENCODING_OBJS += libencoding/base64.o
-
-# other apps
-#SMTP_CAPS_OBJS += smtp-caps.o
-#SMTP_CAPS_ADDITIONAL_OBJS += mime.o
 
 # set of directories with C headers needed for tmail
 INCLUDES+=-Ilibsys/
@@ -69,18 +67,8 @@ TMAIL_OBJECT_FILES_DEPS += $(PARSER_OBJECTS)
 TMAIL_OBJECT_FILES_DEPS += $(LIB_ENCODING_OBJS)
 TMAIL_OBJECT_FILES_DEPS += $(LIB_SMTP_OBJS)
 
-# set of object file that linked together with smtp-caps
-#SMTP_CAPS_OBJECT_FILES_DEPS += $(LIBSYS_OBJS)
-#SMTP_CAPS_OBJECT_FILES_DEPS += $(LIB_UTILS_OBJS)
-#SMTP_CAPS_OBJECT_FILES_DEPS += $(LIB_ENCODING_OBJS)
-#SMTP_CAPS_OBJECT_FILES_DEPS += $(LIB_SMTP_OBJS)
-#SMTP_CAPS_OBJECT_FILES_DEPS += $(SMTP_CAPS_ADDITIONAL_OBJS)
-
 $(TMAIL_EXECUTABLE): $(PARSER_OBJECTS) $(TMAIL_OBJS)
 	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@ $(TMAIL_OBJECT_FILES_DEPS) $(TMAIL_OBJS) $(LIBS)
-
-#$(SMTP_CAPS_EXECUTABLE): $(SMTP_CAPS_OBJS)
-#	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@ $(SMTP_CAPS_OBJECT_FILES_DEPS) $(SMTP_CAPS_OBJS) $(LIBS)
 
 config_parser.tab.o: $(CONFIG_PARSER)
 	$(BISON) -d -v $(CONFIG_PARSER)

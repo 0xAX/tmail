@@ -65,6 +65,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 
 	/* everything is ok, let's parse SMTP server capabilities */
 	smtp->smtp_extension = parse_smtp_caps(response);
+	memset(response, 0, 1024);
 
 	if (!send_mail_from_message(conn->sd, message, response))
 		goto fail;

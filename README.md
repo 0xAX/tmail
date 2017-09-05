@@ -21,6 +21,7 @@ tmail provides following commands:
 
     * send-email - send an email
     * smtp-caps - show SMTP server capabilities
+    * smtp-commands - show commands supported by SMTP server
     * config - manage tmail configuration
 
 Each command has own set of command line arguments.

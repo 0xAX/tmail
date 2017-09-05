@@ -138,7 +138,9 @@ connection_t *connect_to_service(const char *addr, const char *service)
 	{
 		if ((conn->sd =
 			 socket(rp->ai_family, rp->ai_socktype, 0) == -1))
+		{
 			continue;
+		}
 
 		if (connect(conn->sd, rp->ai_addr, rp->ai_addrlen) != -1)
 			break;
@@ -156,5 +158,7 @@ connection_t *connect_to_service(const char *addr, const char *service)
 
 	freeaddrinfo(serv_info);
 
+	printf("connect socket %d\n", conn->sd);
+	
 	return conn;
 }

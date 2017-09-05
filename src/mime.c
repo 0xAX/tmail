@@ -8,7 +8,7 @@
 
 #include "mime.h"
 
-static char *mime_file_content = NULL;
+char *mime_file_content = NULL;
 
 /*
  * load_mime_file - loads `mime.types` file
@@ -134,5 +134,5 @@ char *get_mime_type(char *filename)
 void mime_free(void)
 {
 	if (mime_file_content)
-		free(mime_file_content);
+		mfree(mime_file_content);
 }

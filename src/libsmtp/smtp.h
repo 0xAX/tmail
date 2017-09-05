@@ -201,4 +201,7 @@ int send_data_message(socket_t socket, char *buffer);
 int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
 		 char *buffer);
 
+/* help.c */
+int send_help(smtp_ctx_t *smtp, char *response);
+
 #endif /* __LIB_SMTP_H__ */

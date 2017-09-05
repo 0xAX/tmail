@@ -20,6 +20,10 @@
 
 #include <send-email.h>
 #include <smtp-caps.h>
+#include <smtp-commands.h>
+
+static int config_loaded = 0;
+static int mime_loaded = 0;
 
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
@@ -37,6 +41,8 @@ static void print_help()
 	printf("\n");
 	printf("    * send-email - send an email\n");
 	printf("    * smtp-caps - show SMTP server capabilities\n");
+	printf("    * smtp-commands - show commands supported by an SMTP "
+	       "server\n");
 	printf("    * config - manage tmail configuration\n");
 	printf("\n");
 	printf("Each command has own set of command line arguments.\n");
@@ -69,16 +75,33 @@ static void parse_argv(int argc, char *argv[])
 	}
 }
 
+static void load_config(void)
+{
+	/* create hash table for configuration */
+	hcreate(CONFIGURATION_HASHMAP_SIZE);
+	if (!init_config())
+	{
+		fprintf(stderr,
+			"Error occurs during tmail configuration parsing\n");
+		exit(EXIT_FAILURE);
+	}
+
+	config_loaded = 1;
+}
+
 void exit_cb(void)
 {
 	/* release memory under mime data */
-	mime_free();
+	if (mime_loaded)
+		mime_free();
 
 	/* release memory under `send-email` data */
-	release_send_email_data();
-
+	if (config_loaded)
+		release_send_email_data();
+	
 	/* release memory related to configuration */
-	release_config();
+	if (config_loaded)
+		release_config();
 }
 
 int main(int argc, char *argv[])
@@ -95,28 +118,25 @@ int main(int argc, char *argv[])
 
 	register_exit_cb(exit_cb);
 
-	/* create hash table for configuration */
-	hcreate(CONFIGURATION_HASHMAP_SIZE);
-	if (!init_config())
-	{
-		fprintf(stderr,
-			"Error occurs during tmail configuration parsing\n");
-		exit(EXIT_FAILURE);
-	}
-
-	/* no need to check this, because of early exit */
-	load_mime_file("contrib/mime.types");
-
 	if (!setlocale(LC_ALL, "en_US.utf8"))
 		setlocale(LC_ALL, "");
 
 	/* parse command line arguments */
 	if (strcmp(argv[1], SEND_EMAIL) == 0)
+	{
+		/* no need to check this, because of early exit */
+		load_mime_file("contrib/mime.types");
+		mime_loaded = 1;
+		/* the same for load_config() */
+		load_config();
 		send_email_cmd(--argc, ++argv);
+	}
 	else if (strcmp(argv[1], SMTP_CAPS) == 0)
 		smtp_caps_cmd(--argc, ++argv);
+	else if (strcmp(argv[1], SMTP_COMMANDS) == 0)
+		smtp_commands_cmd(--argc, ++argv);
 	else
 		parse_argv(argc, argv);
-
+	
 	exit(EXIT_SUCCESS);
 }

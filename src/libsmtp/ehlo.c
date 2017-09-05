@@ -100,7 +100,6 @@ __attribute__((pure)) unsigned long parse_smtp_caps(char *r)
 		skip_cl_rl(r);
 	}
 
-	memset(r, 0, 1024);
 	return smtp_caps;
 }
 
