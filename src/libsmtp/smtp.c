@@ -31,18 +31,30 @@ static int read_smtp_greetings(socket_t socket, char *buffer)
 	return 1;
 }
 
+/**
+ * send_email() sends given email @message.
+ *
+ * @smtp - smtp context.
+ * @message - message to be sent.
+ * @opts - smtp session options.
+ *
+ * Following options are supported:
+ *
+ *   * STOP_AFTER_EHLO - an SMTP session will be stopped after
+ * EHLO command. **NOTE** in this case smtp should be deallocated
+ * by caller.
+ */
 void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 {
 	char request[1024];
 	char response[1024];
-	connection_t *conn = NULL;
 
-	conn = connect_to_service(smtp->smtp_server, smtp->smtp_port);
-	if (conn->error)
+	smtp->conn = connect_to_service(smtp->smtp_server, smtp->smtp_port);
+	if (smtp->conn->error)
 	{
-		fprintf(stderr, "Error: %s\n", conn->error);
-		mfree((char *)conn->error);
-		goto fail;
+		fprintf(stderr, "Error: %s\n", smtp->conn->error);
+		mfree((char *)smtp->conn->error);
+		goto fail_smtp;
 	}
 
 	memset(request, 0, 1024);
@@ -50,42 +62,39 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 
 	if (!build_ehlo_msg(request))
 		goto fail;
-	if (!read_smtp_greetings(conn->sd, response))
+	if (!read_smtp_greetings(smtp->conn->sd, response))
 		goto fail;
-	if (!send_ehlo_message(conn->sd, request, response, opts))
+	if (!send_ehlo_message(smtp->conn->sd, request, response))
 		goto fail;
 
 	/* at least tmail-smtp-caps(1) uses this */
 	if (opts & STOP_AFTER_EHLO)
-	{
-		close(conn->sd);
-		free(conn);
 		return strdup(response);
-	}
 
 	/* everything is ok, let's parse SMTP server capabilities */
 	smtp->smtp_extension = parse_smtp_caps(response);
 	memset(response, 0, 1024);
 
-	if (!send_mail_from_message(conn->sd, message, response))
+	if (!send_mail_from_message(smtp->conn->sd, message, response))
 		goto fail;
-	if (!send_rcpt_to_message(conn->sd, message, response))
+	if (!send_rcpt_to_message(smtp->conn->sd, message, response))
 		goto fail;
-	if (!send_data_message(conn->sd, response))
+	if (!send_data_message(smtp->conn->sd, response))
 		goto fail;
-	if (!send_message(conn->sd, smtp, message, response))
+	if (!send_message(smtp->conn->sd, smtp, message, response))
 		goto fail;
-	if (!send_quit_message(conn->sd, response))
+	if (!send_quit_message(smtp->conn->sd, response))
 		goto fail;
 
 	goto ok;
 fail:
-	close(conn->sd);
-	free(conn);
+	close(smtp->conn->sd);
+fail_smtp:
+	free(smtp->conn);
 	return NULL;
 ok:
-	close(conn->sd);
-	free(conn);
+	close(smtp->conn->sd);
+	free(smtp->conn);
 	return (void *)1;
 }
 

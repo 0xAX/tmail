@@ -10,6 +10,7 @@
 #define SYS_CONNECT_H
 
 #include <basic.h>
+#include <string.h>
 
 #define TCP_PROTO 6
 

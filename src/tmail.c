@@ -20,7 +20,7 @@
 
 #include <send-email.h>
 #include <smtp-caps.h>
-#include <smtp-commands.h>
+#include <smtp-server-info.h>
 
 static int config_loaded = 0;
 static int mime_loaded = 0;
@@ -41,8 +41,8 @@ static void print_help()
 	printf("\n");
 	printf("    * send-email - send an email\n");
 	printf("    * smtp-caps - show SMTP server capabilities\n");
-	printf("    * smtp-commands - show commands supported by an SMTP "
-	       "server\n");
+	printf("    * smtp-server-info - show useful information for the\n"
+	       "                         given SMTP server \n");
 	printf("    * config - manage tmail configuration\n");
 	printf("\n");
 	printf("Each command has own set of command line arguments.\n");
@@ -69,10 +69,10 @@ static void parse_argv(int argc, char *argv[])
 		case 'v':
 			print_version();
 		default:
-			/* unknown option. exit */
-			exit(EXIT_SUCCESS);
+			print_help();
 		}
 	}
+	print_help();
 }
 
 static void load_config(void)
@@ -98,7 +98,7 @@ void exit_cb(void)
 	/* release memory under `send-email` data */
 	if (config_loaded)
 		release_send_email_data();
-	
+
 	/* release memory related to configuration */
 	if (config_loaded)
 		release_config();
@@ -133,10 +133,10 @@ int main(int argc, char *argv[])
 	}
 	else if (strcmp(argv[1], SMTP_CAPS) == 0)
 		smtp_caps_cmd(--argc, ++argv);
-	else if (strcmp(argv[1], SMTP_COMMANDS) == 0)
-		smtp_commands_cmd(--argc, ++argv);
+	else if (strcmp(argv[1], SMTP_SERVER_INFO) == 0)
+		smtp_server_info_cmd(--argc, ++argv);
 	else
 		parse_argv(argc, argv);
-	
+
 	exit(EXIT_SUCCESS);
 }

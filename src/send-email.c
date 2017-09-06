@@ -212,7 +212,7 @@ void release_send_email_data(void)
 	list_free_full(bcc);
 }
 
-void send_email_cmd(int argc, char *argv[])
+__attribute__((noreturn)) void send_email_cmd(int argc, char *argv[])
 {
 	int c = 0;
 
@@ -299,7 +299,7 @@ void send_email_cmd(int argc, char *argv[])
 
 	process_send_email();
 
-	return;
+	exit(EXIT_SUCCESS);
 allocation_failed:
 	exit(EXIT_FAILURE);
 }

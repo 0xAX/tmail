@@ -49,13 +49,13 @@ __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap)
  *                *( "250-" ehlo-line CRLF )
  *                   "250" SP ehlo-line CRLF )
  */
-__attribute__((pure)) unsigned long parse_smtp_caps(char *r)
+unsigned long parse_smtp_caps(char *r)
 {
 	/* bitmap of a SMTP server capabilities */
 	bitmap_t smtp_caps = 0;
 
 	/* skip greetings and parse SMTP capabilites */
-	skip_cl_rl(r);
+	r = skip_cl_rl(r);
 
 	while (r[0] != 0)
 	{
@@ -70,18 +70,8 @@ __attribute__((pure)) unsigned long parse_smtp_caps(char *r)
 		 */
 		r += 4;
 
-		/* get capability name and set it in the bitmap */
-		if (strncmp(r, "SIZE", 4) == 0)
-		{
-			/* skip SIZE */
-			r += 4;
-
-			/* go to the next line */
-			skip_cl_rl(r);
-			smtp_caps |= SIZE;
-			continue;
-		}
-
+		/* get capabilities name and set it in the bitmap */
+		ADD_SIMPLE_SMTP_CAPABILITY("SIZE", 4, r, SIZE);
 		ADD_SIMPLE_SMTP_CAPABILITY("HELP", 4, r, HELP);
 		ADD_SIMPLE_SMTP_CAPABILITY("8BITMIME", 8, r, EIGHT_BITMIME);
 		ADD_SIMPLE_SMTP_CAPABILITY("PIPELINING", 10, r, PIPELINING);
@@ -118,8 +108,7 @@ int build_ehlo_msg(char *buffer)
 	return 1;
 }
 
-int send_ehlo_message(socket_t socket, char *request, char *buffer,
-		      bitmap_t opts)
+int send_ehlo_message(socket_t socket, char *request, char *buffer)
 {
 	int n = 0;
 
@@ -137,9 +126,6 @@ int send_ehlo_message(socket_t socket, char *request, char *buffer,
 			buffer);
 		return 0;
 	}
-
-	if (!(opts & STOP_AFTER_EHLO))
-		memset(buffer, 0, 1024);
 
 	return 1;
 }

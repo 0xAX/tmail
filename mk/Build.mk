@@ -101,7 +101,6 @@ ifeq ($(TMAIL_CC), gcc)
 WARNINGS += -fmax-errors=2
 WARNINGS+=-Wswitch-bool
 WARNINGS+=-Wlogical-op
-WARNINGS+=-Wsuggest-attribute=pure
 WARNINGS+=-Wsuggest-attribute=noreturn
 WARNINGS+=-Wsuggest-final-types
 WARNINGS+=-Wduplicated-cond

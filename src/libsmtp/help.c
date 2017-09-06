@@ -8,25 +8,24 @@
 
 #include "smtp.h"
 
-int send_help(smtp_ctx_t *smtp, char *response)
+int send_help(socket_t socket, char *response)
 {
-//	int n = 0;
+	int n = 0;
 
-	UNUSED(smtp);
-	
-	//printf("Response 1 %s\n", response);
-	
-	//send(smtp->conn->sd, "HELP\r\n", 6, 0);
-	//printf("%d\n", smtp->conn->sd);
+	send(socket, "HELP\r\n", 6, 0);
 
-	//if ((n = recv(smtp->conn->sd, response, 1024, 0) == -1))
-	//{
-	//	printf("%s\n", response);
-	//	fprintf(stderr, "Error: Can\'t read SMTP HELP response\n");
-	//	return 0;
-	//}
+	if ((n = recv(socket, response, 1024, 0) == -1))
+	{
+		fprintf(stderr, "Error: Can\'t read SMTP HELP response\n");
+		return 0;
+	}
 
-	printf("response %s\n", response);
-	
+	if (!(response[0] == '2' && response[1] == '1' && response[2] == '4'))
+	{
+		fprintf(stderr, "Error: wrong response fo HELP command: %s\n",
+			response);
+		return 0;
+	}
+
 	return 1;
 }

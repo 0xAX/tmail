@@ -46,7 +46,7 @@ static void parse_argv(int argc, char *argv[])
 	}
 }
 
-void smtp_caps_cmd(int argc, char *argv[])
+__attribute__((noreturn)) void smtp_caps_cmd(int argc, char *argv[])
 {
 	char *ret;
 	smtp_ctx_t *smtp;
@@ -103,7 +103,14 @@ void smtp_caps_cmd(int argc, char *argv[])
 		free(ret);
 	}
 
+	/* release memory under user-input */
 	free(smtp_server);
 	free(smtp_server_port);
-	free(smtp);
+
+	/* release memory under smtp context */
+	close(smtp->conn->sd);
+	mfree(smtp->conn);
+	mfree(smtp);
+
+	exit(EXIT_SUCCESS);
 }

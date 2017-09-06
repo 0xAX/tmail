@@ -1,13 +1,13 @@
 /*
- * smtp-commands.h - Print commands supported by an SMTP server.
+ * smtp-server-info.h - Print commands supported by an SMTP server.
  *
  * Copyright (c) 2017, Alexander Kuleshov <kuleshovmail at gmail dot com>
  *
  * This file is released under the BSD license, see the COPYING file
  */
 
-#ifndef SMTP_COMMNADS_H
-#define SMTP_COMMNADS_H
+#ifndef SMTP_SERVER_INFO_H
+#define SMTP_SERVER_INFO_H
 
 #include <getopt.h>
 #include <stdio.h>
@@ -15,8 +15,8 @@
 
 #include <smtp.h>
 
-#define SMTP_COMMANDS "smtp-commands"
+#define SMTP_SERVER_INFO "smtp-server-info"
 
-void smtp_commands_cmd(int argc, char *argv[]);
+void smtp_server_info_cmd(int argc, char *argv[]);
 
 #endif /* SMTP_COMMNADS_H */

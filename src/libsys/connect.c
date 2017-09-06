@@ -33,12 +33,7 @@ static connection_t *connect_to_ip(const char *addr, connection_t *conn,
 
 	if (conn->sd == -1)
 	{
-		char *err = strerror(errno);
-		size_t err_len = strlen(err) + 1;
-
-		conn->error = malloc(err_len);
-		snprintf((char *)conn->error, err_len, "%s", err);
-
+		conn->error = strdup(strerror(errno));
 		return conn;
 	}
 
@@ -52,15 +47,7 @@ static connection_t *connect_to_ip(const char *addr, connection_t *conn,
 		      (socklen_t)sizeof(struct sockaddr_in));
 
 	if (ret == -1)
-	{
-		char *err = strerror(errno);
-		size_t err_len = strlen(err) + 1;
-
-		conn->error = malloc(err_len);
-		snprintf((char *)conn->error, err_len, "%s", err);
-
-		return conn;
-	}
+		conn->error = strdup(strerror(errno));
 
 	return conn;
 }
@@ -104,7 +91,7 @@ connection_t *connect_to_service(const char *addr, const char *service)
 	memset(&hints, 0, sizeof hints);
 
 	/* allow for IPv4 or IPv6 */
-	hints.ai_family = AF_UNSPEC;
+	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = TCP_PROTO;
 	hints.ai_canonname = NULL;
@@ -116,49 +103,25 @@ connection_t *connect_to_service(const char *addr, const char *service)
 	if (ret != 0)
 	{
 		if (ret == EAI_SYSTEM)
-		{
-			char *err = strerror(errno);
-			size_t err_len = strlen(err) + 1;
-
-			conn->error = malloc(err_len);
-			snprintf((char *)conn->error, err_len, "%s", err);
-		}
+			conn->error = strdup(strerror(errno));
 		else
-		{
-			const char *err = gai_strerror(ret);
-			size_t err_len = strlen(err) + 1;
-
-			conn->error = malloc(err_len);
-			snprintf((char *)conn->error, err_len, "%s", err);
-		}
+			conn->error = strdup(gai_strerror(ret));
 		return conn;
 	}
 
 	for (rp = serv_info; rp != NULL; rp = rp->ai_next)
 	{
-		if ((conn->sd =
-			 socket(rp->ai_family, rp->ai_socktype, 0) == -1))
-		{
+		conn->sd =
+		    socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+		if (conn->sd == -1)
 			continue;
-		}
-
 		if (connect(conn->sd, rp->ai_addr, rp->ai_addrlen) != -1)
 			break;
 		close(conn->sd);
 	}
 
 	if (!rp)
-	{
-		char *err = strerror(errno);
-		size_t err_len = strlen(err) + 1;
-
-		conn->error = malloc(err_len);
-		snprintf((char *)conn->error, err_len, "%s", err);
-	}
-
+		conn->error = strdup(strerror(errno));
 	freeaddrinfo(serv_info);
-
-	printf("connect socket %d\n", conn->sd);
-	
 	return conn;
 }

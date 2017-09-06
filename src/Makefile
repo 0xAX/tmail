@@ -19,7 +19,7 @@ TMAIL_OBJS += mime.o
 TMAIL_OBJS += message.o
 TMAIL_OBJS += send-email.o
 TMAIL_OBJS += smtp-caps.o
-TMAIL_OBJS += smtp-commands.o
+TMAIL_OBJS += smtp-server-info.o
 
 # object files for sys lib
 LIBSYS_OBJS += libsys/at_exit.o
@@ -32,6 +32,7 @@ LIBSYS_OBJS += libsys/inet.o
 LIB_UTILS_OBJS += libutils/list.o
 LIB_UTILS_OBJS += libutils/stack.o
 LIB_UTILS_OBJS += libutils/hashmap.o
+LIB_UTILS_OBJS += libutils/string_utils.o
 
 # object files for smtp lib
 LIB_SMTP_OBJS += libsmtp/attachment.o

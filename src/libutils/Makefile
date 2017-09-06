@@ -11,6 +11,7 @@ include ../../mk/Build.mk
 LIB_UTILS_OBJS += list.o
 LIB_UTILS_OBJS += stack.o
 LIB_UTILS_OBJS += hashmap.o
+LIB_UTILS_OBJS += string_utils.o
 
 TEST_EXECUTABLES += list_test
 TEST_EXECUTABLES += stack_test

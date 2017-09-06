@@ -110,7 +110,6 @@ current dir.
 
 ## libsys
 
-  * remove unneded variables from connect_to_service()
   * add tests for is_valid_ip_address()
   * add IPv6 support to is_valid_ip_address()
   * add IPv6 support to connect_to_ip()

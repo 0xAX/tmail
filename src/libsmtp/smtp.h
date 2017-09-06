@@ -24,6 +24,7 @@
 #include <connect.h>
 #include <gethostname.h>
 #include <mime.h>
+#include <string_utils.h>
 #include <time_utils.h>
 
 #define TO_CLAUSE "To: "
@@ -152,6 +153,7 @@ typedef struct
 	char *from;
 	fd_t signature_fd;
 	unsigned long smtp_extension;
+	connection_t *conn;
 } smtp_ctx_t;
 
 /* check if a `msg` contains CR LF at the end */
@@ -162,14 +164,6 @@ static inline bool smtp_eof(char *msg, int length)
 	return false;
 }
 
-/* skip \r\n 2 bytes from the given string */
-static inline __attribute__((pure)) void skip_cl_rl(char *str)
-{
-	while (*str != '\r')
-		str++;
-	str += 2;
-}
-
 /* smtp.c */
 void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts);
 void release_smtp_ctx(smtp_ctx_t *smtp);
@@ -178,8 +172,7 @@ void release_smtp_ctx(smtp_ctx_t *smtp);
 __attribute__((pure)) unsigned long parse_smtp_caps(char *r);
 __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap);
 int build_ehlo_msg(char *buffer);
-int send_ehlo_message(socket_t socket, char *request, char *buffer,
-		      bitmap_t opts);
+int send_ehlo_message(socket_t socket, char *request, char *buffer);
 
 /* attachment.c */
 int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
@@ -202,6 +195,6 @@ int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
 		 char *buffer);
 
 /* help.c */
-int send_help(smtp_ctx_t *smtp, char *response);
+int send_help(socket_t socket, char *response);
 
 #endif /* __LIB_SMTP_H__ */

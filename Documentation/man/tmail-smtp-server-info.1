@@ -27,3 +27,61 @@
 .\" WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 .\" ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 .\" POSSIBILITY OF SUCH DAMAGE.
+.TH SMTP-SERVER-INFO 1 "2017-09-05" "tmail smtp-server-info" "User Commands"
+.SH NAME
+tmail smtp-server-info \- show userful information for the given SMTP server
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" disable hyphenation
+.nh
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH SYNOPSIS
+.PD 0
+.HP
+.ad l
+\fBtmail smtp-server-info\fR [\fB\--version/-v]
+.HP
+.ad l
+\fBtmail smtp-server-info\fR [\fB\--help/-h]
+.HP
+.ad l
+\fBtmail smtp-server-info\fR smtp-server port
+.br
+.PD
+.ad b
+.SH DESCRIPTION
+\fItmail server-info\fR is a simple util that uses SMTP \fBHELP\fR extension to get useful information from the given SMTP server.
+.PP
+The following options are accepted:
+.TP
+.BI \--version
+Prints current version of \fItmail smtp-server-info\fR util.
+.TP
+.BI \--help
+Prints help message.
+.SS "Usage:"
+.in +4n
+.nf
+.sp
+To get informatiob about an SMTP server, just execute \fItmail smtp-server-info\fR util with the given SMTP server address and port.
+
+ ./tmail smtp-server-info 100.100.0.2 25
+SMTP Server information:
+
+214-Commands supported:
+214 AUTH HELO EHLO MAIL RCPT DATA BDAT NOOP QUIT RSET HELP
+
+.fi
+.in
+.P
+.SH EXIT STATUS
+\fBtmail smtp-server-info\fR exits with \fB0\fR return code on success and \fB>0\fR if an error occurred.
+.sp
+.SH "SEE ALSO"
+.sp
+\fBtmail\fR(1), \fBtmail-config\fR(5), \fBtmail-send-email\fR(1), \fBtmail-smtp-caps\fR(1)
+.SH "TMAIL"
+.sp
+Part of the \fBtmail\fR(1) suite
