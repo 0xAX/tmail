@@ -39,11 +39,13 @@ static void print_help()
 	printf("\n");
 	printf("tmail provides following commands:\n");
 	printf("\n");
-	printf("    * send-email - send an email\n");
-	printf("    * smtp-caps - show SMTP server capabilities\n");
-	printf("    * smtp-server-info - show useful information for the\n"
-	       "                         given SMTP server \n");
-	printf("    * config - manage tmail configuration\n");
+	printf("Outgoing mail related:\n");
+	printf("    send-email\t\t\tsend an email\n");
+	printf("    smtp-server-info\t\tshow useful information for the\n"
+	       "                             \tgiven SMTP server \n");
+	printf("    smtp-caps\t\t\tshow SMTP server capabilities\n");
+	printf("\nConfiguration related:\n");
+	printf("    config - manage tmail configuration\n");
 	printf("\n");
 	printf("Each command has own set of command line arguments.\n");
 	printf("Use: tmail command -h/--help to get help\n");
