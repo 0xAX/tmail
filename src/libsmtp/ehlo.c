@@ -36,6 +36,8 @@ __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap)
 		return "ATRN";
 	if (cap & ETRN)
 		return "ETRN";
+	if (cap & BINARYMIME)
+		return "BINARYMIME";
 	return NULL;
 }
 
@@ -85,9 +87,13 @@ unsigned long parse_smtp_caps(char *r)
 		ADD_SIMPLE_SMTP_CAPABILITY("DELIVERBY", 9, r, DELIVERBY);
 		ADD_SIMPLE_SMTP_CAPABILITY("ATRN", 4, r, ETRN);
 		ADD_SIMPLE_SMTP_CAPABILITY("ETRN", 4, r, ETRN);
+		ADD_SIMPLE_SMTP_CAPABILITY("BINARYMIME", 10, r, BINARYMIME);
 
+		/* maybe we already have reached end of line */
+		if (!r[0])
+			break;
 		/* Go to the next line */
-		skip_cl_rl(r);
+		r = skip_cl_rl(r);
 	}
 
 	return smtp_caps;

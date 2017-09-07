@@ -125,6 +125,12 @@
  * RFC 1985 https://tools.ietf.org/html/rfc1985
  */
 #define ETRN (1 << 12)
+/*
+ * SMTP extension to send large binary data
+ *
+ * RFC 3030 https://tools.ietf.org/html/rfc3030
+ */
+#define BINARYMIME (1 << 13)
 
 /* SMTP session options */
 #define STOP_AFTER_EHLO 1

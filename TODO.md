@@ -76,6 +76,11 @@ without configuration.
   * Check message size if `SIZE` capability is supported.
   * Implement SMTP extensions.
 
+## smtp-server-info
+
+  * Add support for help argument
+(See https://tools.ietf.org/html/rfc5321#section-4.1.1.8)
+
 ## MIME
 
   * Make return value of the `get_mime_type()` - `const`.

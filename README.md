@@ -35,6 +35,24 @@ Each sub-command has own help. Additionally you may find more info at:
 
 or in the man pages.
 
+## Support for protocols
+
+### SMTP
+
+  * [RFC 5321](https://github.com/0xAX/tmail/blob/master/rfc/rfc-5321.txt) - Simple Mail Transfer Protocol. Support for base commands `EHLO`, `MAIL FROM`, `RCPT TO`, and etc...
+
+Following SMTP extensions are supported:
+
+  * [HELP](https://tools.ietf.org/html/rfc5321#section-4.1.1.8)
+
+### MIME
+
+  * [RFC 4648](https://github.com/0xAX/tmail/blob/master/rfc/rfc-4648.txt) - The Base16, Base32, and Base64 Data Encodings. To send attachments in base64 `Content-Transfer-Encoding`.
+
+### IMAP
+
+### POP3
+
 ## Contributing
 
 Feel free to send a [pull request](https://help.github.com/articles/about-pull-requests/) if you found something wrong or you have any ideas.
