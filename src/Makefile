@@ -80,7 +80,7 @@ lex.yy.o: $(CONFIG_LEXER)
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) -c lex.yy.c
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_OBJS) $@ $<
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(DEFS) $(CFLAGS_OBJS) $@ $<
 
 $(CLEAN_TARGET):
 	@echo "./src"

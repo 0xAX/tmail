@@ -131,3 +131,11 @@ endif
 CFLAGS_OBJS += $(WARNINGS) $(STANDARD) $(ARCH) $(MISC_FLAGS) -c -o
 # Set of compiler flags that will be passed during build of shared libraries
 CFLAGS_LIBS += -c $(WARNINGS) $(STANDARD) $(ARCH) $(MISC_FLAGS) -fpic
+
+# tmail version
+TMAIL_VERSION=$(shell ../scripts/version.pl)
+
+#
+# Definitions that will be passed to compiler
+#
+DEFS += -DTMAIL_VERSION=\"$(TMAIL_VERSION)\"

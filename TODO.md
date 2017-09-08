@@ -122,7 +122,6 @@ current dir.
 ## Scripts (misc)
 
   * Add valgrind script.
-  * Add `version.sh` to generate version.
   * Add bash completion.
   * Add scripts to do auto-commit of:
 

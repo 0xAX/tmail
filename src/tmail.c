@@ -54,7 +54,7 @@ static void print_help()
 
 static void print_version(void)
 {
-	printf("tmail version: \n");
+	printf("tmail version: %s\n", TMAIL_VERSION);
 	exit(EXIT_SUCCESS);
 }
 

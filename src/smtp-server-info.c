@@ -18,7 +18,11 @@ static void print_help(void)
 	exit(EXIT_SUCCESS);
 }
 
-static void print_version(void) {}
+static void print_version(void)
+{
+	printf("tmail smtp-server-info version: %s\n", TMAIL_VERSION);
+	exit(EXIT_SUCCESS);
+}
 
 static void parse_argv(int argc, char *argv[])
 {
