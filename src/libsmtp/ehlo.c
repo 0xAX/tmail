@@ -51,7 +51,7 @@ __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap)
  *                *( "250-" ehlo-line CRLF )
  *                   "250" SP ehlo-line CRLF )
  */
-unsigned long parse_smtp_caps(char *r)
+unsigned long parse_smtp_caps(char *r, smtp_ctx_t *smtp)
 {
 	/* bitmap of a SMTP server capabilities */
 	bitmap_t smtp_caps = 0;
@@ -73,21 +73,22 @@ unsigned long parse_smtp_caps(char *r)
 		r += 4;
 
 		/* get capabilities name and set it in the bitmap */
-		ADD_SIMPLE_SMTP_CAPABILITY("SIZE", 4, r, SIZE);
-		ADD_SIMPLE_SMTP_CAPABILITY("HELP", 4, r, HELP);
-		ADD_SIMPLE_SMTP_CAPABILITY("8BITMIME", 8, r, EIGHT_BITMIME);
-		ADD_SIMPLE_SMTP_CAPABILITY("PIPELINING", 10, r, PIPELINING);
-		ADD_SIMPLE_SMTP_CAPABILITY("PRDR", 4, r, PRDR);
-		ADD_SIMPLE_SMTP_CAPABILITY("CHUNKING", 8, r, CHUNKING);
-		ADD_SIMPLE_SMTP_CAPABILITY("ENHANCEDSTATUSCODES", 19, r,
-					   ENHANCEDSTATUSCODES);
-		ADD_SIMPLE_SMTP_CAPABILITY("STARTTLS", 8, r, SMTPTLS);
-		ADD_SIMPLE_SMTP_CAPABILITY("SMTPUTF8", 8, r, SMTPUTF8);
-		ADD_SIMPLE_SMTP_CAPABILITY("DSN", 3, r, DSN);
-		ADD_SIMPLE_SMTP_CAPABILITY("DELIVERBY", 9, r, DELIVERBY);
-		ADD_SIMPLE_SMTP_CAPABILITY("ATRN", 4, r, ETRN);
-		ADD_SIMPLE_SMTP_CAPABILITY("ETRN", 4, r, ETRN);
-		ADD_SIMPLE_SMTP_CAPABILITY("BINARYMIME", 10, r, BINARYMIME);
+		ADD_SMTP_CAPABILITY_WITH_PARAM("SIZE", 4, r, SIZE,
+					       smtp->max_size);
+		ADD_SMTP_CAPABILITY("HELP", 4, r, HELP);
+		ADD_SMTP_CAPABILITY("8BITMIME", 8, r, EIGHT_BITMIME);
+		ADD_SMTP_CAPABILITY("PIPELINING", 10, r, PIPELINING);
+		ADD_SMTP_CAPABILITY("PRDR", 4, r, PRDR);
+		ADD_SMTP_CAPABILITY("CHUNKING", 8, r, CHUNKING);
+		ADD_SMTP_CAPABILITY("ENHANCEDSTATUSCODES", 19, r,
+				    ENHANCEDSTATUSCODES);
+		ADD_SMTP_CAPABILITY("STARTTLS", 8, r, SMTPTLS);
+		ADD_SMTP_CAPABILITY("SMTPUTF8", 8, r, SMTPUTF8);
+		ADD_SMTP_CAPABILITY("DSN", 3, r, DSN);
+		ADD_SMTP_CAPABILITY("DELIVERBY", 9, r, DELIVERBY);
+		ADD_SMTP_CAPABILITY("ATRN", 4, r, ETRN);
+		ADD_SMTP_CAPABILITY("ETRN", 4, r, ETRN);
+		ADD_SMTP_CAPABILITY("BINARYMIME", 10, r, BINARYMIME);
 
 		/* maybe we already have reached end of line */
 		if (!r[0])

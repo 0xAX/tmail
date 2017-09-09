@@ -52,8 +52,8 @@ static void parse_argv(int argc, char *argv[])
 
 __attribute__((noreturn)) void smtp_caps_cmd(int argc, char *argv[])
 {
-	char *ret;
-	smtp_ctx_t *smtp;
+	char *ret = NULL;
+	smtp_ctx_t *smtp = NULL;
 
 	if (argc <= 2)
 		print_help();
@@ -95,12 +95,18 @@ __attribute__((noreturn)) void smtp_caps_cmd(int argc, char *argv[])
 	if (ret)
 	{
 		unsigned long long i;
-		unsigned long smtp_caps = parse_smtp_caps(ret);
+		unsigned long smtp_caps = parse_smtp_caps(ret, smtp);
 
 		for (i = 0; i < 64; i++)
 		{
 			unsigned long long capability = (smtp_caps & (1L << i));
 
+			if (capability && capability & SIZE && smtp->max_size)
+			{
+				printf("%s %s\n", smtp_cap_to_str(capability),
+				       smtp->max_size);
+				continue;
+			}
 			if (capability)
 				printf("%s\n", smtp_cap_to_str(capability));
 		}
@@ -113,6 +119,8 @@ __attribute__((noreturn)) void smtp_caps_cmd(int argc, char *argv[])
 
 	/* release memory under smtp context */
 	close(smtp->conn->sd);
+	if (smtp->max_size)
+		mfree(smtp->max_size);
 	mfree(smtp->conn);
 	mfree(smtp);
 

@@ -52,8 +52,8 @@ static void parse_argv(int argc, char *argv[])
 
 __attribute__((noreturn)) void smtp_server_info_cmd(int argc, char *argv[])
 {
-	smtp_ctx_t *smtp;
-	char *ret;
+	smtp_ctx_t *smtp = NULL;
+	char *ret = NULL;
 
 	if (argc <= 2)
 		print_help();
@@ -109,7 +109,7 @@ __attribute__((noreturn)) void smtp_server_info_cmd(int argc, char *argv[])
 		memset(response, 0, 1024);
 
 		/* use HELP extensions only if it supported by an SMTP server */
-		smtp_caps = parse_smtp_caps(ret);
+		smtp_caps = parse_smtp_caps(ret, smtp);
 		if (smtp_caps & HELP)
 		{
 			/* send HELP command to an SMTP server */
@@ -121,7 +121,6 @@ __attribute__((noreturn)) void smtp_server_info_cmd(int argc, char *argv[])
 			printf("HELP extension is not supported by the %s SMTP "
 			       "server\n",
 			       smtp_server);
-
 		free(response);
 		free(ret);
 	}
@@ -132,6 +131,8 @@ __attribute__((noreturn)) void smtp_server_info_cmd(int argc, char *argv[])
 
 	/* release memory under smtp context */
 	close(smtp->conn->sd);
+	if (smtp->max_size)
+		mfree(smtp->max_size);
 	mfree(smtp->conn);
 	mfree(smtp);
 

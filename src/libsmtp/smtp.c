@@ -72,7 +72,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 		return strdup(response);
 
 	/* everything is ok, let's parse SMTP server capabilities */
-	smtp->smtp_extension = parse_smtp_caps(response);
+	smtp->smtp_extension = parse_smtp_caps(response, smtp);
 	memset(response, 0, 1024);
 
 	if (!send_mail_from_message(smtp->conn->sd, message, response))
@@ -119,6 +119,9 @@ void release_smtp_ctx(smtp_ctx_t *smtp)
 
 		if (smtp->signature_fd != 0)
 			close(smtp->signature_fd);
+
+		if (smtp->max_size)
+			mfree(smtp->max_size);
 
 		mfree(smtp);
 	}

@@ -135,9 +135,33 @@
 /* SMTP session options */
 #define STOP_AFTER_EHLO 1
 
+/* set capability bit with parameter */
+#define ADD_SMTP_CAPABILITY_WITH_PARAM(CAP_NAME, CAP_NAME_LENGTH,              \
+				       SMTP_CAPS_STR, CAPABILITY_BIT, ARG)     \
+	do                                                                     \
+	{                                                                      \
+		if (strncmp(SMTP_CAPS_STR, CAP_NAME, CAP_NAME_LENGTH) == 0)    \
+		{                                                              \
+			char *end = NULL;                                      \
+			SMTP_CAPS_STR += CAP_NAME_LENGTH;                      \
+			smtp_caps |= CAPABILITY_BIT;                           \
+			SMTP_CAPS_STR = skip_spaces(SMTP_CAPS_STR);            \
+			if (SMTP_CAPS_STR[0] == CARIAGE_RET_SYM)               \
+			{                                                      \
+				skip_cl_rl(SMTP_CAPS_STR);                     \
+				continue;                                      \
+			}                                                      \
+			end = strchr(SMTP_CAPS_STR, '\r');                     \
+			ARG = calloc(end - SMTP_CAPS_STR + 1, 1);              \
+			memcpy(ARG, SMTP_CAPS_STR, end - SMTP_CAPS_STR + 1);   \
+			ARG[end - SMTP_CAPS_STR] = 0;                          \
+			continue;                                              \
+		}                                                              \
+	} while (false)
+
 /* check ehlo response and enable capability in a bitmap */
-#define ADD_SIMPLE_SMTP_CAPABILITY(CAP_NAME, CAP_NAME_LENGTH, SMTP_CAPS_STR,   \
-				   CAPABILITY_BIT)                             \
+#define ADD_SMTP_CAPABILITY(CAP_NAME, CAP_NAME_LENGTH, SMTP_CAPS_STR,          \
+			    CAPABILITY_BIT)                                    \
 	do                                                                     \
 	{                                                                      \
 		if (strncmp(SMTP_CAPS_STR, CAP_NAME, CAP_NAME_LENGTH) == 0)    \
@@ -160,6 +184,9 @@ typedef struct
 	fd_t signature_fd;
 	unsigned long smtp_extension;
 	connection_t *conn;
+
+	/* these fields filled by libsmtp only */
+	char *max_size;
 } smtp_ctx_t;
 
 /* check if a `msg` contains CR LF at the end */
@@ -175,7 +202,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts);
 void release_smtp_ctx(smtp_ctx_t *smtp);
 
 /* ehlo.c */
-__attribute__((pure)) unsigned long parse_smtp_caps(char *r);
+__attribute__((pure)) unsigned long parse_smtp_caps(char *r, smtp_ctx_t *smtp);
 __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap);
 int build_ehlo_msg(char *buffer);
 int send_ehlo_message(socket_t socket, char *request, char *buffer);

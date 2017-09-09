@@ -9,6 +9,12 @@
 #ifndef LIB_UTILS_STRING_H
 #define LIB_UTILS_STRING_H
 
+#include <ctype.h>
+
+#define SPACE_SYM 32
+#define CARIAGE_RET_SYM 13
+
 char *skip_cl_rl(char *str);
+char *skip_spaces(char *str);
 
 #endif

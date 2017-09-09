@@ -18,3 +18,13 @@ char *skip_cl_rl(char *str)
 	str += 2;
 	return str;
 }
+
+/**
+ * skip_spaces skips all space symbols
+ */
+char *skip_spaces(char *str)
+{
+	while (isspace(*str))
+		++str;
+	return str;
+}
