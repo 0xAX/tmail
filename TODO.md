@@ -6,9 +6,6 @@
 
 ## Build
 
-  * Add ` -Weverything` for clang build.
-  * Add enumeration of what avaliable targets will be built with the
-`make all`.
   * Strip libraries and executables if the `DEBUG` flag wasn't passed.
   * Disable `asserts` from `assert.h` for non-debug builds.
   * Add tests specific targets (like libtmail-sys.so and etc.) for `make test`.
