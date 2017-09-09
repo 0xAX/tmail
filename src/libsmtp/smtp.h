@@ -173,6 +173,21 @@
 		}                                                              \
 	} while (false)
 
+/* try to read SMTP response and SMTP code */
+#define READ_SMTP_RESPONSE(SOCKET, BUFFER, BUFSIZ, EXP_CODE, READ_ERR_MSG,     \
+			   ERR_CODE_MSG)                                       \
+	if ((n = recv(SOCKET, BUFFER, BUFSIZ, 0)) == -1)                       \
+	{                                                                      \
+		fprintf(stderr, READ_ERR_MSG);                                 \
+		return 0;                                                      \
+	}                                                                      \
+	if (!(BUFFER[0] == EXP_CODE[0] && BUFFER[1] == EXP_CODE[1] &&          \
+	      BUFFER[2] == EXP_CODE[2]))                                       \
+	{                                                                      \
+		fprintf(stderr, ERR_CODE_MSG, BUFFER);                         \
+		return 0;                                                      \
+	}
+
 /* SMTP context describes a server configuration client connected to */
 typedef struct
 {

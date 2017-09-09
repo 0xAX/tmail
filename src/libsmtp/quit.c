@@ -14,20 +14,10 @@ int send_quit_message(socket_t socket, char *buffer)
 
 	send(socket, "QUIT\r\n", 6, 0);
 
-	if ((n = recv(socket, buffer, 1024, 0) == -1))
-	{
-		fprintf(stderr, "Can't get response for SMTP QUIT command\n");
-		return 0;
-	}
-
-	if (!(buffer[0] == '2' && buffer[1] == '2' && buffer[2] == '1'))
-	{
-		fprintf(stderr, "Error: Your message should be sent, but an "
-				"error is gotten from SMTP server on QUIT: "
-				"%s\n",
-			buffer);
-		return 0;
-	}
+	READ_SMTP_RESPONSE(socket, buffer, 1024, "221",
+			   "Can't get response for SMTP QUIT command\n",
+			   "Error: Your message should be sent, but an error "
+			   "is gotten from SMTP server on QUIT: %s\n");
 
 	return 1;
 }

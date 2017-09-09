@@ -50,7 +50,6 @@ int send_mail_from_message(socket_t socket, message_t *message, char *buffer)
 		return 0;
 	}
 
-	memset(buffer, 0, 1024);
 	free(mail_from_msg);
 	return 1;
 }

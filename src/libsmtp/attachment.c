@@ -129,18 +129,8 @@ int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
 	send(socket, mime_boundary, mime_boundary_len, 0);
 	send(socket, "--\r\n.\r\n", 7, 0);
 
-	if ((n = recv(socket, buffer, 1024, 0) == -1))
-	{
-		fprintf(stderr,
-			"Error: Can\'t get response from message BODY\n");
-		return 0;
-	}
-
-	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
-	{
-		fprintf(stderr, "Error: wrong response for message body: %s\n",
-			buffer);
-		return 0;
-	}
+	READ_SMTP_RESPONSE(socket, buffer, 1024, "250",
+			   "Error: Can\'t get response from message BODY\n",
+			   "Error: wrong response for message body: %s\n");
 	return 1;
 }

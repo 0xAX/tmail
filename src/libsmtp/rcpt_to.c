@@ -56,8 +56,6 @@ static int send_rcpt_to(socket_t socket, char *buffer, list_t *recipients,
 			free(rcpt_to_msg);
 			return 0;
 		}
-
-		memset(buffer, 0, 1024);
 		free(rcpt_to_msg);
 	}
 

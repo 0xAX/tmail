@@ -109,7 +109,6 @@ int build_ehlo_msg(char *buffer)
 		return 0;
 	}
 
-	memset(buffer, 0, 1024);
 	snprintf(buffer, 5 + strlen(host) + 2 + 1, "EHLO %s\r\n", host);
 	free(host);
 	return 1;
@@ -121,18 +120,8 @@ int send_ehlo_message(socket_t socket, char *request, char *buffer)
 
 	send(socket, request, strlen(request), 0);
 
-	if ((n = recv(socket, buffer, 1024, 0) == -1))
-	{
-		fprintf(stderr, "Error: Can\'t read SMTP EHLO response\n");
-		return 0;
-	}
-
-	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
-	{
-		fprintf(stderr, "Error: SMTP EHLO wrong response: %s\n",
-			buffer);
-		return 0;
-	}
-
+	READ_SMTP_RESPONSE(socket, buffer, 1024, "250",
+			   "Error: Can\'t read SMTP EHLO response\n",
+			   "Error: SMTP EHLO wrong response: %s\n");
 	return 1;
 }

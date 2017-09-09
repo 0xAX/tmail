@@ -12,22 +12,10 @@ static int read_smtp_greetings(socket_t socket, char *buffer)
 {
 	int n = 0;
 
-	if ((n = recv(socket, buffer, 1024, 0)) == -1)
-	{
-		fprintf(stderr, "Error: something going wrong. SMTP server "
-				"didn't return response\n");
-		return 0;
-	}
-
-	if (!(buffer[0] == '2' && buffer[1] == '2' && buffer[2] == '0'))
-	{
-		fprintf(stderr, "Error: SMTP server greetings error\n");
-		return 0;
-	}
-
-	/* clear response buffer */
-	memset(buffer, 0, 1024);
-
+	READ_SMTP_RESPONSE(socket, buffer, 1024,  "220", "Error: something going "
+						 "wrong. SMTP server didn't "
+						 "return response\n",
+			   "Error: SMTP server greetings error %s\n");
 	return 1;
 }
 
@@ -64,6 +52,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 		goto fail;
 	if (!read_smtp_greetings(smtp->conn->sd, response))
 		goto fail;
+	memset(response, 0, 1024);
 	if (!send_ehlo_message(smtp->conn->sd, request, response))
 		goto fail;
 
@@ -77,12 +66,16 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 
 	if (!send_mail_from_message(smtp->conn->sd, message, response))
 		goto fail;
+	memset(response, 0, 1024);
 	if (!send_rcpt_to_message(smtp->conn->sd, message, response))
 		goto fail;
+	memset(response, 0, 1024);
 	if (!send_data_message(smtp->conn->sd, response))
 		goto fail;
+	memset(response, 0, 1024);
 	if (!send_message(smtp->conn->sd, smtp, message, response))
 		goto fail;
+	memset(response, 0, 1024);
 	if (!send_quit_message(smtp->conn->sd, response))
 		goto fail;
 
