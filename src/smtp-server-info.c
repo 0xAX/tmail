@@ -55,10 +55,10 @@ __attribute__((noreturn)) void smtp_server_info_cmd(int argc, char *argv[])
 	smtp_ctx_t *smtp = NULL;
 	char *ret = NULL;
 
+	parse_argv(argc, argv);
+
 	if (argc <= 2)
 		print_help();
-
-	parse_argv(argc, argv);
 
 	smtp_server = strdup(argv[1]);
 	if (!smtp_server)
