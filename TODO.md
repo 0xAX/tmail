@@ -26,7 +26,6 @@ like this.
 
 ## tmail
 
-  * Make `--version/-v` workable.
   * Return from tmail's `main()` in a `*_cmd(argc, argv)`
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
   * Support for colorful error messages.
