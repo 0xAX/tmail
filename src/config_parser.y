@@ -127,7 +127,12 @@ void fill_smtp_conf(char *name, char *val)
 	else if (strcmp(name, "smtp.server") == 0)
 		set_val(&smtp_conf->smtp_server, val);
 	else if (strcmp(name, "smtp.port") == 0)
+	{
 		set_val(&smtp_conf->smtp_port, val);
+
+		if (strcmp(val, "578") == 0)
+			smtp_conf->tls = true;
+	}
 	else if (strcmp(name, "smtp.passwd") == 0)
 		set_val(&smtp_conf->passwd, val);
 	else if (strcmp(name, "smtp.from") == 0)
