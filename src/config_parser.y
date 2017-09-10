@@ -129,7 +129,6 @@ void fill_smtp_conf(char *name, char *val)
 	else if (strcmp(name, "smtp.port") == 0)
 	{
 		set_val(&smtp_conf->smtp_port, val);
-
 		if (strcmp(val, "578") == 0)
 			smtp_conf->tls = true;
 	}
