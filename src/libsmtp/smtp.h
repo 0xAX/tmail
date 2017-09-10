@@ -202,6 +202,7 @@ typedef struct
 
 	/* these fields filled by libsmtp only */
 	char *max_size;
+	bool tls;
 } smtp_ctx_t;
 
 /* check if a `msg` contains CR LF at the end */
