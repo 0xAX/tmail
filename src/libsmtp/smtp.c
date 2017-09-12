@@ -12,11 +12,17 @@ static int read_smtp_greetings(socket_t socket, char *buffer)
 {
 	int n = 0;
 
-	READ_SMTP_RESPONSE(socket, buffer, 1024,  "220", "Error: something going "
-						 "wrong. SMTP server didn't "
-						 "return response\n",
+	READ_SMTP_RESPONSE(socket, buffer, 1024, "220",
+			   "Error: something going "
+			   "wrong. SMTP server didn't "
+			   "return response\n",
 			   "Error: SMTP server greetings error %s\n");
 	return 1;
+}
+
+static void start_tls_negotiation(void)
+{
+	return;
 }
 
 /**
@@ -64,6 +70,19 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 	smtp->smtp_extension = parse_smtp_caps(response, smtp);
 	memset(response, 0, 1024);
 
+	if (smtp->smtp_extension & SMTPTLS)
+	{
+		smtp->tls = true;
+		if (!send_starttls(smtp->conn->sd, response))
+			goto fail;
+	}
+
+	if (smtp->tls == true)
+	{
+		start_tls_negotiation();
+		goto ok;
+	}
+	
 	if (!send_mail_from_message(smtp->conn->sd, message, response))
 		goto fail;
 	memset(response, 0, 1024);

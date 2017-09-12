@@ -81,9 +81,10 @@ static int send_message_body(socket_t socket, message_t *message, char *buffer)
 	if (!message->attachments)
 	{
 		send(socket, "\r\n.\r\n", 5, 0);
-		READ_SMTP_RESPONSE(socket, buffer, 1024, "250",
-				   "Error: Can\'t get response from message BODY\n",
-				   "Error: wrong response for message body: %s\n");
+		READ_SMTP_RESPONSE(
+		    socket, buffer, 1024, "250",
+		    "Error: Can\'t get response from message BODY\n",
+		    "Error: wrong response for message body: %s\n");
 	}
 	else
 		send(socket, "\r\n", 2, 0);

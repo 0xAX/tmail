@@ -223,6 +223,9 @@ __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap);
 int build_ehlo_msg(char *buffer);
 int send_ehlo_message(socket_t socket, char *request, char *buffer);
 
+/* starttls.c */
+int send_starttls(socket_t socket, char *buffer);
+
 /* attachment.c */
 int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
 		     size_t mime_boundary_len, char *buffer);
@@ -244,6 +247,6 @@ int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
 		 char *buffer);
 
 /* help.c */
-int send_help(socket_t socket, char *response);
+int send_help(socket_t socket, char *buffer);
 
 #endif /* __LIB_SMTP_H__ */
