@@ -11,6 +11,15 @@
 
 #include <basic.h>
 
+/*
+ * Four protocols that use the TLS Record Protocol
+ * https://tools.ietf.org/html/rfc5246#section-6
+ */
+#define CHANGE_CIPHER_SPEC_MSG 20
+#define ALERT_MSG 21
+#define HANDSHAKE_MSG 22
+#define APPLICATION_DATA_MSG 23
+
 int start_tls_negotiation(socket_t socket);
 
 #endif
