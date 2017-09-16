@@ -12,7 +12,7 @@ include ../mk/Build.mk
 CONFIG_PARSER = config_parser.y
 CONFIG_LEXER = config_parser.l
 
-# object files for
+# object files for tmail
 TMAIL_OBJS += config.o
 TMAIL_OBJS += tmail.o
 TMAIL_OBJS += mime.o
@@ -20,6 +20,9 @@ TMAIL_OBJS += message.o
 TMAIL_OBJS += send-email.o
 TMAIL_OBJS += smtp-caps.o
 TMAIL_OBJS += smtp-server-info.o
+
+# object files for tls lib
+LIBTLS_OBJS += libtls/tls.o
 
 # object files for sys lib
 LIBSYS_OBJS += libsys/at_exit.o
@@ -53,6 +56,7 @@ PARSER_OBJECTS = config_parser.tab.o lex.yy.o
 LIB_ENCODING_OBJS += libencoding/base64.o
 
 # set of directories with C headers needed for tmail
+INCLUDES+=-Ilibtls/
 INCLUDES+=-Ilibsys/
 INCLUDES+=-Ilibutils/                    
 INCLUDES+=-Ilibsmtp/
@@ -65,6 +69,7 @@ COMPILER_FLAGS = $(LIBS_PATH) $(INCLUDES) $(LINKER_OPTS) $(CC_EXEC_FLAGS)
 # set of object file that linked together with tmail
 TMAIL_OBJECT_FILES_DEPS += $(LIBSYS_OBJS)
 TMAIL_OBJECT_FILES_DEPS += $(LIB_UTILS_OBJS)
+TMAIL_OBJECT_FILES_DEPS += $(LIBTLS_OBJS)
 TMAIL_OBJECT_FILES_DEPS += $(PARSER_OBJECTS)
 TMAIL_OBJECT_FILES_DEPS += $(LIB_ENCODING_OBJS)
 TMAIL_OBJECT_FILES_DEPS += $(LIB_SMTP_OBJS)
@@ -92,6 +97,7 @@ $(CLEAN_TARGET):
 	@cd $(TMAIL_UTILS_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(CLEAN_TARGET)
 	@cd $(TMAIL_SMTP_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(CLEAN_TARGET)
 	@cd $(TMAIL_ENCODING_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(CLEAN_TARGET)
+	@cd $(TMAIL_TLS_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(CLEAN_TARGET)
 	@cd ./tests && $(MAKE) $(MAKE_FLAGS) $(CLEAN_TARGET)
 
 .PHONY: $(CLEAN_TARGET)

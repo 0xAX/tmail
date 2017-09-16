@@ -9,6 +9,7 @@ include ../../mk/Common.mk
 include ../../mk/Build.mk
 
 INCLUDES += -I../
+INCLUDES += -I../libtls/
 INCLUDES += -I../libutils/
 INCLUDES += -I../libsys/
 INCLUDES += -I../libencoding/

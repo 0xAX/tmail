@@ -88,13 +88,12 @@ endif
 
 # Optimization flags
 OPTIMIZATION+=-O2
-OPTIMIZATION+=-D_FORTIFY_SOURCE=2
 
 # Debug flags
 DEBUG_FLAGS+=-O
 DEBUG_FLAGS+=-g3
 DEBUG_FLAGS+=-ggdb
-DEBUG_FLAGS+=-fstack-protector
+DEBUG_FLAGS+=-D_FORTIFY_SOURCE=2
 
 # Add compiler related warnings flags
 ifeq ($(TMAIL_CC), gcc)

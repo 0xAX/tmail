@@ -20,11 +20,6 @@ static int read_smtp_greetings(socket_t socket, char *buffer)
 	return 1;
 }
 
-static void start_tls_negotiation(void)
-{
-	return;
-}
-
 /**
  * send_email() sends given email @message.
  *
@@ -79,7 +74,10 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 
 	if (smtp->tls == true)
 	{
-		start_tls_negotiation();
+		if (!start_tls_negotiation(smtp->conn->sd))
+		{
+			/* TODO */
+		}
 		goto ok;
 	}
 	

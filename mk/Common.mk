@@ -6,6 +6,8 @@
 # Name of main executable
 TMAIL_EXECUTABLE=tmail
 
+# SSL/TLS library
+TMAIL_TLS_LIB=libtmail-tls.so
 # Auxiliary sys library
 TMAIL_SYS_LIB=libtmail-sys.so
 # Auxiliary library with C utils
@@ -27,6 +29,8 @@ TEST_TARGET=test
 INSTALL_TARGET=install
 # A target to remove tmail from the system
 UNINSTALL_TARGET=uninstall
+# target to build libtmail-tls.so
+BUILD_TLS_LIB_TARGET = libtmail_tls
 # target to build libtmail-sys.so
 BUILD_SYS_LIB_TARGET = libtmail_sys
 # target to build libtmail-smtp.so
@@ -55,6 +59,8 @@ SHARED_LIBS_FILES=*.so
 SRC_DIR=src/
 # Directory with makefile auxiliary scripts
 MK_DIR=mk/
+# Directory with tls library
+TMAIL_TLS_LIB_DIR=libtls
 # Directory with system library
 TMAIL_SYS_LIB_DIR=libsys
 # Directory with utils library

@@ -24,6 +24,7 @@
 #include <connect.h>
 #include <gethostname.h>
 #include <mime.h>
+#include <tls.h>
 #include <string_utils.h>
 #include <time_utils.h>
 
