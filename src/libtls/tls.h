@@ -39,6 +39,13 @@
 #define FINISHED 20
 
 /*
+ * Cihper suites
+ *
+ * https://tools.ietf.org/html/rfc5246#appendix-A.5
+ */
+#define TLS_RSA_WITH_AES_128_CBC_SHA 0x002f
+
+/*
  * The record layer fragments information blocks into TLSPlaintext
  *  records carrying data in chunks of 2^14 bytes or less.
  *
@@ -47,6 +54,9 @@
 #define TLS_FRAGMENT_SIZE 16384
 #define TLS_COMPRESSION_PADDING 1024
 #define TLS_AUTH_CODE 1024
+
+/* miscellaneous */
+#define SUPPORTED_CIPHER_SUITES_CNT 2
 
 /*
  * TLS Record
@@ -96,7 +106,7 @@ typedef struct
 	byte_t session_id_len;
 	unsigned int session_id;
 	unsigned short cipher_suites_len;
-	byte_t cipher_suites[2][65534];
+	unsigned short cipher_suites[10];
 	byte_t compression_method_len;
 	byte_t compression_method;
 	unsigned short extensions_len;
