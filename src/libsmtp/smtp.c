@@ -80,7 +80,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 		}
 		goto ok;
 	}
-	
+
 	if (!send_mail_from_message(smtp->conn->sd, message, response))
 		goto fail;
 	memset(response, 0, 1024);

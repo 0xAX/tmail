@@ -24,9 +24,9 @@
 #include <connect.h>
 #include <gethostname.h>
 #include <mime.h>
-#include <tls.h>
 #include <string_utils.h>
 #include <time_utils.h>
+#include <tls.h>
 
 #define TO_CLAUSE "To: "
 #define CC_CLAUSE "Cc: "
