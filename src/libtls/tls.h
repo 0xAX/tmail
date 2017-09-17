@@ -72,6 +72,17 @@ typedef struct
 } handshake_t;
 
 /*
+ * TLS extension
+ *
+ * https://tools.ietf.org/html/rfc5246#section-7.4.1.4
+ */
+typedef struct
+{
+	unsigned short type;
+	byte_t data[65536];
+} tls_extension;
+
+/*
  * TLS ClientHello Record
  *
  * https://tools.ietf.org/html/rfc5246#section-7.4.1.2
@@ -85,17 +96,6 @@ typedef struct
 	byte_t compression_method;
 	tls_extension extensions[65536];
 } client_hello_t;
-
-/*
- * TLS extension
- *
- * https://tools.ietf.org/html/rfc5246#section-7.4.1.4
- */
-typedef struct
-{
-	unsigned short type;
-	byte_t data[65536];
-} tls_extension;
 
 /* tls.c */
 tls_record *tls_record_new(byte_t type, size_t len, char data[]);
