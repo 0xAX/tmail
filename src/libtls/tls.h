@@ -23,6 +23,22 @@
 #define APPLICATION_DATA_MSG 23
 
 /*
+ * Handshake message type
+ *
+ * https://tools.ietf.org/html/rfc5246#section-7.4
+ */
+#define HELLO_REQUEST 0
+#define CLIENT_HELLO 1
+#define SERVER_HELLO 2
+#define CERTIFICATE 11
+#define SERVER_KEY_EXCHANGE 12
+#define CERTIFICATE_REQUEST 13
+#define SERVER_HELLO_DONE 14
+#define CERTIFICATE_VERIFY 15
+#define CLIENT_KEY_EXCHANGE 16
+#define FINISHED 20
+
+/*
  * The record layer fragments information blocks into TLSPlaintext
  *  records carrying data in chunks of 2^14 bytes or less.
  *
