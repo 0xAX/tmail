@@ -100,6 +100,7 @@ typedef struct
 /* tls.c */
 tls_record *tls_record_new(byte_t type, size_t len, char data[]);
 int start_tls_negotiation(socket_t socket);
+int send_client_hello_msg(void);
 
 /* tls_utils.c */
 byte_t *handshake_random(void);
