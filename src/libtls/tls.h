@@ -60,7 +60,7 @@ typedef struct
 } __attribute__((packed)) tls_record;
 
 /*
- * TLS Handshake Record
+ * TLS Handshake message
  *
  * https://tools.ietf.org/html/rfc5246#section-7.4
  */
@@ -72,7 +72,7 @@ typedef struct
 } __attribute__((packed)) handshake_t;
 
 /*
- * TLS extension
+ * TLS extension representation
  *
  * https://tools.ietf.org/html/rfc5246#section-7.4.1.4
  */
@@ -83,7 +83,7 @@ typedef struct
 } __attribute__((packed)) tls_extension;
 
 /*
- * TLS ClientHello Record
+ * TLS ClientHello message
  *
  * https://tools.ietf.org/html/rfc5246#section-7.4.1.2
  */
