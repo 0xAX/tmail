@@ -57,7 +57,7 @@ typedef struct
 	unsigned short version;
 	unsigned short length;
 	char data[TLS_FRAGMENT_SIZE];
-} tls_record;
+} __attribute__((packed)) tls_record;
 
 /*
  * TLS Handshake Record
@@ -69,7 +69,7 @@ typedef struct
 	byte_t msg_type;
 	byte_t length[3];
 	void *body; // should be castet to client_hello_t and others
-} handshake_t;
+} __attribute__((packed)) handshake_t;
 
 /*
  * TLS extension
@@ -80,7 +80,7 @@ typedef struct
 {
 	unsigned short type;
 	byte_t data[65536];
-} tls_extension;
+} __attribute__((packed)) tls_extension;
 
 /*
  * TLS ClientHello Record
@@ -95,7 +95,7 @@ typedef struct
 	byte_t cipher_suite[2][65534];
 	byte_t compression_method;
 	tls_extension extensions[65536];
-} client_hello_t;
+} __attribute__((packed)) client_hello_t;
 
 /* tls.c */
 tls_record *tls_record_new(byte_t type, size_t len, char data[]);
