@@ -71,7 +71,24 @@ typedef struct
 	void *body;
 } handshake_t;
 
+
+/*
+ * TLS ClientHello Record
+ *
+ * https://tools.ietf.org/html/rfc5246#section-7.4.1.2
+ */
+typedef struct
+{
+	unsigned short version;
+	byte_t random[32];
+	
+} client_hello_t;
+
+/* tls.c */
 tls_record *tls_record_new(byte_t type, size_t len, char data[]);
 int start_tls_negotiation(socket_t socket);
+
+/* tls_utils.c */
+byte_t  *handshake_random(void);
 
 #endif
