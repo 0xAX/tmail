@@ -27,6 +27,6 @@ byte_t *handshake_random(void)
 
 	for (byte_t i = 0; i < 32; i++)
 		random[i] = (byte_t)rand();
-	
+
 	return random;
 }
