@@ -9,6 +9,8 @@
 #ifndef LIB_TLS_H
 #define LIB_TLS_H
 
+#include <string.h>
+
 #include <basic.h>
 
 /*
@@ -41,6 +43,7 @@ typedef struct
 	char data[TLS_FRAGMENT_SIZE];
 } tls_record;
 
+tls_record *tls_record_new(byte_t type, size_t len, char data[]);
 int start_tls_negotiation(socket_t socket);
 
 #endif
