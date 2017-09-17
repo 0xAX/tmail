@@ -59,6 +59,18 @@ typedef struct
 	char data[TLS_FRAGMENT_SIZE];
 } tls_record;
 
+/*
+ * TLS Handshake Record
+ *
+ * https://tools.ietf.org/html/rfc5246#section-7.4
+ */
+typedef struct
+{
+	byte_t msg_type;
+	byte_t length[3];
+	void *body;
+} handshake_t;
+
 tls_record *tls_record_new(byte_t type, size_t len, char data[]);
 int start_tls_negotiation(socket_t socket);
 
