@@ -45,6 +45,8 @@
  * https://tools.ietf.org/html/rfc5246#section-6.2.1
  */
 #define TLS_FRAGMENT_SIZE 16384
+#define TLS_COMPRESSION_PADDING 1024
+#define TLS_AUTH_CODE 1024
 
 /*
  * TLS Record
@@ -91,16 +93,20 @@ typedef struct
 {
 	unsigned short version;
 	byte_t random[32];
+	byte_t session_id_len;
 	unsigned int session_id;
-	byte_t cipher_suite[2][65534];
+	unsigned short cipher_suites_len;
+	byte_t cipher_suites[2][65534];
+	byte_t compression_method_len;
 	byte_t compression_method;
+	unsigned short extensions_len;
 	tls_extension extensions[65536];
 } __attribute__((packed)) client_hello_t;
 
 /* tls.c */
 tls_record *tls_record_new(byte_t type, size_t len, char data[]);
 int start_tls_negotiation(socket_t socket);
-int send_client_hello_msg(void);
+int send_client_hello_msg(socket_t socket);
 
 /* tls_utils.c */
 byte_t *handshake_random(void);
