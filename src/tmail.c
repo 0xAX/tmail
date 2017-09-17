@@ -21,6 +21,7 @@
 #include <send-email.h>
 #include <smtp-caps.h>
 #include <smtp-server-info.h>
+#include <tls.h>
 
 static int config_loaded = 0;
 static int mime_loaded = 0;
@@ -49,6 +50,7 @@ static void print_help()
 	printf("\n");
 	printf("Each command has own set of command line arguments.\n");
 	printf("Use: tmail command -h/--help to get help\n");
+
 	exit(EXIT_SUCCESS);
 }
 
@@ -122,6 +124,9 @@ int main(int argc, char *argv[])
 
 	if (!setlocale(LC_ALL, "en_US.utf8"))
 		setlocale(LC_ALL, "");
+
+	/* should be called for random */
+	srand(time(NULL));
 
 	/* parse command line arguments */
 	if (strcmp(argv[1], SEND_EMAIL) == 0)
