@@ -13,7 +13,7 @@
  * in successful case. In a failure case, the tls_record_new
  * returns `NULL`.
  */
-tls_record *tls_record_new(byte_t type, size_t len, char data[])
+tls_record *tls_record_new(byte_t type, size_t len, unsigned char data[])
 {
 	tls_record *record = NULL;
 
@@ -39,7 +39,7 @@ tls_record *tls_record_new(byte_t type, size_t len, char data[])
 
 int start_tls_negotiation(socket_t socket)
 {
-	if (send_client_hello_msg(socket))
+	if (!send_client_hello_msg(socket))
 		return 0;
 	return 1;
 }

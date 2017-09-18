@@ -9,7 +9,9 @@
 #ifndef LIB_TLS_H
 #define LIB_TLS_H
 
+#include <stdio.h>
 #include <string.h>
+#include <sys/socket.h>
 
 #include <basic.h>
 
@@ -57,6 +59,8 @@
 
 /* miscellaneous */
 #define SUPPORTED_CIPHER_SUITES_CNT 2
+#define RESPONSE_BUFFER_SIZE 8192
+#define CLIENT_HELLO_PREFIX_LEN 9
 
 /*
  * TLS Record
@@ -68,7 +72,7 @@ typedef struct
 	byte_t type;
 	unsigned short version;
 	unsigned short length;
-	char data[TLS_FRAGMENT_SIZE];
+	unsigned char data[TLS_FRAGMENT_SIZE];
 } __attribute__((packed)) tls_record;
 
 /*
@@ -114,7 +118,7 @@ typedef struct
 } __attribute__((packed)) client_hello_t;
 
 /* tls.c */
-tls_record *tls_record_new(byte_t type, size_t len, char data[]);
+tls_record *tls_record_new(byte_t type, size_t len, unsigned char data[]);
 int start_tls_negotiation(socket_t socket);
 int send_client_hello_msg(socket_t socket);
 
