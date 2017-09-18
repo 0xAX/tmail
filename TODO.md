@@ -51,6 +51,14 @@ This stuff should be implemented after `STARTTLS` support:
   * Add `tls` related options.
   * Add `--no-starttls`.
 
+## libtls
+
+  * `client_hello_t.cipher_suites` uses 10 cipher suites for now. Make it
+maximum number allowed by the TLS protocol. Also fix this in the
+`send_client_hello_msg()` during allocation of array of cipher suites.
+ * take into account size of `extension_len` and count * size of extensions
+during calculation of CLIENT HELLO message length in `send_client_hello_msg()`.
+
 ## libencoding
 
   * Add base64 `base64_encode()`.
@@ -73,6 +81,10 @@ without configuration.
   * Add send message in the separate thread.
   * Check message size if `SIZE` capability is supported.
   * Implement SMTP extensions.
+
+## smtp-tls-info
+
+  * Add util to dump information about SMTP TLS server.
 
 ## smtp-server-info
 
