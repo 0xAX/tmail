@@ -18,6 +18,5 @@ int send_starttls(socket_t socket, char *buffer)
 			   "Error: something going wrong. An SMTP server "
 			   "didn't return response on STARTTLS message\n",
 			   "Error: SMTP STARTTLS error %s\n");
-
-	return 0;
+	return 1;
 }
