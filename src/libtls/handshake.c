@@ -12,10 +12,55 @@
 
 static int alert_msg_str(char *buffer)
 {
-	/* TODO */
-	UNUSED(buffer);
+	/*
+	 * Returns Alert code
+	 *
+	 * https://tools.ietf.org/html/rfc5246#section-7.2
+	 */
+	return buffer[6];
+}
 
-	return 0;
+static int handle_server_hello(char *buffer)
+{
+	int idx = 0;
+	unsigned short session_id_len = 0;
+	// byte_t msg_type = buffer[0];
+	unsigned short msg_len = ((buffer[3] & 0xff) << 8) | (buffer[4] & 0xff);
+
+	/* tmail tls supports only TLS v1.2 */
+	if (buffer[1] != 0x03 && buffer[2] != 3)
+		return 0;
+
+	if (buffer[5] != SERVER_HELLO)
+		return 0;
+
+	// TODO random id - 11 - 43
+
+	session_id_len = buffer[43];
+	// this is after session id received by server
+	idx = 43 + session_id_len + 1;
+
+	// TODO cipher cuite bytes
+	printf("%d\n", buffer[idx]);
+	printf("%d\n", buffer[idx + 1]);
+	idx += 2;
+
+	// TODO compression
+	printf("compression %d\n", buffer[idx + 1]);
+	idx += 1;
+
+	if ((idx - HANDSHAKE_PREFIX_LEN) == (msg_len - TLS_MSG_HEADER_LEN))
+		return 0;
+	else
+	{
+		fprintf(stderr, "Something going wrong during ServerHello "
+				"message parsing\n");
+		for (int i = 0; i < RESPONSE_BUFFER_SIZE; i++)
+		{
+			fprintf(stderr, "%d\n", buffer[i]);
+		}
+		return 0;
+	}
 }
 
 static void build_handshake_message(unsigned char *buffer, size_t full_msg_len,
@@ -34,8 +79,8 @@ static void build_handshake_message(unsigned char *buffer, size_t full_msg_len,
 	 *
 	 * 4 bytes are message type and length for handshake
 	 */
-	buffer[3] = (((full_msg_len + 4) >> 8) & 0xff);
-	buffer[4] = ((full_msg_len + 4) & 0xff);
+	buffer[3] = (((full_msg_len + TLS_MSG_HEADER_LEN) >> 8) & 0xff);
+	buffer[4] = ((full_msg_len + TLS_MSG_HEADER_LEN) & 0xff);
 
 	/* handshake message */
 	buffer[5] = 1;			      /* protocol version */
@@ -82,7 +127,10 @@ static void build_handshake_message(unsigned char *buffer, size_t full_msg_len,
  * message.
  *
  * Returns `1` in a successful case and `0` in the case
- * of failure.
+ * of runtime failure (malloc asserted and etc.).
+ *
+ * In a case of receiving of 'Alert' message, the 'AlertDescription'
+ * will be returned (https://tools.ietf.org/html/rfc5246#section-7.2)
  *
  * https://tools.ietf.org/html/rfc5246#section-7.4.1.2
  */
@@ -156,7 +204,7 @@ int send_client_hello_msg(socket_t socket)
 	hello_msg_len =
 	    2 + 32 + 1 + 2 + (2 * SUPPORTED_CIPHER_SUITES_CNT) + 1 + 1;
 	if (hello_msg->session_id_len)
-		hello_msg_len += 4;
+		hello_msg_len += 32;
 
 	/* fill HANDSHAKE message */
 	tls_msg->msg_type = 1;
@@ -165,7 +213,7 @@ int send_client_hello_msg(socket_t socket)
 	tls_msg->length[2] = hello_msg_len & 0xff;
 
 	/* fill TLS header */
-	data = malloc(CLIENT_HELLO_PREFIX_LEN + hello_msg_len + 1);
+	data = malloc(HANDSHAKE_PREFIX_LEN + hello_msg_len + 1);
 	if (!data)
 	{
 		mfree(tls_msg);
@@ -173,13 +221,13 @@ int send_client_hello_msg(socket_t socket)
 		mfree(rnd);
 		return 0;
 	}
-	memset(data, 0, CLIENT_HELLO_PREFIX_LEN + hello_msg_len + 1);
+	memset(data, 0, HANDSHAKE_PREFIX_LEN + hello_msg_len + 1);
 
 	/* build handshake message */
 	build_handshake_message(data, hello_msg_len, hello_msg, tls_msg);
 
 	/* finally send message */
-	send(socket, data, CLIENT_HELLO_PREFIX_LEN + hello_msg_len, 0);
+	send(socket, data, HANDSHAKE_PREFIX_LEN + hello_msg_len, 0);
 
 	/* receive ServerHello response */
 	memset(response_buffer, 0, RESPONSE_BUFFER_SIZE);
@@ -198,6 +246,9 @@ int send_client_hello_msg(socket_t socket)
 		return alert_msg_str(response_buffer);
 	}
 
+	if (!handle_server_hello(response_buffer))
+		goto failure;
+failure:
 	mfree(data);
 	mfree(tls_msg);
 	mfree(hello_msg);

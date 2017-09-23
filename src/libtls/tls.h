@@ -60,7 +60,8 @@
 /* miscellaneous */
 #define SUPPORTED_CIPHER_SUITES_CNT 2
 #define RESPONSE_BUFFER_SIZE 8192
-#define CLIENT_HELLO_PREFIX_LEN 9
+#define TLS_MSG_HEADER_LEN 4
+#define HANDSHAKE_PREFIX_LEN 9
 
 /*
  * TLS Record
