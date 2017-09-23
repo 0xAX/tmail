@@ -46,7 +46,7 @@ static int handle_server_hello(char *buffer)
 	idx += 2;
 
 	// TODO compression
-	printf("compression %d\n", buffer[idx + 1]);
+	printf("compression %d\n", buffer[idx]);
 	idx += 1;
 
 	if ((idx - HANDSHAKE_PREFIX_LEN) == (msg_len - TLS_MSG_HEADER_LEN))
@@ -192,7 +192,7 @@ int send_client_hello_msg(socket_t socket)
 	 *   version = 2
 	 *   random = 32
 	 *   sessiond_id_len = 1
-	 *   session_id = 4
+	 *   session_id = - we have no it in CLIENT_HELLO
 	 *   cipher_suites_len = 2
 	 *   cipher_suites = 2 * count of cipher suites
 	 *   compression_method_len = 1
@@ -203,8 +203,6 @@ int send_client_hello_msg(socket_t socket)
 	 */
 	hello_msg_len =
 	    2 + 32 + 1 + 2 + (2 * SUPPORTED_CIPHER_SUITES_CNT) + 1 + 1;
-	if (hello_msg->session_id_len)
-		hello_msg_len += 32;
 
 	/* fill HANDSHAKE message */
 	tls_msg->msg_type = 1;

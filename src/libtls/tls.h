@@ -109,7 +109,7 @@ typedef struct
 	unsigned short version;
 	byte_t random[32];
 	byte_t session_id_len;
-	unsigned int session_id;
+	byte_t *session_id;
 	unsigned short cipher_suites_len;
 	unsigned short cipher_suites[10];
 	byte_t compression_method_len;
