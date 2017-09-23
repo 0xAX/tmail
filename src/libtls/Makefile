@@ -13,8 +13,8 @@ INCLUDES += -I../libutils/
 INCLUDES += -I../libsys/
 INCLUDES += -I../libencoding/
 
-LIB_TLS_OBJS += handshake.o
 LIB_TLS_OBJS += tls_utils.o
+LIB_TLS_OBJS += handshake.o
 LIB_TLS_OBJS += tls.o
 
 $(TMAIL_TLS_LIB): $(LIB_TLS_OBJS)
