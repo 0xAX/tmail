@@ -10,6 +10,9 @@
 
 #include "tls.h"
 
+/* list of supported cipher suites */
+static const unsigned short SUPPORTED_CIPHER_SUITES[1] = {0x002f};
+
 static int alert_msg_str(char *buffer)
 {
 	/*
@@ -24,43 +27,68 @@ static int handle_server_hello(char *buffer)
 {
 	int idx = 0;
 	unsigned short session_id_len = 0;
-	// byte_t msg_type = buffer[0];
-	unsigned short msg_len = ((buffer[3] & 0xff) << 8) | (buffer[4] & 0xff);
+	unsigned long certificate_len = 0;
+	unsigned short selected_cipher_suite = 0;
 
 	/* tmail tls supports only TLS v1.2 */
 	if (buffer[1] != 0x03 && buffer[2] != 3)
 		return 0;
 
+	/* we should get SERVER_HELLO message */
 	if (buffer[5] != SERVER_HELLO)
 		return 0;
 
-	// TODO random id - 11 - 43
+	/* TODO random id - 11 - 43 */
 
+	/* read session ID assigned by server */
 	session_id_len = buffer[43];
-	// this is after session id received by server
+	/* this is after session id received from server */
 	idx = 43 + session_id_len + 1;
 
-	// TODO cipher cuite bytes
-	printf("%d\n", buffer[idx]);
-	printf("%d\n", buffer[idx + 1]);
+	/* check selected cipher cuite by server */
+	for (int i = 0; i < SUPPORTED_CIPHER_SUITES_CNT / 2; i++)
+	{
+		if (buffer[idx] == ((SUPPORTED_CIPHER_SUITES[i] >> 8) & 0xff) &&
+		    buffer[idx + 1] == (SUPPORTED_CIPHER_SUITES[i] & 0xff))
+		{
+			selected_cipher_suite = ((buffer[idx] << 8) & 0xff) |
+						(buffer[idx + 1] & 0xff);
+			break;
+		}
+	}
+	if (!selected_cipher_suite)
+		return 0;
 	idx += 2;
 
-	// TODO compression
-	printf("compression %d\n", buffer[idx]);
+	/* skip compression */
 	idx += 1;
 
-	if ((idx - HANDSHAKE_PREFIX_LEN) == (msg_len - TLS_MSG_HEADER_LEN))
-		return 0;
-	else
+	/* Certificate message */
+	if (buffer[idx + 5] == CERTIFICATE)
 	{
-		fprintf(stderr, "Something going wrong during ServerHello "
-				"message parsing\n");
-		for (int i = 0; i < RESPONSE_BUFFER_SIZE; i++)
-		{
-			fprintf(stderr, "%d\n", buffer[i]);
-		}
-		return 0;
+		certificate_len =
+		    ((buffer[idx + 3] & 0xff) << 8) | (buffer[idx + 4] & 0xff);
+		UNUSED(certificate_len);
+		/* move to first byte of certificates */
+		idx += 6;
 	}
+
+	/* ServerKeyExchange */
+	if (buffer[idx + 5] == SERVER_KEY_EXCHANGE)
+	{
+	}
+
+	/* CertificateRequest */
+	if (buffer[idx + 5] == CERTIFICATE_REQUEST)
+	{
+	}
+
+	/* ServerHelloDone message */
+	if (buffer[idx + 5] == SERVER_HELLO_DONE)
+	{
+	}
+
+	return 1;
 }
 
 static void build_handshake_message(unsigned char *buffer, size_t full_msg_len,
