@@ -25,6 +25,15 @@
 #define APPLICATION_DATA_MSG 23
 
 /*
+ * Offsets to the different parts of TLS records.
+ */
+#define ALERT_DESCRIPTION_OFFSET 6
+#define LEN_BYTE1_OFFSET 3
+#define LEN_BYTE2_OFFSET 4
+#define SESSION_ID_OFFSET 38
+#define RANDOM_OFFSET 6
+
+/*
  * Handshake message type
  *
  * https://tools.ietf.org/html/rfc5246#section-7.4
