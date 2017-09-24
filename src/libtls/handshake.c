@@ -13,6 +13,11 @@
 /* list of supported cipher suites */
 static const unsigned short SUPPORTED_CIPHER_SUITES[1] = {0x002f};
 
+static unsigned short get_tls_message_len(char *b)
+{
+	return (b[3] << 8) | (b[4] & 0xff);
+}
+
 static int alert_msg_str(char *buffer)
 {
 	/*
@@ -23,27 +28,47 @@ static int alert_msg_str(char *buffer)
 	return buffer[6];
 }
 
-static int handle_server_hello(char *buffer)
+static int read_tls_message(socket_t socket, char *buffer)
 {
+	int n = 0;
+	unsigned short msg_len;
+
+	/* read TLS message header */
+	if ((n = recv(socket, buffer, 5, 0)) == -1)
+		return 0;
+
+	/* we may get alert message */
+	if (buffer[0] == ALERT_MSG)
+		return alert_msg_str(buffer);
+
+	msg_len = get_tls_message_len(buffer);
+	if (msg_len > RESPONSE_BUFFER_SIZE)
+	{
+		buffer = realloc(buffer, msg_len);
+		if (!buffer)
+			return 0;
+	}
+
+	/* read tls message */
+	memset(buffer, 0, msg_len);
+	if ((n = recv(socket, buffer, msg_len, 0)) == -1)
+		return 0;
+	return 1;
+}
+
+static int handle_server_hello(socket_t socket, char *buffer)
+{
+	int ret = 1;
 	int idx = 0;
 	unsigned short session_id_len = 0;
-	unsigned long certificate_len = 0;
 	unsigned short selected_cipher_suite = 0;
 
-	/* tmail tls supports only TLS v1.2 */
-	if (buffer[1] != 0x03 && buffer[2] != 3)
-		return 0;
-
-	/* we should get SERVER_HELLO message */
-	if (buffer[5] != SERVER_HELLO)
-		return 0;
-
-	/* TODO random id - 11 - 43 */
+	/* TODO random id - 6 - 38 */
 
 	/* read session ID assigned by server */
-	session_id_len = buffer[43];
+	session_id_len = buffer[38];
 	/* this is after session id received from server */
-	idx = 43 + session_id_len + 1;
+	idx = 38 + session_id_len + 1;
 
 	/* check selected cipher cuite by server */
 	for (int i = 0; i < SUPPORTED_CIPHER_SUITES_CNT / 2; i++)
@@ -63,32 +88,29 @@ static int handle_server_hello(char *buffer)
 	/* skip compression */
 	idx += 1;
 
-	/* Certificate message */
-	if ((int)buffer[idx + 5] == CERTIFICATE)
-	{
-		certificate_len =
-		    ((buffer[idx + 3] & 0xff) << 8) | (buffer[idx + 4] & 0xff);
-		UNUSED(certificate_len);
-		/* move to first byte of certificates */
-		idx += 6;
+	/* Read certificate message */
+	memset(buffer, 0, RESPONSE_BUFFER_SIZE);
+	if ((ret = read_tls_message(socket, buffer)) != 1)
+		return ret;
 
-		/* skip certicates for now */
-		idx += certificate_len - 1;
-	}
-
-	/* ServerKeyExchange */
-	if ((int)buffer[idx + 5] == SERVER_KEY_EXCHANGE)
+	/* handle possible Certificate message */
+	if ((unsigned short)buffer[0] == CERTIFICATE)
 	{
 	}
 
-	/* CertificateRequest */
-	if ((int)buffer[idx + 5] == CERTIFICATE_REQUEST)
+	/* handle possible ServerKeyExchange */
+	if ((unsigned short)buffer[0] == SERVER_KEY_EXCHANGE)
 	{
 	}
 
-	/* ServerHelloDone message */
-	if ((int)buffer[idx + 5] == SERVER_HELLO_DONE)
-		idx += 9; /* skip ServerHelloDone message */
+	/* handle possible CertificateRequest */
+	if ((unsigned short)buffer[0] == CERTIFICATE_REQUEST)
+	{
+	}
+
+	/* ServerHelloDone message should be in the end */
+	if ((unsigned short)buffer[0] == SERVER_HELLO_DONE)
+		; /* skip ServerHelloDone message */
 
 	return 1;
 }
@@ -166,7 +188,7 @@ static void build_handshake_message(unsigned char *buffer, size_t full_msg_len,
  */
 int send_client_hello_msg(socket_t socket)
 {
-	int n = 0;
+	int ret = 0;
 	char response_buffer[RESPONSE_BUFFER_SIZE];
 	byte_t *rnd = NULL;
 	size_t hello_msg_len = 0;
@@ -258,34 +280,23 @@ int send_client_hello_msg(socket_t socket)
 	send(socket, data, HANDSHAKE_PREFIX_LEN + hello_msg_len, 0);
 
 	/* receive ServerHello response */
-	memset(response_buffer, 0, RESPONSE_BUFFER_SIZE);
-	if ((n = recv(socket, response_buffer, RESPONSE_BUFFER_SIZE, 0)) == -1)
-	{
-		return 0;
-	}
-
-	/* we may got alert message */
-	if (response_buffer[0] == 21)
-	{
-		mfree(data);
-		mfree(tls_msg);
-		mfree(hello_msg);
-		mfree(rnd);
-		return alert_msg_str(response_buffer);
-	}
-
-	/* send SERVER_HELLO message */
-	if (!handle_server_hello(response_buffer))
+	if ((ret = read_tls_message(socket, response_buffer)) != 1)
 		goto failure;
-	memset(response_buffer, 0, RESPONSE_BUFFER_SIZE);
 
-	/* TODO if we've got Certificate Request, the Certificate message should be sent */
+	/* handle ServerHello message */
+	if ((ret = handle_server_hello(socket, response_buffer)) != 1)
+		goto failure;
 
+	/*
+	 * TODO if we've got Certificate Request, the Certificate message should
+	 * be sent
+	 */
+	ret = 1;
 failure:
 	mfree(data);
 	mfree(tls_msg);
 	mfree(hello_msg);
 	mfree(rnd);
 
-	return 1;
+	return ret;
 }
