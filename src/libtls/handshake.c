@@ -64,29 +64,31 @@ static int handle_server_hello(char *buffer)
 	idx += 1;
 
 	/* Certificate message */
-	if (buffer[idx + 5] == CERTIFICATE)
+	if ((int)buffer[idx + 5] == CERTIFICATE)
 	{
 		certificate_len =
 		    ((buffer[idx + 3] & 0xff) << 8) | (buffer[idx + 4] & 0xff);
 		UNUSED(certificate_len);
 		/* move to first byte of certificates */
 		idx += 6;
+
+		/* skip certicates for now */
+		idx += certificate_len - 1;
 	}
 
 	/* ServerKeyExchange */
-	if (buffer[idx + 5] == SERVER_KEY_EXCHANGE)
+	if ((int)buffer[idx + 5] == SERVER_KEY_EXCHANGE)
 	{
 	}
 
 	/* CertificateRequest */
-	if (buffer[idx + 5] == CERTIFICATE_REQUEST)
+	if ((int)buffer[idx + 5] == CERTIFICATE_REQUEST)
 	{
 	}
 
 	/* ServerHelloDone message */
-	if (buffer[idx + 5] == SERVER_HELLO_DONE)
-	{
-	}
+	if ((int)buffer[idx + 5] == SERVER_HELLO_DONE)
+		idx += 9; /* skip ServerHelloDone message */
 
 	return 1;
 }
