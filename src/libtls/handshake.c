@@ -274,8 +274,13 @@ int send_client_hello_msg(socket_t socket)
 		return alert_msg_str(response_buffer);
 	}
 
+	/* send SERVER_HELLO message */
 	if (!handle_server_hello(response_buffer))
 		goto failure;
+	memset(response_buffer, 0, RESPONSE_BUFFER_SIZE);
+
+	/* TODO if we've got Certificate Request, the Certificate message should be sent */
+
 failure:
 	mfree(data);
 	mfree(tls_msg);
