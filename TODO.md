@@ -53,7 +53,8 @@ This stuff should be implemented after `STARTTLS` support:
 
 ## libtls
 
-  * test `realloc` in the `read_tls_message()`. 
+  * test `realloc` in the `read_tls_message()`.
+  * use correct size during memseting of response_buffer.
   * `client_hello_t.cipher_suites` uses 10 cipher suites for now. Make it
 maximum number allowed by the TLS protocol. Also fix this in the
 `send_client_hello_msg()` during allocation of array of cipher suites.

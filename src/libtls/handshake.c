@@ -15,7 +15,7 @@ static const unsigned short SUPPORTED_CIPHER_SUITES[1] = {0x002f};
 
 static unsigned short get_tls_message_len(char *b)
 {
-	return (b[3] << 8) | (b[4] & 0xff);
+	return (b[LEN_BYTE1_OFFSET] << 8) | (b[LEN_BYTE2_OFFSET] & 0xff);
 }
 
 static int alert_msg_str(char *buffer)
@@ -25,13 +25,14 @@ static int alert_msg_str(char *buffer)
 	 *
 	 * https://tools.ietf.org/html/rfc5246#section-7.2
 	 */
-	return buffer[6];
+	return buffer[ALERT_DESCRIPTION_OFFSET];
 }
 
 static int read_tls_message(socket_t socket, char *buffer)
 {
 	int n = 0;
 	unsigned short msg_len;
+	void *realloced_buf = NULL;
 
 	/* read TLS message header */
 	if ((n = recv(socket, buffer, 5, 0)) == -1)
@@ -44,9 +45,13 @@ static int read_tls_message(socket_t socket, char *buffer)
 	msg_len = get_tls_message_len(buffer);
 	if (msg_len > RESPONSE_BUFFER_SIZE)
 	{
-		buffer = realloc(buffer, msg_len);
-		if (!buffer)
+		realloced_buf = realloc(buffer, msg_len);
+		if (!realloced_buf)
+		{
+			mfree(buffer);
 			return 0;
+		}
+		buffer = realloced_buf;
 	}
 
 	/* read tls message */
@@ -63,12 +68,12 @@ static int handle_server_hello(socket_t socket, char *buffer)
 	unsigned short session_id_len = 0;
 	unsigned short selected_cipher_suite = 0;
 
-	/* TODO random id - 6 - 38 */
+	/* TODO random id - RANDOM_OFFSET - SESSION_ID_OFFSET */
 
 	/* read session ID assigned by server */
-	session_id_len = buffer[38];
+	session_id_len = buffer[SESSION_ID_OFFSET];
 	/* this is after session id received from server */
-	idx = 38 + session_id_len + 1;
+	idx = SESSION_ID_OFFSET + session_id_len + 1;
 
 	/* check selected cipher cuite by server */
 	for (int i = 0; i < SUPPORTED_CIPHER_SUITES_CNT / 2; i++)
@@ -83,10 +88,6 @@ static int handle_server_hello(socket_t socket, char *buffer)
 	}
 	if (!selected_cipher_suite)
 		return 0;
-	idx += 2;
-
-	/* skip compression */
-	idx += 1;
 
 	/* Read certificate message */
 	memset(buffer, 0, RESPONSE_BUFFER_SIZE);
@@ -110,7 +111,8 @@ static int handle_server_hello(socket_t socket, char *buffer)
 
 	/* ServerHelloDone message should be in the end */
 	if ((unsigned short)buffer[0] == SERVER_HELLO_DONE)
-		; /* skip ServerHelloDone message */
+	{
+	}; /* skip ServerHelloDone message */
 
 	return 1;
 }
@@ -174,6 +176,26 @@ static void build_handshake_message(unsigned char *buffer, size_t full_msg_len,
 	/* extensions */
 }
 
+static int build_client_key_exchange_message(char *buffer)
+{
+	/* TLS header */
+	buffer[0] = HANDSHAKE_MSG;
+	buffer[1] = 0x03;
+	buffer[2] = 0x03;
+
+	/*
+	 * length of TLS packet
+	 *
+	 * 4 bytes are message type and length for handshake
+	 */
+	// buffer[3] = (((full_msg_len + TLS_MSG_HEADER_LEN) >> 8) & 0xff);
+	// buffer[4] = ((full_msg_len + TLS_MSG_HEADER_LEN) & 0xff);
+
+	buffer[5] = CLIENT_KEY_EXCHANGE;
+
+	return 1;
+}
+
 /**
  * send_client_hello_msg() function sends ClientHello
  * message.
@@ -189,21 +211,29 @@ static void build_handshake_message(unsigned char *buffer, size_t full_msg_len,
 int send_client_hello_msg(socket_t socket)
 {
 	int ret = 0;
-	char response_buffer[RESPONSE_BUFFER_SIZE];
+	char *response_buffer = NULL; //[RESPONSE_BUFFER_SIZE];
 	byte_t *rnd = NULL;
 	size_t hello_msg_len = 0;
 	handshake_t *tls_msg = NULL;
 	client_hello_t *hello_msg = NULL;
 	unsigned char *data = NULL;
 
+	response_buffer = malloc(RESPONSE_BUFFER_SIZE);
+	if (!response_buffer)
+		return 0;
+
 	tls_msg = malloc(sizeof(handshake_t));
 	if (!tls_msg)
+	{
+		mfree(response_buffer);
 		return 0;
+	}
 
 	hello_msg = malloc(sizeof(client_hello_t));
 	if (!hello_msg)
 	{
 		mfree(tls_msg);
+		mfree(response_buffer);
 		return 0;
 	}
 
@@ -214,6 +244,7 @@ int send_client_hello_msg(socket_t socket)
 	{
 		mfree(tls_msg);
 		mfree(hello_msg);
+		mfree(response_buffer);
 		return 0;
 	}
 	memcpy(hello_msg->random, rnd, 32);
@@ -269,6 +300,7 @@ int send_client_hello_msg(socket_t socket)
 		mfree(tls_msg);
 		mfree(hello_msg);
 		mfree(rnd);
+		mfree(response_buffer);
 		return 0;
 	}
 	memset(data, 0, HANDSHAKE_PREFIX_LEN + hello_msg_len + 1);
@@ -291,12 +323,18 @@ int send_client_hello_msg(socket_t socket)
 	 * TODO if we've got Certificate Request, the Certificate message should
 	 * be sent
 	 */
+
+	/* send ClientKeyExchange */
+	memset(response_buffer, 0, RESPONSE_BUFFER_SIZE);
+	build_client_key_exchange_message(response_buffer);
+
 	ret = 1;
 failure:
 	mfree(data);
 	mfree(tls_msg);
 	mfree(hello_msg);
 	mfree(rnd);
+	mfree(response_buffer);
 
 	return ret;
 }
