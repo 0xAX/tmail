@@ -188,10 +188,15 @@ static int build_client_key_exchange_message(char *buffer)
 	 *
 	 * 4 bytes are message type and length for handshake
 	 */
-	// buffer[3] = (((full_msg_len + TLS_MSG_HEADER_LEN) >> 8) & 0xff);
-	// buffer[4] = ((full_msg_len + TLS_MSG_HEADER_LEN) & 0xff);
-
+	buffer[3] = 0x00;
+	/* This is for RSA key https://tools.ietf.org/html/rfc5246#section-7.4.7.1 */
+	buffer[4] = 54;
 	buffer[5] = CLIENT_KEY_EXCHANGE;
+
+	buffer[6] = 0x03;
+	buffer[7] = 0x03;
+
+	/* 46 random bytes of premaster secret */
 
 	return 1;
 }
