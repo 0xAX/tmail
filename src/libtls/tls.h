@@ -124,7 +124,6 @@ typedef struct
 	byte_t compression_method_len;
 	byte_t compression_method;
 	unsigned short extensions_len;
-	tls_extension extensions[65536];
 } __attribute__((packed)) client_hello_t;
 
 /* tls.c */

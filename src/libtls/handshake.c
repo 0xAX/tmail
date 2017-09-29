@@ -189,7 +189,8 @@ static int build_client_key_exchange_message(char *buffer)
 	 * 4 bytes are message type and length for handshake
 	 */
 	buffer[3] = 0x00;
-	/* This is for RSA key https://tools.ietf.org/html/rfc5246#section-7.4.7.1 */
+	/* This is for RSA key
+	 * https://tools.ietf.org/html/rfc5246#section-7.4.7.1 */
 	buffer[4] = 54;
 	buffer[5] = CLIENT_KEY_EXCHANGE;
 
@@ -226,7 +227,6 @@ int send_client_hello_msg(socket_t socket)
 	response_buffer = malloc(RESPONSE_BUFFER_SIZE);
 	if (!response_buffer)
 		return 0;
-
 	tls_msg = malloc(sizeof(handshake_t));
 	if (!tls_msg)
 	{
@@ -314,7 +314,8 @@ int send_client_hello_msg(socket_t socket)
 	build_handshake_message(data, hello_msg_len, hello_msg, tls_msg);
 
 	/* finally send message */
-	send(socket, data, HANDSHAKE_PREFIX_LEN + hello_msg_len, 0);
+	send(socket, (const char *)data, HANDSHAKE_PREFIX_LEN + hello_msg_len,
+	     MSG_DONTWAIT);
 
 	/* receive ServerHello response */
 	if ((ret = read_tls_message(socket, response_buffer)) != 1)
