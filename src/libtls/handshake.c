@@ -15,7 +15,6 @@ static const unsigned short SUPPORTED_CIPHER_SUITES[1] = {0x002f};
 
 static int handle_server_hello(socket_t socket, char *buffer)
 {
-	int ret = 1;
 	int idx = 0;
 	unsigned short session_id_len = 0;
 	unsigned short selected_cipher_suite = 0;
