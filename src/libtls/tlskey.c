@@ -8,8 +8,7 @@
 
 #include "tls.h"
 
-long long *encrypt_with_key(const char *message,
-			    const size_t message_size,
+long long *encrypt_with_key(const char *message, const size_t message_size,
 			    const struct public_key_class *pub)
 {
 	UNUSED(message);
@@ -19,8 +18,7 @@ long long *encrypt_with_key(const char *message,
 	return NULL;
 }
 
-char *decrypt_with_key(const long long *message,
-		       const size_t message_size,
+char *decrypt_with_key(const long long *message, const size_t message_size,
 		       const struct private_key_class *priv)
 {
 	UNUSED(message);

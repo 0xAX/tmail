@@ -28,35 +28,34 @@ static int alert_msg_str(char *buffer)
 	return buffer[ALERT_DESCRIPTION_OFFSET];
 }
 
-static int read_tls_message(socket_t socket, char *buffer)
+static int read_tls_message(socket_t socket, char **buffer)
 {
 	int n = 0;
 	unsigned short msg_len;
-	void *realloced_buf = NULL;
+	void *tmpbuf = NULL;
 
 	/* read TLS message header */
-	if ((n = recv(socket, buffer, 5, 0)) == -1)
+	if ((n = recv(socket, *buffer, 5, 0)) == -1)
 		return 0;
 
 	/* we may get alert message */
-	if (buffer[0] == ALERT_MSG)
-		return alert_msg_str(buffer);
+	if ((*buffer)[0] == ALERT_MSG)
+		return alert_msg_str(*buffer);
 
-	msg_len = get_tls_message_len(buffer);
+	msg_len = get_tls_message_len(*buffer);
 	if (msg_len > RESPONSE_BUFFER_SIZE)
 	{
-		realloced_buf = realloc(buffer, msg_len);
-		if (!realloced_buf)
+		tmpbuf = (char *)realloc(*buffer, msg_len + 1);
+		if (!tmpbuf)
 		{
-			mfree(buffer);
+			mfree(*buffer);
 			return 0;
 		}
-		buffer = realloced_buf;
+		*buffer = tmpbuf;
 	}
 
 	/* read tls message */
-	memset(buffer, 0, msg_len);
-	if ((n = recv(socket, buffer, msg_len, 0)) == -1)
+	if ((n = recv(socket, *buffer, msg_len, 0)) == -1)
 		return 0;
 	return 1;
 }
@@ -88,32 +87,6 @@ static int handle_server_hello(socket_t socket, char *buffer)
 	}
 	if (!selected_cipher_suite)
 		return 0;
-
-	/* Read certificate message */
-	memset(buffer, 0, RESPONSE_BUFFER_SIZE);
-	if ((ret = read_tls_message(socket, buffer)) != 1)
-		return ret;
-
-	/* handle possible Certificate message */
-	if ((unsigned short)buffer[0] == CERTIFICATE)
-	{
-		return handle_certificate(buffer);
-	}
-
-	/* handle possible ServerKeyExchange */
-	if ((unsigned short)buffer[0] == SERVER_KEY_EXCHANGE)
-	{
-	}
-
-	/* handle possible CertificateRequest */
-	if ((unsigned short)buffer[0] == CERTIFICATE_REQUEST)
-	{
-	}
-
-	/* ServerHelloDone message should be in the end */
-	if ((unsigned short)buffer[0] == SERVER_HELLO_DONE)
-	{
-	}; /* skip ServerHelloDone message */
 
 	return 1;
 }
@@ -230,6 +203,7 @@ int send_client_hello_msg(socket_t socket)
 	response_buffer = malloc(RESPONSE_BUFFER_SIZE);
 	if (!response_buffer)
 		return 0;
+
 	tls_msg = malloc(sizeof(handshake_t));
 	if (!tls_msg)
 	{
@@ -321,12 +295,36 @@ int send_client_hello_msg(socket_t socket)
 	     0);
 
 	/* receive ServerHello response */
-	if ((ret = read_tls_message(socket, response_buffer)) != 1)
+	if ((ret = read_tls_message(socket, &response_buffer)) != 1)
 		goto failure;
 
 	/* handle ServerHello message */
 	if ((ret = handle_server_hello(socket, response_buffer)) != 1)
 		goto failure;
+
+	/* read certificate message */
+	memset(response_buffer, 0, RESPONSE_BUFFER_SIZE);
+	if ((ret = read_tls_message(socket, &response_buffer)) != 1)
+		return ret;
+
+	/* handle possible Certificate message */
+	if ((unsigned short)response_buffer[0] == CERTIFICATE)
+		handle_certificate(response_buffer);
+
+	/* handle possible ServerKeyExchange */
+	if ((unsigned short)response_buffer[0] == SERVER_KEY_EXCHANGE)
+	{
+	}
+
+	/* handle possible CertificateRequest */
+	if ((unsigned short)response_buffer[0] == CERTIFICATE_REQUEST)
+	{
+	}
+
+	/* ServerHelloDone message should be in the end and skip it*/
+	if ((unsigned short)response_buffer[0] == SERVER_HELLO_DONE)
+	{
+	}
 
 	/*
 	 * TODO if we've got Certificate Request, the Certificate message should

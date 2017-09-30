@@ -10,5 +10,6 @@
 
 int handle_certificate(const char *buffer)
 {
+	UNUSED(buffer);
 	return 1;
 }
