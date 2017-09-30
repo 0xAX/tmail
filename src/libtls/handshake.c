@@ -198,6 +198,8 @@ static int build_client_key_exchange_message(char *buffer)
 	buffer[7] = 0x03;
 
 	/* 46 random bytes of premaster secret */
+	for (int i = 8; i < 54; i++)
+		buffer[i] = rand() % 10;
 
 	return 1;
 }
