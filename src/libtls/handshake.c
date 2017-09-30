@@ -13,7 +13,7 @@
 /* list of supported cipher suites */
 static const unsigned short SUPPORTED_CIPHER_SUITES[1] = {0x002f};
 
-static int handle_server_hello(socket_t socket, char *buffer)
+static int handle_server_hello(char *buffer)
 {
 	int idx = 0;
 	unsigned short session_id_len = 0;
@@ -251,7 +251,7 @@ int send_client_hello_msg(socket_t socket)
 		goto failure;
 
 	/* handle ServerHello message */
-	if ((ret = handle_server_hello(socket, response_buffer)) != 1)
+	if ((ret = handle_server_hello(response_buffer)) != 1)
 		goto failure;
 
 	/* read certificate message */
