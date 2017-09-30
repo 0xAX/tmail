@@ -20,6 +20,7 @@ CRYPTO_MODULES_OBJS += ./crypto/rsa.o
 
 LIB_TLS_OBJS += tls_utils.o
 LIB_TLS_OBJS += tlskey.o
+LIB_TLS_OBJS += certificate.o
 LIB_TLS_OBJS += handshake.o
 LIB_TLS_OBJS += tls.o
 

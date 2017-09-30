@@ -97,6 +97,7 @@ static int handle_server_hello(socket_t socket, char *buffer)
 	/* handle possible Certificate message */
 	if ((unsigned short)buffer[0] == CERTIFICATE)
 	{
+		return handle_certificate(buffer);
 	}
 
 	/* handle possible ServerKeyExchange */

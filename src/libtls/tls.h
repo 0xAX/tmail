@@ -146,6 +146,9 @@ long long *encrypt_with_key(const char *message, const size_t message_size,
 char *decrypt_with_key(const long long *message, const size_t message_size,
 		       const struct private_key_class *priv);
 
+/* handle certificate */
+int handle_certificate(const char *buffer);
+
 /* tls_utils.c */
 byte_t *handshake_random(void);
 
