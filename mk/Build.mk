@@ -111,9 +111,9 @@ endif
 # depends on `DEBUG` flags
 ifndef DEBUG
 MISC_FLAGS=$(OPTIMIZATION)
-WARNINGS =
 else
 MISC_FLAGS=$(DEBUG_FLAGS)
+WARNINGS =
 endif
 
 # Compile a shared library
