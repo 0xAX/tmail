@@ -8,13 +8,15 @@
 
 #include "rsa.h"
 
-long long *rsa_encrypt(const char *message, const size_t message_size,
+long long *rsa_encrypt(const char *message,
+		       const size_t message_size,
 		       const struct public_key_class *pub)
 {
 	return NULL;
 }
 
-char *rsa_decrypt(const long long *message, const size_t message_size,
+char *rsa_decrypt(const long long *message,
+		  const size_t message_size,
 		  const struct private_key_class *priv)
 {
 	return NULL;
