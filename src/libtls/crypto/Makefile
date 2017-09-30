@@ -6,12 +6,14 @@
 include ../../../mk/Common.mk
 include ../../../mk/Build.mk
 
+INCLUDES = -I../../libutils
+
 CRYPTO_OBJS += rsa.o
 
 all: $(CRYPTO_OBJS)
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(CFLAGS_LIBS) $<
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_LIBS) $<
 
 $(CLEAN_TARGET):
 	$(QUIET_CLEAN_OBJECTS) $(RM) $(CRYPTO_OBJS)

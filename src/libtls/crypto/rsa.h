@@ -12,6 +12,7 @@
 #include <stdlib.h>
 
 #include "keys.h"
+#include <basic.h>
 
 long long *rsa_encrypt(const char *message, const size_t message_size,
 		       const struct public_key_class *pub);
