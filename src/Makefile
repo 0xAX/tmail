@@ -23,6 +23,7 @@ TMAIL_OBJS += smtp-server-info.o
 
 # object files for tls lib
 LIBTLS_OBJS += libtls/tls_utils.o
+LIBTLS_OBJS += libtls/tlskey.o
 LIBTLS_OBJS += libtls/handshake.o
 LIBTLS_OBJS += libtls/tls.o
 
