@@ -54,6 +54,12 @@
  *
  * https://tools.ietf.org/html/rfc5246#appendix-A.5
  */
+
+/*
+ * Mandatory cipher cuite
+ *
+ * https://tools.ietf.org/html/rfc5246#section-9
+ */
 #define TLS_RSA_WITH_AES_128_CBC_SHA 0x002f
 
 /*
