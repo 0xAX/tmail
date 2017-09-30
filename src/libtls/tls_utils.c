@@ -30,3 +30,13 @@ byte_t *handshake_random(void)
 
 	return random;
 }
+
+/**
+ * get_tls_message_len function extracts length of the given
+ * TLS message.
+ */
+unsigned short get_tls_message_len(char *message)
+{
+	return (message[LEN_BYTE1_OFFSET] << 8) |
+	       (message[LEN_BYTE2_OFFSET] & 0xff);
+}

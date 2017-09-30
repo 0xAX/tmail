@@ -149,7 +149,11 @@ char *decrypt_with_key(const long long *message, const size_t message_size,
 /* handle certificate */
 int handle_certificate(const char *buffer);
 
+/* tls_io.c */
+int read_tls_message(socket_t socket, char **buffer);
+
 /* tls_utils.c */
 byte_t *handshake_random(void);
+unsigned short get_tls_message_len(char *message);
 
 #endif

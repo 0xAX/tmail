@@ -26,6 +26,7 @@ LIBTLS_OBJS += libtls/crypto/rsa.o
 
 # object files for tls lib
 LIBTLS_OBJS += libtls/tls_utils.o
+LIBTLS_OBJS += libtls/tls_io.o
 LIBTLS_OBJS += libtls/tlskey.o
 LIBTLS_OBJS += libtls/certificate.o
 LIBTLS_OBJS += libtls/handshake.o
