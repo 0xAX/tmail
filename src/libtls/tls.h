@@ -10,9 +10,11 @@
 #define LIB_TLS_H
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
 
+#include "crypto/keys.h"
 #include <basic.h>
 
 /*
@@ -136,6 +138,13 @@ typedef struct
 tls_record *tls_record_new(byte_t type, size_t len, unsigned char data[]);
 int start_tls_negotiation(socket_t socket);
 int send_client_hello_msg(socket_t socket);
+
+/* tlskey.c */
+long long *encrypt_with_key(const char *message, const size_t message_size,
+			    const struct public_key_class *pub);
+
+char *decrypt_with_key(const long long *message, const size_t message_size,
+		       const struct private_key_class *priv);
 
 /* tls_utils.c */
 byte_t *handshake_random(void);

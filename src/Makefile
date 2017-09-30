@@ -21,6 +21,9 @@ TMAIL_OBJS += send-email.o
 TMAIL_OBJS += smtp-caps.o
 TMAIL_OBJS += smtp-server-info.o
 
+# object files for tls crypto lib
+LIBTLS_OBJS += libtls/crypto/rsa.o
+
 # object files for tls lib
 LIBTLS_OBJS += libtls/tls_utils.o
 LIBTLS_OBJS += libtls/tlskey.o

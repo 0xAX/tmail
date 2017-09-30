@@ -316,7 +316,8 @@ int send_client_hello_msg(socket_t socket)
 	build_handshake_message(data, hello_msg_len, hello_msg, tls_msg);
 
 	/* finally send message */
-	send(socket, (const char *)data, HANDSHAKE_PREFIX_LEN + hello_msg_len, 0);
+	send(socket, (const char *)data, HANDSHAKE_PREFIX_LEN + hello_msg_len,
+	     0);
 
 	/* receive ServerHello response */
 	if ((ret = read_tls_message(socket, response_buffer)) != 1)
