@@ -147,7 +147,7 @@ char *decrypt_with_key(const long long *message, const size_t message_size,
 		       const struct private_key_class *priv);
 
 /* handle certificate */
-int handle_certificate(const char *buffer);
+int handle_certificate(char *buffer);
 
 /* tls_io.c */
 int read_tls_message(socket_t socket, char **buffer);
