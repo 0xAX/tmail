@@ -8,8 +8,18 @@
 
 #include "tls.h"
 
-int handle_certificate(const char *buffer)
+static unsigned long get_certificate_len(char *message)
 {
-	UNUSED(buffer);
+	return (message[0] << 16) | (message[1] << 8) | (message[2] & 0xff);
+}
+
+int handle_certificate(char *buffer)
+{
+	unsigned long msg_len = get_certificate_len(buffer + 4);
+	unsigned long cert_len = get_certificate_len(buffer + 7);
+
+	UNUSED(cert_len);
+	UNUSED(msg_len);
+
 	return 1;
 }
