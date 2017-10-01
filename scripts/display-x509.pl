@@ -21,7 +21,7 @@ my ($cert) = @ARGV;
 
 # check is openssl is installed
 my $openssl = `whereis openssl`;
-$openssl =~ s/openssls:\s//;
+$openssl =~ s/openssl\:\s//;
 
 if ($openssl eq "") {
     print PUSHCOLOR RED "display-x509.pl: execpted that openssl is installed\n";
