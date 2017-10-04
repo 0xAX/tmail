@@ -53,6 +53,7 @@ This stuff should be implemented after `STARTTLS` support:
 
 ## libtls
 
+  * It maybe be good to define tls related structures from tls as bit-fields values.
   * handshake refactoring.
   * use correct size during memseting of response_buffer.
   * `client_hello_t.cipher_suites` uses 10 cipher suites for now. Make it
