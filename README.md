@@ -39,7 +39,7 @@ or in the man pages.
 
 ### SMTP
 
-  * [RFC 5321](https://github.com/0xAX/tmail/blob/master/rfc/rfc-5321.txt) - Simple Mail Transfer Protocol. Support for base commands `EHLO`, `MAIL FROM`, `RCPT TO`, and etc...
+  * [RFC 5321](https://github.com/0xAX/tmail/blob/master/rfc/smtp/rfc-5321.txt) - Simple Mail Transfer Protocol. Support for base commands `EHLO`, `MAIL FROM`, `RCPT TO`, and etc...
 
 Following SMTP extensions are supported:
 
