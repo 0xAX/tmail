@@ -34,6 +34,14 @@ like this.
 
   * Add initial implementation.
 
+## smtp-caps
+
+  * Pass ssl context to send_email. Now it is only `NULL` is passed.
+
+## smtp-server-info
+
+  * Pass ssl context to send_email. Now it is only `NULL` is passed.
+
 ## send-email
 
   * Implement `-i/--interactive`.
