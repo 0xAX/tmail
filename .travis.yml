@@ -7,7 +7,7 @@ notifications:
     on_success: change
     on_failure: always
 
-sudo: false
+sudo: true
 
 cache:
   directories:
