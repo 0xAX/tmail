@@ -212,7 +212,8 @@ void release_send_email_data(void)
 	list_free_full(bcc);
 }
 
-__attribute__((noreturn)) void send_email_cmd(int argc, char *argv[], SSL_CTX *tls_client_ctx)
+__attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
+					      SSL_CTX *tls_client_ctx)
 {
 	int c = 0;
 

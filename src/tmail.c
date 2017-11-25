@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "%s\n", "Can't initialize TLS context");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	/* parse command line arguments */
 	if (strcmp(argv[1], SEND_EMAIL) == 0)
 	{
