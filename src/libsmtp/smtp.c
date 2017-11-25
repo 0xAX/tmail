@@ -74,10 +74,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 
 	if (smtp->tls == true)
 	{
-		if (!start_tls_negotiation(smtp->conn->sd))
-		{
-			/* TODO */
-		}
+		/* TODO start tls negotiation */
 		goto ok;
 	}
 

@@ -42,6 +42,8 @@ int send_mail_from_message(socket_t socket, message_t *message, char *buffer)
 		return 0;
 	}
 
+	printf("%s\n", buffer);
+
 	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
 	{
 		free(mail_from_msg);

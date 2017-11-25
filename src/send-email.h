@@ -30,9 +30,11 @@
 #include <send-email.h>
 #include <smtp.h>
 
+#include <openssl/ssl.h>
+
 #define SEND_EMAIL "send-email"
 
 void release_send_email_data(void);
-void send_email_cmd(int argc, char *argv[]);
+void send_email_cmd(int argc, char *argv[], SSL_CTX *tls_client_ctx);
 
 #endif /* SEND_EMAIL_H */

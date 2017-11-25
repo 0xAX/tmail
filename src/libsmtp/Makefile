@@ -14,6 +14,7 @@ INCLUDES += -I../libutils/
 INCLUDES += -I../libsys/
 INCLUDES += -I../libencoding/
 
+LIB_SMTP_OBJS += starttls.o
 LIB_SMTP_OBJS += attachment.o
 LIB_SMTP_OBJS += ehlo.o
 LIB_SMTP_OBJS += help.o

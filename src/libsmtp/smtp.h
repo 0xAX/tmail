@@ -26,7 +26,6 @@
 #include <mime.h>
 #include <string_utils.h>
 #include <time_utils.h>
-#include <tls.h>
 
 #define TO_CLAUSE "To: "
 #define CC_CLAUSE "Cc: "

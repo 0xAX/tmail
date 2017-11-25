@@ -2,6 +2,7 @@
 
 ## General
 
+  * Describe dependencies in README.md
   * Decrease number of header files in libraries, like in libsmtp.
   * Use `strncmp(3)` instead of `strcmp(3)` when we know a length of a string.
 
@@ -50,18 +51,6 @@ This stuff should be implemented after `STARTTLS` support:
 
   * Add `tls` related options.
   * Add `--no-starttls`.
-
-## libtls
-
-  * It maybe be good to define tls related structures from tls as bit-fields values.
-  * handshake refactoring.
-  * use correct size during memseting of response_buffer.
-  * `client_hello_t.cipher_suites` uses 10 cipher suites for now. Make it
-maximum number allowed by the TLS protocol. Also fix this in the
-`send_client_hello_msg()` during allocation of array of cipher suites.
-  * take into account size of `extension_len` and count * size of extensions
-during calculation of CLIENT HELLO message length in `send_client_hello_msg()`.
-  * implement `alert_msg_str()` from the `handshake.c`.
  
 ## libencoding
 
