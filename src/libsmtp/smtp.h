@@ -27,6 +27,8 @@
 #include <string_utils.h>
 #include <time_utils.h>
 
+#include <openssl/ssl.h>
+
 #define TO_CLAUSE "To: "
 #define CC_CLAUSE "Cc: "
 #define FROM_CLAUSE "From: "
@@ -214,7 +216,8 @@ static inline bool smtp_eof(char *msg, int length)
 }
 
 /* smtp.c */
-void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts);
+void *send_email(smtp_ctx_t *smtp, message_t *message, SSL_CTX *tls_client_ctx,
+		 bitmap_t opts);
 void release_smtp_ctx(smtp_ctx_t *smtp);
 
 /* ehlo.c */

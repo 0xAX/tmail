@@ -33,8 +33,10 @@ static int read_smtp_greetings(socket_t socket, char *buffer)
  * EHLO command. **NOTE** in this case smtp should be deallocated
  * by caller.
  */
-void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
+void *send_email(smtp_ctx_t *smtp, message_t *message, SSL_CTX *tls_client_ctx,
+		 bitmap_t opts)
 {
+	SSL *clienttls = NULL;
 	char request[1024];
 	char response[1024];
 
@@ -74,6 +76,18 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, bitmap_t opts)
 
 	if (smtp->tls == true)
 	{
+		clienttls = SSL_new(tls_client_ctx);
+		if (!clienttls)
+		{
+			/* TODO handle this */
+		}
+
+		SSL_set_fd(clienttls, smtp->conn->sd);
+		if (!SSL_connect(clienttls))
+		{
+			/* TODO handle this */
+		}
+
 		/* TODO start tls negotiation */
 		goto ok;
 	}
@@ -100,7 +114,9 @@ fail_smtp:
 	free(smtp->conn);
 	return NULL;
 ok:
+	SSL_shutdown(clienttls);
 	close(smtp->conn->sd);
+	SSL_free(clienttls);
 	free(smtp->conn);
 	return (void *)1;
 }

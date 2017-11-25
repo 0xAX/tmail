@@ -142,7 +142,7 @@ static message_t *fill_message(void)
 	return m;
 }
 
-static void process_send_email(void)
+static void process_send_email(SSL_CTX *tls_client_ctx)
 {
 	message_t *m = NULL;
 	ENTRY *ep = NULL;
@@ -196,7 +196,7 @@ static void process_send_email(void)
 	}
 
 	/* and finally send message */
-	send_email(smtp_opts, m, 0);
+	send_email(smtp_opts, m, tls_client_ctx, 0);
 fail:
 	free_message(m);
 finish:
@@ -300,7 +300,9 @@ __attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
 		}
 	}
 
-	process_send_email();
+	process_send_email(tls_client_ctx);
+
+	SSL_CTX_free(tls_client_ctx);
 
 	exit(EXIT_SUCCESS);
 allocation_failed:

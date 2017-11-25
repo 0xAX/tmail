@@ -90,7 +90,7 @@ __attribute__((noreturn)) void smtp_caps_cmd(int argc, char *argv[])
 	smtp->smtp_server = smtp_server;
 	smtp->smtp_port = smtp_server_port;
 
-	ret = send_email(smtp, NULL, STOP_AFTER_EHLO);
+	ret = send_email(smtp, NULL, NULL, STOP_AFTER_EHLO);
 
 	if (ret)
 	{
