@@ -12,7 +12,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <sys/socket.h>
 #include <sys/stat.h>
+#include <unistd.h>
+
+#include <openssl/ssl.h>
 
 /* Help us to suppress unused errors/warnings during compilation */
 #define UNUSED(x) (void)(x)
@@ -26,6 +30,7 @@
 /* check is the given bit set or not */
 #define IS_BIT_SET(bitmap, bit) ((bitmap) & (1 << (bit)))
 
+/* define NULL just in case */
 #ifndef NULL
 #define NULL (void *)0
 #endif
@@ -49,6 +54,35 @@ static inline void *mfree(void *ptr)
 {
 	free(ptr);
 	return NULL;
+}
+
+static inline int tmail_sock_read(void *fd, char *bf, size_t sz, bool protected)
+{
+	if (protected)
+		return read(*(int *)fd, bf, sz);
+	return SSL_read((SSL *)fd, bf, sz);
+}
+
+static inline int tmail_sock_write(void *fd, char *bf, size_t sz,
+				   bool protected)
+{
+	if (protected)
+		return write(*(int *)fd, bf, sz);
+	return SSL_write((SSL *)fd, bf, sz);
+}
+
+static inline int tmail_sock_send(void *fd, char *bf, size_t sz, bool protected)
+{
+	if (protected)
+		return send(*(int *)fd, bf, sz, 0);
+	return SSL_write((SSL *)fd, bf, sz);
+}
+
+static inline int tmail_sock_recv(void *fd, char *bf, size_t sz, bool protected)
+{
+	if (protected)
+		return recv(*(int *)fd, bf, sz, 0);
+	return SSL_read((SSL *)fd, bf, sz);
 }
 
 #endif /* __LIB_UTILS_BASIC_H__ */
