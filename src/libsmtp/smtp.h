@@ -177,8 +177,8 @@
 
 /* try to read SMTP response and SMTP code */
 #define READ_SMTP_RESPONSE(SOCKET, BUFFER, BUFSIZ, EXP_CODE, READ_ERR_MSG,     \
-			   ERR_CODE_MSG)                                       \
-	if ((n = recv(SOCKET, BUFFER, BUFSIZ, 0)) == -1)                       \
+			   ERR_CODE_MSG, PROTECTED)                            \
+	if ((n = tmail_sock_recv(SOCKET, BUFFER, BUFSIZ, PROTECTED)) == -1)    \
 	{                                                                      \
 		fprintf(stderr, READ_ERR_MSG);                                 \
 		return 0;                                                      \
@@ -224,32 +224,35 @@ void release_smtp_ctx(smtp_ctx_t *smtp);
 __attribute__((pure)) unsigned long parse_smtp_caps(char *r, smtp_ctx_t *smtp);
 __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap);
 int build_ehlo_msg(char *buffer);
-int send_ehlo_message(socket_t socket, char *request, char *buffer);
+int send_ehlo_message(void *socket, char *request, char *buffer,
+		      bool protected);
 
 /* starttls.c */
-int send_starttls(socket_t socket, char *buffer);
+int send_starttls(void *socket, char *buffer);
 
 /* attachment.c */
-int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
-		     size_t mime_boundary_len, char *buffer);
+int send_attachments(void *socket, message_t *message, char *mime_boundary,
+		     size_t mime_boundary_len, char *buffer, bool protected);
 
 /* rcpt_to.c */
-int send_rcpt_to_message(socket_t socket, message_t *message, char *buffer);
+int send_rcpt_to_message(void *socket, message_t *message, char *buffer,
+			 bool protected);
 
 /* mail_from.c */
-int send_mail_from_message(socket_t socket, message_t *message, char *buffer);
+int send_mail_from_message(void *socket, message_t *message, char *buffer,
+			   bool protected);
 
 /* quit.c */
-int send_quit_message(socket_t socket, char *buffer);
+int send_quit_message(void *socket, char *buffer, bool protected);
 
 /* data_msg.c */
-int send_data_message(socket_t socket, char *buffer);
+int send_data_message(void *socket, char *buffer, bool protected);
 
 /* body.c */
-int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
-		 char *buffer);
+int send_message(void *socket, smtp_ctx_t *smtp, message_t *message,
+		 char *buffer, bool protected);
 
 /* help.c */
-int send_help(socket_t socket, char *buffer);
+int send_help(void *socket, char *buffer, bool protected);
 
 #endif /* __LIB_SMTP_H__ */

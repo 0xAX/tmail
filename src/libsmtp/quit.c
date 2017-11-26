@@ -8,16 +8,17 @@
 
 #include "smtp.h"
 
-int send_quit_message(socket_t socket, char *buffer)
+int send_quit_message(void *socket, char *buffer, bool protected)
 {
 	int n = 0;
 
-	send(socket, "QUIT\r\n", 6, 0);
+	tmail_sock_send(socket, "QUIT\r\n", 6, protected);
 
 	READ_SMTP_RESPONSE(socket, buffer, 1024, "221",
 			   "Can't get response for SMTP QUIT command\n",
 			   "Error: Your message should be sent, but an error "
-			   "is gotten from SMTP server on QUIT: %s\n");
+			   "is gotten from SMTP server on QUIT: %s\n",
+			   protected);
 
 	return 1;
 }

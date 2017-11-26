@@ -12,7 +12,8 @@
 /* this size is convinient for MIME base64 encoding */
 #define BUFFER_SIZE 4560
 
-static int read_and_send(socket_t socket, fd_t fd, char *buf, size_t len)
+static int read_and_send(void *socket, fd_t fd, char *buf, size_t len,
+			 bool protected)
 {
 	int n = 0;
 	base64_data_t *base64_encoded_buf = NULL;
@@ -26,14 +27,15 @@ static int read_and_send(socket_t socket, fd_t fd, char *buf, size_t len)
 		return 0;
 	}
 
-	send(socket, base64_encoded_buf->data, base64_encoded_buf->out_len, 0);
+	tmail_sock_send(socket, base64_encoded_buf->data,
+			base64_encoded_buf->out_len, protected);
 	mfree(base64_encoded_buf->data);
 	mfree(base64_encoded_buf);
 	return 1;
 }
 
-int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
-		     size_t mime_boundary_len, char *buffer)
+int send_attachments(void *socket, message_t *message, char *mime_boundary,
+		     size_t mime_boundary_len, char *buffer, bool protected)
 {
 	int n = 0;
 	list_t *entry = NULL;
@@ -58,28 +60,30 @@ int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
 		}
 
 		/* send mime boundary */
-		send(socket, "\r\n--", 4, 0);
-		send(socket, mime_boundary, mime_boundary_len, 0);
-		send(socket, "\r\n--", 2, 0);
+		tmail_sock_send(socket, "\r\n--", 4, protected);
+		tmail_sock_send(socket, mime_boundary, mime_boundary_len,
+				protected);
+		tmail_sock_send(socket, "\r\n--", 2, protected);
 
 		/* build and send Content-Type header */
 		memset(buf, 0, BUFFER_SIZE);
 		snprintf(buf, 25 + strlen(mime_type) + strlen(base_name),
 			 "Content-Type :%s; name=\"%s\"\r\n", mime_type,
 			 base_name);
-		send(socket, buf, strlen(buf), 0);
+		tmail_sock_send(socket, buf, strlen(buf), protected);
 
 		/* build and send content dispostion buffer */
 		memset(buf, 0, BUFFER_SIZE);
 		snprintf(buf, 46 + strlen(base_name),
 			 "Content-Disposition: attachment; filename=\"%s\"\r\n",
 			 base_name);
-		send(socket, buf, strlen(buf), 0);
+		tmail_sock_send(socket, buf, strlen(buf), protected);
 		memset(buf, 0, BUFFER_SIZE);
 
 		/* send Content-Transfer-Encoding header */
-		send(socket, "Content-Transfer-Encoding: base64\r\n\r\n", 37,
-		     0);
+		tmail_sock_send(socket,
+				"Content-Transfer-Encoding: base64\r\n\r\n", 37,
+				protected);
 
 		/* to get file size */
 		if (stat(path, &st) == -1)
@@ -97,13 +101,14 @@ int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
 
 		while (blk_count > 0)
 		{
-			if (!read_and_send(socket, fd, buf, (size_t)4560))
+			if (!read_and_send(socket, fd, buf, (size_t)4560,
+					   protected))
 			{
 				free(mime_type);
 				close(fd);
 				return 0;
 			}
-			send(socket, "\r\n", 2, 0);
+			tmail_sock_send(socket, "\r\n", 2, protected);
 			memset(buf, 0, 4560);
 			blk_count--;
 		}
@@ -113,7 +118,8 @@ int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
 			char buf_rem[blk_rem + 1];
 
 			memset(buf_rem, 0, blk_rem + 2);
-			if (!read_and_send(socket, fd, buf_rem, blk_rem))
+			if (!read_and_send(socket, fd, buf_rem, blk_rem,
+					   protected))
 			{
 				free(mime_type);
 				close(fd);
@@ -125,12 +131,13 @@ int send_attachments(socket_t socket, message_t *message, char *mime_boundary,
 	}
 
 	/* send last mime-boundary */
-	send(socket, "\r\n--", 4, 0);
-	send(socket, mime_boundary, mime_boundary_len, 0);
-	send(socket, "--\r\n.\r\n", 7, 0);
+	tmail_sock_send(socket, "\r\n--", 4, protected);
+	tmail_sock_send(socket, mime_boundary, mime_boundary_len, protected);
+	tmail_sock_send(socket, "--\r\n.\r\n", 7, protected);
 
 	READ_SMTP_RESPONSE(socket, buffer, 1024, "250",
 			   "Error: Can\'t get response from message BODY\n",
-			   "Error: wrong response for message body: %s\n");
+			   "Error: wrong response for message body: %s\n",
+			   protected);
 	return 1;
 }

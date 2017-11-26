@@ -8,7 +8,7 @@
 
 #include "smtp.h"
 
-static int read_smtp_greetings(socket_t socket, char *buffer)
+static int read_smtp_greetings(void *socket, char *buffer)
 {
 	int n = 0;
 
@@ -16,9 +16,33 @@ static int read_smtp_greetings(socket_t socket, char *buffer)
 			   "Error: something going "
 			   "wrong. SMTP server didn't "
 			   "return response\n",
-			   "Error: SMTP server greetings error %s\n");
+			   "Error: SMTP server greetings error %s\n", false);
 	return 1;
 }
+
+/* static void *start_smtp_protected_session(SSL *client, bitmap_t opts) */
+/* { */
+/* 	char request[1024]; */
+/* 	char response[1024]; */
+
+/* 	memset(request, 0, 1024); */
+/* 	memset(response, 0, 1024); */
+
+/* 	if (!build_ehlo_msg(request)) */
+/* 		goto exit; */
+
+/* 	if (!send_ehlo_message(client, request, response, true)) */
+/* 	{ */
+/* 		/\* TODO handle this *\/ */
+/* 		goto exit; */
+/* 	} */
+
+/* 	/\* at least tmail-smtp-caps(1) uses this *\/ */
+/* 	if (opts & STOP_AFTER_EHLO) */
+/* 		return strdup(response); */
+/* exit: */
+/* 	return (void *)1; */
+/* } */
 
 /**
  * send_email() sends given email @message.
@@ -40,6 +64,9 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, SSL_CTX *tls_client_ctx,
 	char request[1024];
 	char response[1024];
 
+	/* TODO remove this */
+	UNUSED(message);
+
 	smtp->conn = connect_to_service(smtp->smtp_server, smtp->smtp_port);
 	if (smtp->conn->error)
 	{
@@ -53,10 +80,10 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, SSL_CTX *tls_client_ctx,
 
 	if (!build_ehlo_msg(request))
 		goto fail;
-	if (!read_smtp_greetings(smtp->conn->sd, response))
+	if (!read_smtp_greetings(&smtp->conn->sd, response))
 		goto fail;
 	memset(response, 0, 1024);
-	if (!send_ehlo_message(smtp->conn->sd, request, response))
+	if (!send_ehlo_message(&smtp->conn->sd, request, response, false))
 		goto fail;
 
 	/* at least tmail-smtp-caps(1) uses this */
@@ -67,46 +94,53 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, SSL_CTX *tls_client_ctx,
 	smtp->smtp_extension = parse_smtp_caps(response, smtp);
 	memset(response, 0, 1024);
 
-	if (smtp->smtp_extension & SMTPTLS)
-	{
-		smtp->tls = true;
-		if (!send_starttls(smtp->conn->sd, response))
-			goto fail;
-	}
+	UNUSED(tls_client_ctx);
+	/* if (smtp->smtp_extension & SMTPTLS) */
+	/* { */
+	/* 	smtp->tls = true; */
+	/* 	if (!send_starttls(&smtp->conn->sd, response)) */
+	/* 		goto fail; */
+	/* } */
 
-	if (smtp->tls == true)
-	{
-		clienttls = SSL_new(tls_client_ctx);
-		if (!clienttls)
-		{
-			/* TODO handle this */
-		}
+	/* if (smtp->tls == true) */
+	/* { */
+	/* 	clienttls = SSL_new(tls_client_ctx); */
+	/* 	if (!clienttls) */
+	/* 	{ */
+	/* 		/\* TODO handle this *\/ */
+	/* 	} */
 
-		SSL_set_fd(clienttls, smtp->conn->sd);
-		if (!SSL_connect(clienttls))
-		{
-			/* TODO handle this */
-		}
+	/* 	SSL_set_fd(clienttls, smtp->conn->sd); */
+	/* 	if (!SSL_connect(clienttls)) */
+	/* 	{ */
+	/* 		/\* TODO handle this *\/ */
+	/* 	} */
 
-		/* TODO start tls negotiation */
-		goto ok;
-	}
+	/* 	/\* Do not return this from here, it causes memory leak *\/ */
+	/* 	start_smtp_protected_session(clienttls, opts); */
 
-	if (!send_mail_from_message(smtp->conn->sd, message, response))
+	/* 	/\* TODO start tls negotiation *\/ */
+	/* 	goto ok; */
+	/* } */
+
+	if (!send_mail_from_message(&smtp->conn->sd, message, response, false))
 		goto fail;
 	memset(response, 0, 1024);
-	if (!send_rcpt_to_message(smtp->conn->sd, message, response))
-		goto fail;
-	memset(response, 0, 1024);
-	if (!send_data_message(smtp->conn->sd, response))
-		goto fail;
-	memset(response, 0, 1024);
-	if (!send_message(smtp->conn->sd, smtp, message, response))
-		goto fail;
-	memset(response, 0, 1024);
-	if (!send_quit_message(smtp->conn->sd, response))
-		goto fail;
 
+	if (!send_rcpt_to_message(&smtp->conn->sd, message, response, false))
+		goto fail;
+	memset(response, 0, 1024);
+
+	if (!send_data_message(&smtp->conn->sd, response, false))
+		goto fail;
+	memset(response, 0, 1024);
+
+	if (!send_message(&smtp->conn->sd, smtp, message, response, false))
+		goto fail;
+	memset(response, 0, 1024);
+
+	if (!send_quit_message(&smtp->conn->sd, response, false))
+		goto fail;
 	goto ok;
 fail:
 	close(smtp->conn->sd);
@@ -114,9 +148,11 @@ fail_smtp:
 	free(smtp->conn);
 	return NULL;
 ok:
-	SSL_shutdown(clienttls);
+	if (clienttls)
+		SSL_shutdown(clienttls);
 	close(smtp->conn->sd);
-	SSL_free(clienttls);
+	if (clienttls)
+		SSL_free(clienttls);
 	free(smtp->conn);
 	return (void *)1;
 }

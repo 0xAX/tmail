@@ -8,14 +8,14 @@
 
 #include "smtp.h"
 
-int send_data_message(socket_t socket, char *buffer)
+int send_data_message(void *socket, char *buffer, bool protected)
 {
 	int n = 0;
 
-	send(socket, "DATA\r\n", 6, 0);
+	tmail_sock_send(socket, "DATA\r\n", 6, protected);
 
 	READ_SMTP_RESPONSE(socket, buffer, 1024, "354",
 			   "Error: Can\'t get response for DATA command\n",
-			   "Error: SMTP DATA wrong response: %s\n");
+			   "Error: SMTP DATA wrong response: %s\n", protected);
 	return 1;
 }

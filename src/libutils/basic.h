@@ -59,30 +59,30 @@ static inline void *mfree(void *ptr)
 static inline int tmail_sock_read(void *fd, char *bf, size_t sz, bool protected)
 {
 	if (protected)
-		return read(*(int *)fd, bf, sz);
-	return SSL_read((SSL *)fd, bf, sz);
+		return SSL_read((SSL *)fd, bf, sz);
+	return read(*(int *)fd, bf, sz);
 }
 
 static inline int tmail_sock_write(void *fd, char *bf, size_t sz,
 				   bool protected)
 {
 	if (protected)
-		return write(*(int *)fd, bf, sz);
-	return SSL_write((SSL *)fd, bf, sz);
+		return SSL_write((SSL *)fd, bf, sz);
+	return write(*(int *)fd, bf, sz);
 }
 
 static inline int tmail_sock_send(void *fd, char *bf, size_t sz, bool protected)
 {
 	if (protected)
-		return send(*(int *)fd, bf, sz, 0);
-	return SSL_write((SSL *)fd, bf, sz);
+		return SSL_write((SSL *)fd, bf, sz);
+	return send(*(int *)fd, bf, sz, 0);
 }
 
 static inline int tmail_sock_recv(void *fd, char *bf, size_t sz, bool protected)
 {
 	if (protected)
-		return recv(*(int *)fd, bf, sz, 0);
-	return SSL_read((SSL *)fd, bf, sz);
+		return SSL_read((SSL *)fd, bf, sz);
+	return recv(*(int *)fd, bf, sz, 0);
 }
 
 #endif /* __LIB_UTILS_BASIC_H__ */

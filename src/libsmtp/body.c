@@ -8,8 +8,8 @@
 
 #include "smtp.h"
 
-static int send_message_header(socket_t socket, char *cmd, int cmd_len,
-			       char *data)
+static int send_message_header(void *socket, char *cmd, int cmd_len, char *data,
+			       bool protected)
 {
 	char *msg = NULL;
 	size_t msg_len = strlen(data);
@@ -23,13 +23,13 @@ static int send_message_header(socket_t socket, char *cmd, int cmd_len,
 		return 0;
 	}
 	snprintf(msg, len, "%s%s\r\n", cmd, data);
-	send(socket, msg, len - 1, 0);
+	tmail_sock_send(socket, msg, len - 1, protected);
 
 	mfree(msg);
 	return 1;
 }
 
-static int send_date_header(socket_t socket)
+static int send_date_header(void *socket, bool protected)
 {
 	char timebuf[128];
 	time_t current_time = time(NULL);
@@ -48,23 +48,27 @@ static int send_date_header(socket_t socket)
 		return 0;
 	}
 
-	send(socket, "Date: ", 6, 0);
-	send(socket, timebuf, strlen(timebuf), 0);
+	tmail_sock_send(socket, "Date: ", 6, protected);
+	tmail_sock_send(socket, timebuf, strlen(timebuf), protected);
 
 	return 1;
 }
 
-static int send_message_body(socket_t socket, message_t *message, char *buffer)
+static int send_message_body(void *socket, message_t *message, char *buffer,
+			     bool protected)
 {
 	int n = 0;
 	char body[4096];
 
-	send(socket, "Content-Type: text/plain; charset=\"UTF-8\"\r\n", 43, 0);
+	tmail_sock_send(socket,
+			"Content-Type: text/plain; charset=\"UTF-8\"\r\n", 43,
+			protected);
 
 	memset(body, 0, 4096);
-	while ((n = read(message->body->message_fd, body, 4096)) > 0)
+	while ((n = tmail_sock_read(&message->body->message_fd, body, 4096,
+				    protected)) > 0)
 	{
-		send(socket, body, n, 0);
+		tmail_sock_send(socket, body, n, protected);
 		memset(body, 0, 4096);
 	}
 
@@ -80,20 +84,20 @@ static int send_message_body(socket_t socket, message_t *message, char *buffer)
 	/* finsih message body */
 	if (!message->attachments)
 	{
-		send(socket, "\r\n.\r\n", 5, 0);
+		tmail_sock_send(socket, "\r\n.\r\n", 5, protected);
 		READ_SMTP_RESPONSE(
 		    socket, buffer, 1024, "250",
 		    "Error: Can\'t get response from message BODY\n",
-		    "Error: wrong response for message body: %s\n");
+		    "Error: wrong response for message body: %s\n", protected);
 	}
 	else
-		send(socket, "\r\n", 2, 0);
+		tmail_sock_send(socket, "\r\n", 2, protected);
 
 	return 1;
 }
 
-static int send_message_content(socket_t socket, message_t *message,
-				char *buffer)
+static int send_message_content(void *socket, message_t *message, char *buffer,
+				bool protected)
 {
 	char mime_boundary[100];
 	size_t mime_boundary_len = 0;
@@ -119,10 +123,12 @@ static int send_message_content(socket_t socket, message_t *message,
 		snprintf(mime_boundary,
 			 uid->out_len + 1 + strlen(timestamp_buffer) + 1,
 			 "%s-%s", uid->data, timestamp_buffer);
-		send(socket, "Content-Type: multipart/mixed; boundary=\"", 41,
-		     0);
-		send(socket, mime_boundary, strlen(mime_boundary), 0);
-		send(socket, "\"\r\n\r\n", 5, 0);
+		tmail_sock_send(socket,
+				"Content-Type: multipart/mixed; boundary=\"",
+				41, protected);
+		tmail_sock_send(socket, mime_boundary, strlen(mime_boundary),
+				protected);
+		tmail_sock_send(socket, "\"\r\n\r\n", 5, protected);
 		mfree(uid->data);
 		mfree(uid);
 	}
@@ -133,17 +139,18 @@ static int send_message_content(socket_t socket, message_t *message,
 	/* send first boundary */
 	if (mime_boundary_len)
 	{
-		send(socket, "--", 2, 0);
-		send(socket, mime_boundary, mime_boundary_len, 0);
-		send(socket, "\r\n", 2, 0);
+		tmail_sock_send(socket, "--", 2, protected);
+		tmail_sock_send(socket, mime_boundary, mime_boundary_len,
+				protected);
+		tmail_sock_send(socket, "\r\n", 2, protected);
 	}
 
 	/* send message text and attachments */
-	if (!send_message_body(socket, message, buffer))
+	if (!send_message_body(socket, message, buffer, protected))
 		return 0;
 	if (mime_boundary_len &&
 	    !send_attachments(socket, message, mime_boundary, mime_boundary_len,
-			      buffer))
+			      buffer, protected))
 		return 0;
 
 	return 1;
@@ -171,19 +178,19 @@ static char *build_from_clause(smtp_ctx_t *smtp, message_t *message)
 	return from_buf;
 }
 
-int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
-		 char *buffer)
+int send_message(void *socket, smtp_ctx_t *smtp, message_t *message,
+		 char *buffer, bool protected)
 {
 	list_t *entry = NULL;
 
 	/* send MIME version header */
-	send(socket, "MIME-Version: 1.0\r\n", 19, 0);
+	tmail_sock_send(socket, "MIME-Version: 1.0\r\n", 19, protected);
 
 	/* send 'From:' header */
 	if (!smtp->realname && !message->realname)
 	{
 		if (!send_message_header(socket, FROM_CLAUSE, FROM_CLAUSE_LEN,
-					 message->from))
+					 message->from, protected))
 			return 0;
 	}
 	else
@@ -194,7 +201,7 @@ int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
 			return 0;
 
 		if (!send_message_header(socket, FROM_CLAUSE, FROM_CLAUSE_LEN,
-					 from))
+					 from, protected))
 		{
 			mfree(from);
 			return 0;
@@ -208,7 +215,8 @@ int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
 		for_each_list_item(message->to, entry)
 		{
 			if (!send_message_header(socket, TO_CLAUSE,
-						 TO_CLAUSE_LEN, entry->item))
+						 TO_CLAUSE_LEN, entry->item,
+						 protected))
 				return 0;
 		}
 	}
@@ -216,35 +224,39 @@ int send_message(socket_t socket, smtp_ctx_t *smtp, message_t *message,
 	/* send 'Cc:' headers */
 	if (message->cc)
 	{
-		send(socket, "Cc: ", 4, 0);
+		tmail_sock_send(socket, "Cc: ", 4, protected);
 		for_each_list_item(message->cc, entry)
 		{
-			send(socket, entry->item, strlen(entry->item), 0);
+			tmail_sock_send(socket, entry->item,
+					strlen(entry->item), protected);
 			if (entry->next != NULL)
-				send(socket, ",", 1, 0);
+				tmail_sock_send(socket, ",", 1, protected);
 			else
-				send(socket, "\r\n", 2, 0);
+				tmail_sock_send(socket, "\r\n", 2, protected);
 		}
 	}
 
 	/* send subject */
 	if (message->subject)
 		if (!send_message_header(socket, SUBJECT_CLAUSE,
-					 SUBJECT_CLAUSE_LEN, message->subject))
+					 SUBJECT_CLAUSE_LEN, message->subject,
+					 protected))
 			return 0;
+
 	/* send 'In-Reply-To' header */
 	if (message->message_id)
 		if (!send_message_header(socket, REPLY_TO_CLAUSE,
 					 REPLY_TO_CLAUSE_LEN,
-					 message->message_id))
+					 message->message_id, protected))
 			return 0;
 
 	/* send 'Date' header */
-	if (!send_date_header(socket))
+	if (!send_date_header(socket, protected))
 		return 0;
 
 	/* send message body */
-	if (!send_message_content(socket, message, buffer))
+	if (!send_message_content(socket, message, buffer, protected))
 		return 0;
+
 	return 1;
 }

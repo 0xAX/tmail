@@ -8,8 +8,8 @@
 
 #include "smtp.h"
 
-static int send_rcpt_to(socket_t socket, char *buffer, list_t *recipients,
-			list_t *entry)
+static int send_rcpt_to(void *socket, char *buffer, list_t *recipients,
+			list_t *entry, bool protected)
 {
 	for_each_list_item(recipients, entry)
 	{
@@ -37,9 +37,11 @@ static int send_rcpt_to(socket_t socket, char *buffer, list_t *recipients,
 		/*send RCPT TO message */
 		snprintf(rcpt_to_msg, 8 + to_len + 2 + 1, "RCPT TO:%s\r\n",
 			 (char *)entry->item);
-		send(socket, rcpt_to_msg, strlen(rcpt_to_msg), 0);
+		tmail_sock_send(socket, rcpt_to_msg, strlen(rcpt_to_msg),
+				protected);
 
-		if ((n = recv(socket, buffer, 1024, 0) == -1))
+		if ((n = tmail_sock_recv(socket, buffer, 1024, protected) ==
+			 -1))
 		{
 			fprintf(
 			    stderr,
@@ -62,25 +64,29 @@ static int send_rcpt_to(socket_t socket, char *buffer, list_t *recipients,
 	return 1;
 }
 
-int send_rcpt_to_message(socket_t socket, message_t *message, char *buffer)
+int send_rcpt_to_message(void *socket, message_t *message, char *buffer,
+			 bool protected)
 {
 	int ret = 1;
 	list_t *entry = NULL;
 
 	if (message->to)
-		ret = send_rcpt_to(socket, buffer, message->to, entry);
+		ret =
+		    send_rcpt_to(socket, buffer, message->to, entry, protected);
 
 	if (!ret)
 		return ret;
 
 	if (message->cc)
-		ret = send_rcpt_to(socket, buffer, message->cc, entry);
+		ret =
+		    send_rcpt_to(socket, buffer, message->cc, entry, protected);
 
 	if (!ret)
 		return ret;
 
 	if (message->bcc)
-		ret = send_rcpt_to(socket, buffer, message->bcc, entry);
+		ret = send_rcpt_to(socket, buffer, message->bcc, entry,
+				   protected);
 
 	if (!ret)
 		return ret;

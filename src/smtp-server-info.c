@@ -113,7 +113,7 @@ __attribute__((noreturn)) void smtp_server_info_cmd(int argc, char *argv[])
 		if (smtp_caps & HELP)
 		{
 			/* send HELP command to an SMTP server */
-			if (send_help(smtp->conn->sd, response))
+			if (send_help(&smtp->conn->sd, response, false))
 				printf("SMTP Server information:\n\n%s\n",
 				       response);
 		}

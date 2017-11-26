@@ -8,7 +8,8 @@
 
 #include "smtp.h"
 
-int send_mail_from_message(socket_t socket, message_t *message, char *buffer)
+int send_mail_from_message(void *socket, message_t *message, char *buffer,
+			   bool protected)
 {
 	int n = 0;
 	size_t from_len = strlen(message->from);
@@ -32,17 +33,15 @@ int send_mail_from_message(socket_t socket, message_t *message, char *buffer)
 	snprintf(mail_from_msg, msg_len, "MAIL FROM:%s\r\n", message->from);
 
 	/* send MAIL FROM clause */
-	send(socket, mail_from_msg, msg_len - 1, 0);
+	tmail_sock_send(socket, mail_from_msg, msg_len - 1, protected);
 
-	if ((n = recv(socket, buffer, 1024, 0) == -1))
+	if ((n = tmail_sock_recv(socket, buffer, 1024, protected) == -1))
 	{
 		free(mail_from_msg);
 		fprintf(stderr,
 			"Error: Can't get response for MAIL FROM command\n");
 		return 0;
 	}
-
-	printf("%s\n", buffer);
 
 	if (!(buffer[0] == '2' && buffer[1] == '5' && buffer[2] == '0'))
 	{

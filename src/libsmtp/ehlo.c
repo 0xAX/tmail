@@ -114,14 +114,14 @@ int build_ehlo_msg(char *buffer)
 	return 1;
 }
 
-int send_ehlo_message(socket_t socket, char *request, char *buffer)
+int send_ehlo_message(void *socket, char *request, char *buffer, bool protected)
 {
 	int n = 0;
 
-	send(socket, request, strlen(request), 0);
+	tmail_sock_send(socket, request, strlen(request), protected);
 
 	READ_SMTP_RESPONSE(socket, buffer, 1024, "250",
 			   "Error: Can\'t read SMTP EHLO response\n",
-			   "Error: SMTP EHLO wrong response: %s\n");
+			   "Error: SMTP EHLO wrong response: %s\n", protected);
 	return 1;
 }
