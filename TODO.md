@@ -8,6 +8,7 @@
 
 ## Build
 
+  * Fix build in CI
   * Add header files as prerequisites in make files.
   * Strip libraries and executables if the `DEBUG` flag wasn't passed.
   * Disable `asserts` from `assert.h` for non-debug builds.
@@ -33,14 +34,6 @@ like this.
 ## tmail daemon
 
   * Add initial implementation.
-
-## smtp-caps
-
-  * Pass ssl context to send_email. Now it is only `NULL` is passed.
-
-## smtp-server-info
-
-  * Pass ssl context to send_email. Now it is only `NULL` is passed.
 
 ## send-email
 
