@@ -20,29 +20,29 @@ static int read_smtp_greetings(void *socket, char *buffer)
 	return 1;
 }
 
-/* static void *start_smtp_protected_session(SSL *client, bitmap_t opts) */
-/* { */
-/* 	char request[1024]; */
-/* 	char response[1024]; */
+static void *start_smtp_protected_session(SSL *client, bitmap_t opts)
+{
+	char request[1024];
+	char response[1024];
 
-/* 	memset(request, 0, 1024); */
-/* 	memset(response, 0, 1024); */
+	memset(request, 0, 1024);
+	memset(response, 0, 1024);
 
-/* 	if (!build_ehlo_msg(request)) */
-/* 		goto exit; */
+	if (!build_ehlo_msg(request))
+		goto exit;
 
-/* 	if (!send_ehlo_message(client, request, response, true)) */
-/* 	{ */
-/* 		/\* TODO handle this *\/ */
-/* 		goto exit; */
-/* 	} */
+	if (!send_ehlo_message(client, request, response, true))
+	{
+		/* TODO handle this */
+		goto exit;
+	}
 
-/* 	/\* at least tmail-smtp-caps(1) uses this *\/ */
-/* 	if (opts & STOP_AFTER_EHLO) */
-/* 		return strdup(response); */
-/* exit: */
-/* 	return (void *)1; */
-/* } */
+	/* at least tmail-smtp-caps(1) uses this */
+	if (opts & STOP_AFTER_EHLO)
+		return strdup(response);
+exit:
+	return (void *)1;
+}
 
 /**
  * send_email() sends given email @message.
@@ -94,34 +94,33 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, SSL_CTX *tls_client_ctx,
 	smtp->smtp_extension = parse_smtp_caps(response, smtp);
 	memset(response, 0, 1024);
 
-	UNUSED(tls_client_ctx);
-	/* if (smtp->smtp_extension & SMTPTLS) */
-	/* { */
-	/* 	smtp->tls = true; */
-	/* 	if (!send_starttls(&smtp->conn->sd, response)) */
-	/* 		goto fail; */
-	/* } */
+	if (smtp->smtp_extension & SMTPTLS)
+	{
+		smtp->tls = true;
+		if (!send_starttls(&smtp->conn->sd, response))
+			goto fail;
+	}
 
-	/* if (smtp->tls == true) */
-	/* { */
-	/* 	clienttls = SSL_new(tls_client_ctx); */
-	/* 	if (!clienttls) */
-	/* 	{ */
-	/* 		/\* TODO handle this *\/ */
-	/* 	} */
+	if (smtp->tls == true)
+	{
+		clienttls = SSL_new(tls_client_ctx);
+		if (!clienttls)
+		{
+			/* TODO handle this */
+		}
 
-	/* 	SSL_set_fd(clienttls, smtp->conn->sd); */
-	/* 	if (!SSL_connect(clienttls)) */
-	/* 	{ */
-	/* 		/\* TODO handle this *\/ */
-	/* 	} */
+		SSL_set_fd(clienttls, smtp->conn->sd);
+		if (!SSL_connect(clienttls))
+		{
+			/* TODO handle this */
+		}
 
-	/* 	/\* Do not return this from here, it causes memory leak *\/ */
-	/* 	start_smtp_protected_session(clienttls, opts); */
+		/* Do not return this from here, it causes memory leak */
+		start_smtp_protected_session(clienttls, opts);
 
-	/* 	/\* TODO start tls negotiation *\/ */
-	/* 	goto ok; */
-	/* } */
+		/* TODO start tls negotiation */
+		goto ok;
+	}
 
 	if (!send_mail_from_message(&smtp->conn->sd, message, response, false))
 		goto fail;
