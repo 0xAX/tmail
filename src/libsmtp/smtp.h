@@ -206,10 +206,10 @@ typedef struct
 	char *passwd;
 	char *from;
 	fd_t signature_fd;
-	bitmap_t smtp_extension;
-	connection_t *conn;
 
 	/* these fields filled by libsmtp only */
+	bitmap_t smtp_extension;
+	connection_t *conn;
 	char *max_size;
 	bitmap_t auth_caps;
 	bool tls;
@@ -264,8 +264,7 @@ int send_message(void *socket, smtp_ctx_t *smtp, message_t *message,
 int send_help(void *socket, char *buffer, bool protected);
 
 /* smtpauth.c */
-void parse_auth_capabilities(char *capname, size_t capname_len,
-			     char *buf, int capability,
-			     bitmap_t *capbitmap);
+int parse_auth_capabilities(char *capname, size_t capname_len, char *buf,
+			    unsigned long *capbitmap);
 
 #endif /* __LIB_SMTP_H__ */

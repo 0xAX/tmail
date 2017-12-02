@@ -74,10 +74,15 @@ unsigned long parse_smtp_caps(char *r, smtp_ctx_t *smtp)
 		 */
 		r += 4;
 
-		/* get capabilities name and set it in the bitmap */
+		/* try to get maximum size of a message */
 		ADD_SMTP_CAPABILITY_WITH_PARAM("SIZE", 4, r, SIZE,
 					       smtp->max_size);
-		parse_auth_capabilities("AUTH", 4, r, AUTH, &smtp->auth_caps);
+
+		/* parse AUTH capabilities */
+		if (parse_auth_capabilities("AUTH", 4, r, &smtp->auth_caps))
+			smtp->smtp_extension |= AUTH;
+
+		/* parse and set other capabilities of an SMTP server */
 		ADD_SMTP_CAPABILITY("HELP", 4, r, HELP);
 		ADD_SMTP_CAPABILITY("8BITMIME", 8, r, EIGHT_BITMIME);
 		ADD_SMTP_CAPABILITY("PIPELINING", 10, r, PIPELINING);

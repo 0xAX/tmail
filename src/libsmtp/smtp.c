@@ -20,7 +20,8 @@ static int read_smtp_greetings(void *socket, char *buffer)
 	return 1;
 }
 
-static void *start_smtp_protected_session(smtp_ctx_t *smtp, SSL *client, bitmap_t opts)
+static void *start_smtp_protected_session(smtp_ctx_t *smtp, SSL *client,
+					  bitmap_t opts)
 {
 	char request[1024];
 	char response[1024];

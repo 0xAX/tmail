@@ -76,10 +76,6 @@ without configuration.
   * Check message size if `SIZE` capability is supported.
   * Implement SMTP extensions.
 
-## smtp-tls-info
-
-  * Add util to dump information about SMTP TLS server.
-
 ## smtp-server-info
 
   * Add support for help argument
