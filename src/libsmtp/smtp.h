@@ -210,11 +210,12 @@ typedef struct
 	char *passwd;
 	char *from;
 	fd_t signature_fd;
-	unsigned long smtp_extension;
+	bitmap_t smtp_extension;
 	connection_t *conn;
 
 	/* these fields filled by libsmtp only */
 	char *max_size;
+	bitmap_t auth;
 	bool tls;
 } smtp_ctx_t;
 
