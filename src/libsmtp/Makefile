@@ -14,6 +14,7 @@ INCLUDES += -I../libutils/
 INCLUDES += -I../libsys/
 INCLUDES += -I../libencoding/
 
+LIB_SMTP_OBJS += smtpauth.o
 LIB_SMTP_OBJS += starttls.o
 LIB_SMTP_OBJS += attachment.o
 LIB_SMTP_OBJS += ehlo.o
@@ -23,7 +24,6 @@ LIB_SMTP_OBJS += mail_from.o
 LIB_SMTP_OBJS += data_msg.o
 LIB_SMTP_OBJS += body.o
 LIB_SMTP_OBJS += quit.o
-LIB_SMTP_OBJS += starttls.o
 LIB_SMTP_OBJS += smtp.o
 
 # some SMTP code uses libsys code

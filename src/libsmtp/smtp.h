@@ -144,10 +144,6 @@
 /* SMTP session options */
 #define STOP_AFTER_EHLO 1
 
-/* set capability bit with bitmap parameter */
-#define ADD_SMTP_CAPABILITY_WITH_BITMAP_PARAM(CAP_NAME, CAP_NAME_LENGTH,\
-					      SMTP_CAPS_STR, CAPABILITY_BIT, ARG) \
-
 /* set capability bit with parameter */
 #define ADD_SMTP_CAPABILITY_WITH_PARAM(CAP_NAME, CAP_NAME_LENGTH,              \
 				       SMTP_CAPS_STR, CAPABILITY_BIT, ARG)     \
@@ -215,7 +211,7 @@ typedef struct
 
 	/* these fields filled by libsmtp only */
 	char *max_size;
-	bitmap_t auth;
+	bitmap_t auth_caps;
 	bool tls;
 } smtp_ctx_t;
 
@@ -266,5 +262,10 @@ int send_message(void *socket, smtp_ctx_t *smtp, message_t *message,
 
 /* help.c */
 int send_help(void *socket, char *buffer, bool protected);
+
+/* smtpauth.c */
+void parse_auth_capabilities(char *capname, size_t capname_len,
+			     char *buf, int capability,
+			     bitmap_t *capbitmap);
 
 #endif /* __LIB_SMTP_H__ */

@@ -20,7 +20,7 @@ static int read_smtp_greetings(void *socket, char *buffer)
 	return 1;
 }
 
-static void *start_smtp_protected_session(SSL *client, bitmap_t opts)
+static void *start_smtp_protected_session(smtp_ctx_t *smtp, SSL *client, bitmap_t opts)
 {
 	char request[1024];
 	char response[1024];
@@ -32,14 +32,18 @@ static void *start_smtp_protected_session(SSL *client, bitmap_t opts)
 		goto exit;
 
 	if (!send_ehlo_message(client, request, response, true))
-	{
-		/* TODO handle this */
 		goto exit;
-	}
 
 	/* at least tmail-smtp-caps(1) uses this */
 	if (opts & STOP_AFTER_EHLO)
 		return strdup(response);
+
+	/* everything is ok, let's parse SMTP server capabilities */
+	smtp->smtp_extension = parse_smtp_caps(response, smtp);
+	memset(response, 0, 1024);
+
+	printf("buffer %s\n", response);
+
 exit:
 	return (void *)1;
 }
@@ -116,7 +120,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, SSL_CTX *tls_client_ctx,
 		}
 
 		/* Do not return this from here, it causes memory leak */
-		start_smtp_protected_session(clienttls, opts);
+		start_smtp_protected_session(smtp, clienttls, opts);
 
 		/* TODO start tls negotiation */
 		goto ok;

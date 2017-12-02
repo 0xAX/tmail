@@ -71,7 +71,6 @@ without configuration.
 
 ## libsmtp
 
-  * Implement `ADD_SMTP_CAPABILITY_WITH_BITMAP_PARAM()` macro.
   * specify `MAX_ATTACHMENT_SIZE` during build.
   * Add send message in the separate thread.
   * Check message size if `SIZE` capability is supported.
@@ -150,6 +149,7 @@ and
 
 ## Documentation
 
+  * Document 
   * Provide information about supported SMTP extensions to man and md pages.
   * Describe that `smtp.signature` is path to file with a signature.
 

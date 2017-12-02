@@ -42,6 +42,7 @@ LIB_SMTP_OBJS += libsmtp/starttls.o
 LIB_SMTP_OBJS += libsmtp/attachment.o
 LIB_SMTP_OBJS += libsmtp/help.o
 LIB_SMTP_OBJS += libsmtp/ehlo.o
+LIB_SMTP_OBJS += libsmtp/smtpauth.o
 LIB_SMTP_OBJS += libsmtp/mail_from.o
 LIB_SMTP_OBJS += libsmtp/rcpt_to.o
 LIB_SMTP_OBJS += libsmtp/data_msg.o
