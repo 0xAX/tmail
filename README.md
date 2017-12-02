@@ -45,6 +45,7 @@ Following SMTP extensions are supported:
 
   * [HELP](https://tools.ietf.org/html/rfc5321#section-4.1.1.8)
   * [SIZE](https://tools.ietf.org/html/rfc1870)
+  * [STARTTLS](https://tools.ietf.org/html/rfc3207)
 
 ### MIME
 
