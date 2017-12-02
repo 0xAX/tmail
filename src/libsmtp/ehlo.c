@@ -38,6 +38,8 @@ __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap)
 		return "ETRN";
 	if (cap & BINARYMIME)
 		return "BINARYMIME";
+	if (cap & AUTH)
+		return "AUTH";
 	return NULL;
 }
 

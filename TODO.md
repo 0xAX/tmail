@@ -71,6 +71,7 @@ without configuration.
 
 ## libsmtp
 
+  * Implement `ADD_SMTP_CAPABILITY_WITH_BITMAP_PARAM()` macro.
   * specify `MAX_ATTACHMENT_SIZE` during build.
   * Add send message in the separate thread.
   * Check message size if `SIZE` capability is supported.

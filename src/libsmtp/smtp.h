@@ -134,8 +134,19 @@
  */
 #define BINARYMIME (1 << 13)
 
+/*
+ * SMTP AUTH extension
+ *
+ * https://tools.ietf.org/html/rfc4954#section-4
+ */
+#define AUTH (1 << 14)
+
 /* SMTP session options */
 #define STOP_AFTER_EHLO 1
+
+/* set capability bit with bitmap parameter */
+#define ADD_SMTP_CAPABILITY_WITH_BITMAP_PARAM(CAP_NAME, CAP_NAME_LENGTH,\
+					      SMTP_CAPS_STR, CAPABILITY_BIT, ARG) \
 
 /* set capability bit with parameter */
 #define ADD_SMTP_CAPABILITY_WITH_PARAM(CAP_NAME, CAP_NAME_LENGTH,              \
