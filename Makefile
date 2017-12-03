@@ -16,6 +16,11 @@
 # Define BINDIR to specify where to install tmail executables
 #
 # Define MANDIR to specify where to install tmail man pages
+#
+# Following flags can be passed too, but they are mostly CI,
+# containerization and testing stuff
+#
+# Define TRAVIS=1 to use openssl from ${HOME}/opt
 .DEFAULT_GOAL: $(DEFAULT_TARGET)
 
 include ./mk/Common.mk

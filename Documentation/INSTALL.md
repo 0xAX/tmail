@@ -33,8 +33,9 @@ on `*BSD` systems.
 You may need to install following dependencies:
 
   * [bison](https://www.gnu.org/software/bison/)
-  * [flix](https://www.gnu.org/software/flex/)
+  * [flex](https://www.gnu.org/software/flex/)
   * [make](https://www.gnu.org/software/make/)
+  * [openssl 1.1.X](https://www.openssl.org/)
 
 And of course compilers
 

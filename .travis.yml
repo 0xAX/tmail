@@ -12,16 +12,11 @@ sudo: true
 cache:
   directories:
     - $HOME/travis-cache
+    - download-cache
+    - ${HOME}/opt
 
 matrix:
   include:
-    - os: linux
-      env: TMAIL_CC=gcc-8
-      compiler: gcc-8
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['gcc-8', 'flex', 'bison']
     - os: linux
       env: TMAIL_CC=gcc-7
       compiler: gcc-7
@@ -59,18 +54,12 @@ matrix:
 
 before_install:
   - test -n $CC && unset CC
-  - 'if [[ "$TRAVIS_OS_NAME" == "osx" && "$TMAIL_CC" == "gcc" ]]; then TMAIL_CC=$(ls -t /usr/local/bin/gcc-?.*); fi'
-  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi'
-  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install flex openssl bison; fi'
-  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --force flex; fi'
-  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --force bison; fi'
-  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --force openssl; fi'
-  - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update -qq; fi'
-  - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install openssl libssl-dev -y; fi'
+  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install flex; brew link --force flex; brew install bison; brew link --force bison; fi'
 
 git:
   depth: 1
 
 script:
-  - make TMAIL_CC=$TMAIL_CC DEBUG=1 V=1 all
-  - make TMAIL_CC=$TMAIL_CC DEBUG=1 V=1 test
+  - .travis/build.sh
+  - make TMAIL_CC=$TMAIL_CC DEBUG=1 V=1 TRAVIS=1 all
+  - make TMAIL_CC=$TMAIL_CC DEBUG=1 V=1 TRAVIS=1 test

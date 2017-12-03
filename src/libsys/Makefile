@@ -8,7 +8,13 @@ default: $(TMAIL_SYS_LIB)
 include ../../mk/Common.mk
 include ../../mk/Build.mk
 
-INCLUDES += -I../libutils/
+# if we are in CI context
+ifdef TRAVIS
+PREFIX=${HOME}/opt
+CI_FLAGS = -I${PREFIX}/include -L${PREFIX}/lib
+endif
+
+INCLUDES += -I../libutils/ $(CI_FLAGS)
 
 LIB_SYS_OBJS += at_exit.o
 LIB_SYS_OBJS += connect.o

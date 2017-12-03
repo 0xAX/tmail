@@ -8,6 +8,12 @@
 include ../mk/Common.mk
 include ../mk/Build.mk
 
+# if we are in CI context
+ifdef TRAVIS
+PREFIX="${HOME}/opt"
+CI_FLAGS = -I${PREFIX}/include -L${PREFIX}/lib
+endif
+
 # external libraries that are used by tmail
 LIBS = -lssl -lcrypto
 
@@ -74,7 +80,7 @@ TMAIL_OBJECT_FILES_DEPS += $(LIB_ENCODING_OBJS)
 TMAIL_OBJECT_FILES_DEPS += $(LIB_SMTP_OBJS)
 
 $(TMAIL_EXECUTABLE): $(PARSER_OBJECTS) $(TMAIL_OBJS)
-	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@ $(TMAIL_OBJECT_FILES_DEPS) $(TMAIL_OBJS) $(LIBS)
+	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@ $(CI_FLAGS) $(TMAIL_OBJECT_FILES_DEPS) $(TMAIL_OBJS) $(LIBS)
 
 config_parser.tab.o: $(CONFIG_PARSER)
 	$(BISON) -d -v $(CONFIG_PARSER)
@@ -85,7 +91,7 @@ lex.yy.o: $(CONFIG_LEXER)
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) -c lex.yy.c
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(DEFS) $(CFLAGS_OBJS) $@ $<
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CI_FLAGS) $(DEFS) $(CFLAGS_OBJS) $@ $<
 
 $(CLEAN_TARGET):
 	@echo "./src"
