@@ -59,7 +59,7 @@ before_install:
   - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --force bison; fi'
   - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --force openssl; fi'
   - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update -qq; fi'
-  - 'if [[ "$TRAVIS_OS_NAME" == "" ]]; then sudo apt-get install openssl libssl-dev -y; fi'
+  - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install openssl libssl-dev -y; fi'
 
 git:
   depth: 1
