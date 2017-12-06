@@ -2,7 +2,6 @@
 
 ## General
 
-  * Describe dependencies in README.md
   * Decrease number of header files in libraries, like in libsmtp.
   * Use `strncmp(3)` instead of `strcmp(3)` when we know a length of a string.
 
