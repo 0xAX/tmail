@@ -45,16 +45,9 @@ matrix:
         apt:
           sources: ['llvm-toolchain-precise']
           packages: ['clang-3.9', 'flex', 'bison']
-    - os: osx
-      env: TMAIL_CC=clang
-      compiler: clang
-    - os: osx
-      env: TMAIL_CC=gcc
-      compiler: gcc
 
 before_install:
   - test -n $CC && unset CC
-  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install flex; brew link --force flex; brew install bison; brew link --force bison; fi'
 
 git:
   depth: 1
