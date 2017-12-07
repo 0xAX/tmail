@@ -25,6 +25,7 @@ like this.
 
 ## tmail
 
+  * Do not exit from tmail sub-commands, just go to the `main()` back.
   * Return from tmail's `main()` in a `*_cmd(argc, argv)`
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
   * Support for colorful error messages.
