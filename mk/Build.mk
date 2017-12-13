@@ -132,10 +132,23 @@ CFLAGS_OBJS += $(WARNINGS) $(STANDARD) $(ARCH) $(MISC_FLAGS) -c -o
 # Set of compiler flags that will be passed during build of shared libraries
 CFLAGS_LIBS += -c $(WARNINGS) $(STANDARD) $(ARCH) $(MISC_FLAGS) -fpic
 
-# tmail version
-TMAIL_VERSION=$(shell ../scripts/version.pl)
-
 #
 # Definitions that will be passed to compiler
 #
+TMAIL_VERSION=$(shell ../scripts/version.pl)
 DEFS += -DTMAIL_VERSION=\"$(TMAIL_VERSION)\"
+
+OPENSSL_VERSION=$(shell openssl version 2>/dev/null | sed -e "s/OpenSSL //" | sed -e "s/\.[0-9][a-z].*//")
+ifeq ($(OPENSSL_VERSION), 1.1)
+	DEFS += -DSSL_V11=\"1\"
+	LIBSMTP_DEFS += -DSSL_V11=\"1\"
+else
+	ifeq ($(OPENSSL_VERSION), 1.0)
+		DEFS += -DSSL_V10=\"1\"
+		LIBSMTP_DEFS += -DSSL_V10=\"1\"
+	else
+		SSL_DISABLED = 1
+		DEFS += -DSSL_DISABLED=\"1\"
+		LIBSMTP_DEFS = -DSSL_DISABLED=\"1\"
+	endif
+endif

@@ -27,7 +27,9 @@
 #include <string_utils.h>
 #include <time_utils.h>
 
+#ifndef SSL_DISABLED
 #include <openssl/ssl.h>
+#endif
 
 #define TO_CLAUSE "To: "
 #define CC_CLAUSE "Cc: "
@@ -224,7 +226,8 @@ static inline bool smtp_eof(char *msg, int length)
 }
 
 /* smtp.c */
-void *send_email(smtp_ctx_t *smtp, message_t *message, SSL_CTX *tls_client_ctx,
+void *send_email(smtp_ctx_t *smtp, message_t *message,
+		 SSL_CTX *tls_client_ctx __attribute__((__unused__)),
 		 bitmap_t opts);
 void release_smtp_ctx(smtp_ctx_t *smtp);
 

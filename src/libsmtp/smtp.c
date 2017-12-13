@@ -20,6 +20,7 @@ static int read_smtp_greetings(void *socket, char *buffer)
 	return 1;
 }
 
+#ifndef SSL_DISABLED
 static void *start_smtp_protected_session(smtp_ctx_t *smtp, SSL *client,
 					  bitmap_t opts)
 {
@@ -42,12 +43,10 @@ static void *start_smtp_protected_session(smtp_ctx_t *smtp, SSL *client,
 	/* everything is ok, let's parse SMTP server capabilities */
 	smtp->smtp_extension = parse_smtp_caps(response, smtp);
 	memset(response, 0, 1024);
-
-	printf("buffer %s\n", response);
-
 exit:
 	return (void *)1;
 }
+#endif
 
 /**
  * send_email() sends given email @message.
@@ -62,10 +61,13 @@ exit:
  * EHLO command. **NOTE** in this case smtp should be deallocated
  * by caller.
  */
-void *send_email(smtp_ctx_t *smtp, message_t *message, SSL_CTX *tls_client_ctx,
+void *send_email(smtp_ctx_t *smtp, message_t *message,
+		 SSL_CTX *tls_client_ctx __attribute__((__unused__)),
 		 bitmap_t opts)
 {
+#ifndef SSL_DISABLED
 	SSL *clienttls = NULL;
+#endif
 	char request[1024];
 	char response[1024];
 
@@ -99,6 +101,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, SSL_CTX *tls_client_ctx,
 	smtp->smtp_extension = parse_smtp_caps(response, smtp);
 	memset(response, 0, 1024);
 
+#ifndef SSL_DISABLED
 	if (smtp->smtp_extension & SMTPTLS)
 	{
 		smtp->tls = true;
@@ -126,7 +129,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message, SSL_CTX *tls_client_ctx,
 		/* TODO start tls negotiation */
 		goto ok;
 	}
-
+#endif
 	if (!send_mail_from_message(&smtp->conn->sd, message, response, false))
 		goto fail;
 	memset(response, 0, 1024);
@@ -152,11 +155,15 @@ fail_smtp:
 	free(smtp->conn);
 	return NULL;
 ok:
+#ifndef SSL_DISABLED
 	if (clienttls)
 		SSL_shutdown(clienttls);
+#endif
 	close(smtp->conn->sd);
+#ifndef SSL_DISABLED
 	if (clienttls)
 		SSL_free(clienttls);
+#endif
 	free(smtp->conn);
 	return (void *)1;
 }

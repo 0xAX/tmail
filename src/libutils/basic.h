@@ -16,7 +16,11 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#ifndef SSL_DISABLED
 #include <openssl/ssl.h>
+#else
+typedef void *SSL_CTX;
+#endif
 
 /* Help us to suppress unused errors/warnings during compilation */
 #define UNUSED(x) (void)(x)
@@ -56,32 +60,43 @@ static inline void *mfree(void *ptr)
 	return NULL;
 }
 
-static inline int tmail_sock_read(void *fd, char *bf, size_t sz, bool protected)
+static inline int tmail_sock_read(void *fd, char *bf, size_t sz,
+				  bool protected __attribute__((__unused__)))
 {
+#ifndef SSL_DISABLED
 	if (protected)
 		return SSL_read((SSL *)fd, bf, sz);
+#endif
 	return read(*(int *)fd, bf, sz);
 }
 
 static inline int tmail_sock_write(void *fd, char *bf, size_t sz,
-				   bool protected)
+				   bool protected __attribute__((__unused__)))
 {
+#ifndef SSL_DISABLED
 	if (protected)
 		return SSL_write((SSL *)fd, bf, sz);
+#endif
 	return write(*(int *)fd, bf, sz);
 }
 
-static inline int tmail_sock_send(void *fd, char *bf, size_t sz, bool protected)
+static inline int tmail_sock_send(void *fd, char *bf, size_t sz,
+				  bool protected __attribute__((__unused__)))
 {
+#ifndef SSL_DISABLED
 	if (protected)
 		return SSL_write((SSL *)fd, bf, sz);
+#endif
 	return send(*(int *)fd, bf, sz, 0);
 }
 
-static inline int tmail_sock_recv(void *fd, char *bf, size_t sz, bool protected)
+static inline int tmail_sock_recv(void *fd, char *bf, size_t sz,
+				  bool protected __attribute__((__unused__)))
 {
+#ifndef SSL_DISABLED
 	if (protected)
 		return SSL_read((SSL *)fd, bf, sz);
+#endif
 	return recv(*(int *)fd, bf, sz, 0);
 }
 

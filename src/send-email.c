@@ -231,8 +231,6 @@ __attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
 	    {"in-reply-to", required_argument, NULL, 'r'},
 	};
 
-	UNUSED(tls_client_ctx);
-
 	if (argc <= 1)
 		print_help();
 
@@ -301,9 +299,9 @@ __attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
 	}
 
 	process_send_email(tls_client_ctx);
-
+#ifndef SSL_DISABLED
 	SSL_CTX_free(tls_client_ctx);
-
+#endif
 	exit(EXIT_SUCCESS);
 allocation_failed:
 	exit(EXIT_FAILURE);

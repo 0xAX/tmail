@@ -15,7 +15,11 @@ CI_FLAGS = -I${PREFIX}/include -L${PREFIX}/lib
 endif
 
 # external libraries that are used by tmail
-LIBS = -lssl -lcrypto
+ifndef SSL_DISABLED
+OPENSSL = -lssl -lcrypto
+endif
+
+LIBS += $(OPENSSL)
 
 # lexer and parser source code
 CONFIG_PARSER = config_parser.y
@@ -44,7 +48,9 @@ LIB_UTILS_OBJS += libutils/hashmap.o
 LIB_UTILS_OBJS += libutils/string_utils.o
 
 # object files for smtp lib
+ifndef SSL_DISABLED
 LIB_SMTP_OBJS += libsmtp/starttls.o
+endif
 LIB_SMTP_OBJS += libsmtp/attachment.o
 LIB_SMTP_OBJS += libsmtp/help.o
 LIB_SMTP_OBJS += libsmtp/ehlo.o
@@ -91,7 +97,7 @@ lex.yy.o: $(CONFIG_LEXER)
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) -c lex.yy.c
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CI_FLAGS) $(DEFS) $(CFLAGS_OBJS) $@ $<
+	$(QUIET_CC) $(TMAIL_CC) $(DEFS) $(INCLUDES) $(CI_FLAGS) $(CFLAGS_OBJS) $@ $<
 
 $(CLEAN_TARGET):
 	@echo "./src"

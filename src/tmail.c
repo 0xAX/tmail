@@ -22,7 +22,9 @@
 #include <smtp-caps.h>
 #include <smtp-server-info.h>
 
+#ifndef SSL_DISABLED
 #include <openssl/ssl.h>
+#endif
 
 static int config_loaded = 0;
 static int mime_loaded = 0;
@@ -111,9 +113,12 @@ void exit_cb(void)
 
 int main(int argc, char *argv[])
 {
+#ifndef SSL_DISABLED
 	const SSL_METHOD *tls_method = NULL;
 	SSL_CTX *tls_client_ctx = NULL;
-
+#else
+	void *tls_client_ctx = NULL;
+#endif
 	/* it is not good idea to run tmail via root */
 	if (!getuid())
 	{
@@ -132,18 +137,23 @@ int main(int argc, char *argv[])
 	/* should be called for random */
 	srand(time(NULL));
 
+#ifndef SSL_DISABLED
 	/* initialize openssl */
 	SSL_library_init();
 	SSL_load_error_strings();
+#ifdef SSL_V11
 	tls_method = TLS_method();
+#endif
+#ifdef SSL_V10
+	tls_method = TLSv1_2_method();
+#endif
 	tls_client_ctx = SSL_CTX_new(tls_method);
-
 	if (!tls_client_ctx)
 	{
 		fprintf(stderr, "%s\n", "Can't initialize TLS context");
 		exit(EXIT_FAILURE);
 	}
-
+#endif
 	/* parse command line arguments */
 	if (strcmp(argv[1], SEND_EMAIL) == 0)
 	{

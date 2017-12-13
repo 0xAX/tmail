@@ -15,7 +15,9 @@ INCLUDES += -I../libsys/
 INCLUDES += -I../libencoding/
 
 LIB_SMTP_OBJS += smtpauth.o
+ifndef SSL_DISABLED
 LIB_SMTP_OBJS += starttls.o
+endif
 LIB_SMTP_OBJS += attachment.o
 LIB_SMTP_OBJS += ehlo.o
 LIB_SMTP_OBJS += help.o
@@ -42,7 +44,7 @@ $(MIME_OBJECT):
 	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_LIBS) ../mime.c -o $(MIME_OBJECT)
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_LIBS) $<
+	$(QUIET_CC) $(TMAIL_CC) $(LIBSMTP_DEFS) $(INCLUDES) $(CFLAGS_LIBS) $<
 
 $(CLEAN_TARGET):
 	$(QUIET_CLEAN_OBJECTS) $(RM) $(LIB_SMTP_OBJS)
