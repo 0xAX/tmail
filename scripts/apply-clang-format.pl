@@ -12,14 +12,12 @@ use File::Basename;
 use File::Find;
 
 my $argc = @ARGV;
+my ($tmail_dir) = @ARGV;
 
 if ($argc < 1) {
-    print PUSHCOLOR RED "apply-clang-format.pl: path to tmail root dir should be passed.\n";
-    print POPCOLOR;
-    exit 1;
+    $tmail_dir = `pwd`;
+    chop($tmail_dir);
 }
-
-my ($tmail_dir) = @ARGV;
 
 if (! -d $tmail_dir) {
     print PUSHCOLOR RED "apply-clang-format.pl: path to tmail root dir should be passed.";
