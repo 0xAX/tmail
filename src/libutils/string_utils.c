@@ -24,7 +24,7 @@ char *skip_cl_rl(char *str)
  */
 char *skip_spaces(char *str)
 {
-	while (isspace(*str))
+	while (isspace((int)*str))
 		++str;
 	return str;
 }
