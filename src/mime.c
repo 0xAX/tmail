@@ -115,7 +115,7 @@ char *get_mime_type(char *filename)
 		}
 		ptr++;
 
-		while (!isspace(*ptr))
+		while (!isspace((int)*ptr))
 		{
 			buffer[i] = *ptr;
 			ptr++;
