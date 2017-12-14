@@ -189,12 +189,14 @@
 			   ERR_CODE_MSG, PROTECTED)                            \
 	if ((n = tmail_sock_recv(SOCKET, BUFFER, BUFSIZ, PROTECTED)) == -1)    \
 	{                                                                      \
+		n = 0;                                                         \
 		fprintf(stderr, READ_ERR_MSG);                                 \
 		return 0;                                                      \
 	}                                                                      \
 	if (!(BUFFER[0] == EXP_CODE[0] && BUFFER[1] == EXP_CODE[1] &&          \
 	      BUFFER[2] == EXP_CODE[2]))                                       \
 	{                                                                      \
+		n = 0;                                                         \
 		fprintf(stderr, ERR_CODE_MSG, BUFFER);                         \
 		return 0;                                                      \
 	}
@@ -269,7 +271,7 @@ int send_help(void *socket, char *buffer, bool protected);
 /* smtpauth.c */
 int parse_auth_capabilities(char *capname, size_t capname_len, char *buf,
 			    unsigned long *capbitmap);
-int send_auth(smtp_ctx_t *smtp,
-	      SSL_CTX *tls_client_ctx __attribute__((__unused__)));
+int send_auth(smtp_ctx_t *smtp, void *socket __attribute__((__unused__)),
+	      bool protected);
 
 #endif /* __LIB_SMTP_H__ */
