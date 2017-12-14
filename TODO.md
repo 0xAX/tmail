@@ -67,6 +67,7 @@ This stuff should be implemented after `STARTTLS` support:
 without configuration.
   * Add `smpt.encoding` configuration parameter.
   * Release everything in `at_exit()` callback.
+  * Support for multiline configuration items.
 
 ## libsmtp
 
