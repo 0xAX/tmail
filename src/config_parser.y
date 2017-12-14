@@ -132,8 +132,8 @@ void fill_smtp_conf(char *name, char *val)
 		if (strcmp(val, "578") == 0)
 			smtp_conf->tls = true;
 	}
-	else if (strcmp(name, "smtp.passwd") == 0)
-		set_val(&smtp_conf->passwd, val);
+	else if (strcmp(name, "smtp.password") == 0)
+		set_val(&smtp_conf->password, val);
 	else if (strcmp(name, "smtp.from") == 0)
 		set_val(&smtp_conf->from, val);
 	else if (strcmp(name, "smtp.signature") == 0)

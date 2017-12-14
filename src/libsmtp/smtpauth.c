@@ -50,3 +50,9 @@ int parse_auth_capabilities(char *capname, size_t capname_len, char *buf,
 
 	return 0;
 }
+
+int send_auth(smtp_ctx_t *smtp,
+	      SSL_CTX *tls_client_ctx __attribute__((__unused__)))
+{
+	return 0;
+}

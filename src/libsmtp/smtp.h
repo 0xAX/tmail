@@ -205,7 +205,7 @@ typedef struct
 	char *smtp_server;
 	char *smtp_port;
 	char *realname;
-	char *passwd;
+	char *password;
 	char *from;
 	fd_t signature_fd;
 
@@ -269,5 +269,7 @@ int send_help(void *socket, char *buffer, bool protected);
 /* smtpauth.c */
 int parse_auth_capabilities(char *capname, size_t capname_len, char *buf,
 			    unsigned long *capbitmap);
+int send_auth(smtp_ctx_t *smtp,
+	      SSL_CTX *tls_client_ctx __attribute__((__unused__)));
 
 #endif /* __LIB_SMTP_H__ */
