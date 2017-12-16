@@ -44,7 +44,7 @@ static void *start_smtp_protected_session(smtp_ctx_t *smtp, SSL *client,
 	smtp->smtp_extension = parse_smtp_caps(response, smtp);
 	memset(response, 0, 1024);
 
-	send_auth(smtp, (void *)client);
+	send_auth(smtp, (void *)client, true);
 exit:
 	return (void *)1;
 }
