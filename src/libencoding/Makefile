@@ -14,13 +14,13 @@ TEST_EXECUTABLES += base64_test
 
 TEST_OBJS += base64_test.o
 
-INCLUDES = -I../libutils
+INCLUDES = -I../libutils $(OSX_FLAGS)
 
 $(TMAIL_ENCODING_LIB): $(LIB_ENCODING_OBJS)
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CC_SHLIB_FLAGS) $@ $<
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(WARNINGS) $(CC_SHLIB_FLAGS) $@ $<
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_LIBS) $<
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(WARNINGS) $(CFLAGS_LIBS) $<
 
 $(TEST_TARGET): base64_test
 	@exec ./run_tests.pl

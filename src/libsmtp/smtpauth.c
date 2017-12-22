@@ -12,7 +12,7 @@
 #define LOGIN (1 << 1)
 
 int parse_auth_capabilities(char *capname, size_t capname_len, char *buf,
-			    unsigned long *capbitmap)
+			    bitmap_t *capbitmap)
 {
 	if (strncmp(capname, buf, capname_len) == 0)
 	{
@@ -51,7 +51,7 @@ int parse_auth_capabilities(char *capname, size_t capname_len, char *buf,
 	return 0;
 }
 
-int send_auth(smtp_ctx_t *smtp,
+int send_auth(smtp_ctx_t *smtp __attribute__((__unused__)),
 	      SSL_CTX *tls_client_ctx __attribute__((__unused__)))
 {
 	return 0;

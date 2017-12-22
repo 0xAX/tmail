@@ -268,7 +268,7 @@ int send_help(void *socket, char *buffer, bool protected);
 
 /* smtpauth.c */
 int parse_auth_capabilities(char *capname, size_t capname_len, char *buf,
-			    unsigned long *capbitmap);
+			    bitmap_t *capbitmap);
 int send_auth(smtp_ctx_t *smtp,
 	      SSL_CTX *tls_client_ctx __attribute__((__unused__)));
 

@@ -96,15 +96,16 @@ DEBUG_FLAGS+=-ggdb
 DEBUG_FLAGS+=-D_FORTIFY_SOURCE=2
 
 # Add compiler related warnings flags
-ifeq ($(TMAIL_CC), gcc)
+ifeq ($(findstring gcc, $(TMAIL_CC)), gcc)
 WARNINGS += -fmax-errors=2
 WARNINGS+=-Wswitch-bool
 WARNINGS+=-Wlogical-op
 WARNINGS+=-Wsuggest-attribute=noreturn
 WARNINGS+=-Wsuggest-final-types
 WARNINGS+=-Wduplicated-cond
-else ifeq ($(TMAIL_CC), clang)
+else ifeq ($(findstring clang, $(TMAIL_CC)), clang)
 WARNINGS += -ferror-limit=2
+WARNINGS += -Qunused-arguments
 endif
 
 # Compile with debug info or optimization stuff
@@ -138,7 +139,7 @@ CFLAGS_LIBS += -c $(WARNINGS) $(STANDARD) $(ARCH) $(MISC_FLAGS) -fpic
 TMAIL_VERSION=$(shell ../scripts/version.pl)
 DEFS += -DTMAIL_VERSION=\"$(TMAIL_VERSION)\"
 
-OPENSSL_VERSION=$(shell openssl version 2>/dev/null | sed -e "s/OpenSSL //" | sed -e "s/\.[0-9][a-z].*//")
+OPENSSL_VERSION=$(shell openssl version 2>/dev/null | sed -E -e "s/(OpenSSL|LibreSSL).//" | sed -e "s/\.[0-9][a-z].*//")
 ifeq ($(OPENSSL_VERSION), 1.1)
 	DEFS += -DSSL_V11=\"1\"
 	LIBSMTP_DEFS += -DSSL_V11=\"1\"
@@ -150,5 +151,16 @@ else
 		SSL_DISABLED = 1
 		DEFS += -DSSL_DISABLED=\"1\"
 		LIBSMTP_DEFS = -DSSL_DISABLED=\"1\"
+	endif
+endif
+
+
+#
+# OS related stuff
+#
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	ifndef SSL_DISABLED
+		OSX_FLAGS=-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib
 	endif
 endif

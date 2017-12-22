@@ -8,12 +8,6 @@
 include ../mk/Common.mk
 include ../mk/Build.mk
 
-# if we are in CI context
-ifdef TRAVIS
-PREFIX="${HOME}/opt"
-CI_FLAGS = -I${PREFIX}/include -L${PREFIX}/lib
-endif
-
 # external libraries that are used by tmail
 ifndef SSL_DISABLED
 OPENSSL = -lssl -lcrypto
@@ -76,7 +70,7 @@ INCLUDES+=-Ilibencoding/
 INCLUDES+=-I./
 
 # Final compiler flags
-COMPILER_FLAGS = $(LIBS_PATH) $(INCLUDES) $(LINKER_OPTS) $(CC_EXEC_FLAGS)
+COMPILER_FLAGS = $(LIBS_PATH) $(INCLUDES) $(OSX_FLAGS) $(LINKER_OPTS) $(CC_EXEC_FLAGS)
 
 # set of object file that linked together with tmail
 TMAIL_OBJECT_FILES_DEPS += $(LIBSYS_OBJS)
@@ -86,18 +80,18 @@ TMAIL_OBJECT_FILES_DEPS += $(LIB_ENCODING_OBJS)
 TMAIL_OBJECT_FILES_DEPS += $(LIB_SMTP_OBJS)
 
 $(TMAIL_EXECUTABLE): $(PARSER_OBJECTS) $(TMAIL_OBJS)
-	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@ $(CI_FLAGS) $(TMAIL_OBJECT_FILES_DEPS) $(TMAIL_OBJS) $(LIBS)
+	$(QUIET_CC) $(TMAIL_CC)	$(COMPILER_FLAGS) ../$@ $(TMAIL_OBJECT_FILES_DEPS) $(TMAIL_OBJS) $(LIBS)
 
 config_parser.tab.o: $(CONFIG_PARSER)
 	$(BISON) -d -v $(CONFIG_PARSER)
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) -c config_parser.tab.c
+	$(QUIET_CC) $(TMAIL_CC) $(OSX_FLAGS) $(INCLUDES) -c config_parser.tab.c
 
 lex.yy.o: $(CONFIG_LEXER)
 	$(FLEX) $(CONFIG_LEXER)
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) -c lex.yy.c
+	$(QUIET_CC) $(TMAIL_CC) $(OSX_FLAGS) $(INCLUDES) -c lex.yy.c
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(DEFS) $(INCLUDES) $(CI_FLAGS) $(CFLAGS_OBJS) $@ $<
+	$(QUIET_CC) $(TMAIL_CC) $(DEFS) $(OSX_FLAGS) $(INCLUDES) $(CFLAGS_OBJS) $@ $<
 
 $(CLEAN_TARGET):
 	@echo "./src"

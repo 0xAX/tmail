@@ -8,13 +8,7 @@ default: $(TMAIL_SYS_LIB)
 include ../../mk/Common.mk
 include ../../mk/Build.mk
 
-# if we are in CI context
-ifdef TRAVIS
-PREFIX=${HOME}/opt
-CI_FLAGS = -I${PREFIX}/include -L${PREFIX}/lib
-endif
-
-INCLUDES += -I../libutils/ $(CI_FLAGS)
+INCLUDES += -I../libutils/ $(OSX_FLAGS)
 
 LIB_SYS_OBJS += at_exit.o
 LIB_SYS_OBJS += connect.o
@@ -23,10 +17,10 @@ LIB_SYS_OBJS += gethostname.o
 LIB_SYS_OBJS += inet.o
 
 $(TMAIL_SYS_LIB): $(LIB_SYS_OBJS)
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CC_SHLIB_FLAGS) $@ $<
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(WARNINGS) $(CC_SHLIB_FLAGS) $@ $<
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(CFLAGS_LIBS) $<
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(WARNINGS) $(CFLAGS_LIBS) $<
 
 $(CLEAN_TARGET):
 	@echo "./src/libsys"

@@ -47,19 +47,37 @@ matrix:
           packages: ['clang-3.9', 'flex', 'bison']
     - os: linux
       env: TMAIL_CC=clang
-      compiler: clang
+      compiler: clang-4.0
       addons:
         apt:
           sources: ['llvm-toolchain-trusty-4.0']
-          packages: ['clang-4.0', 'flex', 'bison']
+          packages: ['clang', 'flex', 'bison']
+    - os: linux
+      env: TMAIL_CC=clang
+      compiler: clang-5.0
+      addons:
+        apt:
+          sources: ['llvm-toolchain-trusty-5.0']
+          packages: ['clang', 'flex', 'bison']
+    - os: osx
+      env: TMAIL_CC=clang
+      compiler: clang
 
 before_install:
   - test -n $CC && unset CC
+  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi'
+  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew upgrade openssl; fi'
+  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --force openssl; fi'
+  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ln -s /usr/local/Cellar/openssl/1.0.2n/bin/openssl /usr/local/bin/openssl; fi'
+  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install flex; fi'
+  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --force flex; fi'
+  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install bison; fi'
+  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --force bison; fi'
 
 git:
   depth: 1
 
 script:
-  - .travis/build.sh
-  - make TMAIL_CC=$TMAIL_CC DEBUG=1 V=1 TRAVIS=1 all
-  - make TMAIL_CC=$TMAIL_CC DEBUG=1 V=1 TRAVIS=1 test
+  - $TMAIL_CC -v
+  - make TMAIL_CC=$TMAIL_CC DEBUG=1 V=1 all
+  - make TMAIL_CC=$TMAIL_CC DEBUG=1 V=1 test

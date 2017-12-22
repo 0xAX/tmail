@@ -15,11 +15,11 @@ INCLUDE_DIR += -I../libutils
 
 $(TEST_TARGET): $(TEST_EXECUTABLES)
 	@exec ./run_tests.pl
-#	@rm -rf $(TEST_EXECUTABLES)
+	@rm -rf $(TEST_EXECUTABLES)
 
 mime_test:
-	$(TMAIL_CC) $(INCLUDE_DIR) $(DEBUG_FLAGS) -c mime_test.c
-	$(TMAIL_CC) $(INCLUDE_DIR) $(DEBUG_FLAGS) ../mime.o mime_test.o -o mime_test
+	$(TMAIL_CC) $(OSX_FLAGS) $(INCLUDE_DIR) $(DEBUG_FLAGS) -c mime_test.c
+	$(TMAIL_CC) $(OSX_FLAGS) $(INCLUDE_DIR) $(DEBUG_FLAGS) ../mime.o mime_test.o -o mime_test
 
 $(CLEAN_TARGET):
 	@echo "./src/tests"
