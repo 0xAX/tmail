@@ -51,45 +51,53 @@ int parse_auth_capabilities(char *capname, size_t capname_len, char *buf,
 	return 0;
 }
 
-static int send_plain(smtp_ctx_t *smtp __attribute__((__unused__)),
+static int send_login(smtp_ctx_t *smtp __attribute__((__unused__)),
 		      void *socket __attribute__((__unused__)), bool protected)
 {
 	int n = 0;
-	size_t username_len = strlen(smtp->from);
-	size_t password_len = strlen(smtp->password);
-	char *auth_data;
 	char buffer[1024];
-
-	memset(buffer, 0, 1024);
+	base64_data_t *login_result = NULL;
+	base64_data_t *password_result = NULL;
 
 	// send AUTH command and read a response
-	tmail_sock_send(socket, "AUTH PLAIN\r\n", 12, protected);
+	memset(buffer, 0, 1024);
+	tmail_sock_send(socket, "AUTH LOGIN\r\n", 12, protected);
 	READ_SMTP_RESPONSE(socket, buffer, 1024, "334",
 			   "Error: Can\'t read SMTP AUTH PLAIN response\n",
-			   "Error: SMTP EHLO wrong response: %s\n", protected);
+			   "Error: SMTP PLAIN auth wrong response: %s\n",
+			   protected);
+	memset(buffer, 0, 1024);
 
-	// allocate space for AUTH message
-	auth_data = malloc(username_len + password_len + 2 + 1);
-	if (!auth_data)
-	{
-		fprintf(stderr,
-			"Error: can't allocate memory for PLAIN LOGIN\n");
-		return 0;
-	}
-	memset(auth_data, 0, username_len + password_len + 1);
-	snprintf(auth_data, username_len + password_len + 2 + 1, "%s%s\r\n",
-		 smtp->from, smtp->password);
+	login_result = base64_encode(smtp->from, strlen(smtp->from), NOT_MIME);
+	tmail_sock_send(socket, login_result->data, login_result->out_len,
+			protected);
+	tmail_sock_send(socket, "\r\n", 2, protected);
+	READ_SMTP_RESPONSE(
+	    socket, buffer, 1024, "334",
+	    "Error: Something going wrong during PLAIN authentication\n",
+	    "Error: SMTP PLAIN auth response: %s\n", protected);
+	memset(buffer, 0, 1024);
 
-	free(auth_data);
+	password_result =
+	    base64_encode(smtp->password, strlen(smtp->password), NOT_MIME);
+	tmail_sock_send(socket, password_result->data, password_result->out_len,
+			protected);
+	tmail_sock_send(socket, "\r\n", 2, protected);
+	READ_SMTP_RESPONSE(
+	    socket, buffer, 1024, "235",
+	    "Error: Something going wrong during PLAIN authentication\n",
+	    "Error: SMTP PLAIN auth response: %s\n", protected);
+
+	free(login_result);
+	free(password_result);
 	return 1;
 }
 
-int send_auth(smtp_ctx_t *smtp,
-	      void *socket __attribute__((__unused__)),
+int send_auth(smtp_ctx_t *smtp, void *socket __attribute__((__unused__)),
 	      bool protected)
 {
-	if (smtp->auth_caps & PLAIN)
-		return send_plain(smtp, socket, protected);
+	if (smtp->auth_caps & LOGIN)
+		return send_login(smtp, socket, protected);
 
 	return 1;
 }

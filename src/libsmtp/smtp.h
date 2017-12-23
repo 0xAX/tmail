@@ -270,7 +270,6 @@ int send_help(void *socket, char *buffer, bool protected);
 int parse_auth_capabilities(char *capname, size_t capname_len, char *buf,
 			    bitmap_t *capbitmap);
 int send_auth(smtp_ctx_t *smtp,
-	      void *tls_client_ctx __attribute__((__unused__)),
-	      bool protected);
+	      void *tls_client_ctx __attribute__((__unused__)), bool protected);
 
 #endif /* __LIB_SMTP_H__ */

@@ -12,11 +12,11 @@
 static char alphabet[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-base64_data_t *base64_encode(char *data, size_t len)
+base64_data_t *base64_encode(char *data, size_t len, bitmap_t opts)
 {
 	base64_data_t *result = NULL;
 	size_t out_len = 4 * (len / 3);
-	int lines_count = out_len / 76 + 1;
+	int lines_count = 0;
 	size_t c = len % 3;
 	char padding[3];
 
@@ -24,7 +24,12 @@ base64_data_t *base64_encode(char *data, size_t len)
 		return NULL;
 
 	/* besides length of data, we need to add CR\LF to each line */
-	out_len += lines_count * 2 + 2;
+	if ((opts & NOT_MIME) == 0)
+	{
+		lines_count = out_len / 76 + 1;
+		out_len += lines_count * 2;
+	}
+	out_len += 2;
 
 	/* fill message with padding */
 	memset(padding, 0, 3);
@@ -56,7 +61,7 @@ base64_data_t *base64_encode(char *data, size_t len)
 		 * The encoded output stream must be represented in lines of no
 		 * more than 76 characters each.
 		 */
-		if (i > 0 && (i / 3 * 4) % 76 == 0)
+		if ((opts & NOT_MIME) == 0 && i > 0 && (i / 3 * 4) % 76 == 0)
 			strncat(result->data, (char *)"\r\n", 2);
 
 		n0 = ((u_char)(data)[i] << 16) + ((u_char)(data)[i + 1] << 8) +

@@ -37,6 +37,7 @@ like this.
 
 ## send-email
 
+  * More verbose error when attachment is not found.
   * Implement `-i/--interactive`.
   * Implement `-e/--use-editor`.
   * Add `--smtp-server`, `--smtp-server-address` and `--smtp-server-port`.

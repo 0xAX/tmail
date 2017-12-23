@@ -23,6 +23,11 @@ typedef struct
 	char *data;
 } base64_data_t;
 
-base64_data_t *base64_encode(char *data, size_t len);
+/*
+ * base64 options
+ */
+#define NOT_MIME (1 << 0)
+
+base64_data_t *base64_encode(char *data, size_t len, bitmap_t opts);
 
 #endif

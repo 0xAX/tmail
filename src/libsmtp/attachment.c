@@ -19,7 +19,7 @@ static int read_and_send(void *socket, fd_t fd, char *buf, size_t len,
 	base64_data_t *base64_encoded_buf = NULL;
 
 	n = read(fd, buf, len);
-	base64_encoded_buf = base64_encode(buf, n);
+	base64_encoded_buf = base64_encode(buf, n, 0);
 	if (!base64_encoded_buf)
 	{
 		fprintf(stderr, "Error: can't allocate memory for "

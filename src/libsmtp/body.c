@@ -108,7 +108,7 @@ static int send_message_content(void *socket, message_t *message, char *buffer,
 	if (message->attachments)
 	{
 		base64_data_t *uid =
-		    base64_encode(message->from, strlen(message->from));
+		    base64_encode(message->from, strlen(message->from), 0);
 		time_t timestamp = time(NULL);
 		char timestamp_buffer[32];
 
