@@ -267,12 +267,8 @@ int send_message(void *socket, smtp_ctx_t *smtp, message_t *message,
 int send_help(void *socket, char *buffer, bool protected);
 
 /* smtpauth.c */
-int parse_auth_capabilities(char *capname,
-			    size_t capname_len,
-			    char *buf,
+int parse_auth_capabilities(char *capname, size_t capname_len, char *buf,
 			    bitmap_t *capbitmap);
-int send_auth(smtp_ctx_t *smtp,
-	      void *tls_client_ctx,
-	      bool protected);
+int send_auth(smtp_ctx_t *smtp, void *tls_client_ctx, bool protected);
 
 #endif /* __LIB_SMTP_H__ */

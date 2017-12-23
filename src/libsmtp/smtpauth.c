@@ -97,8 +97,7 @@ static int send_login(smtp_ctx_t *smtp __attribute__((__unused__)),
 	return 1;
 }
 
-int send_auth(smtp_ctx_t *smtp, void *socket,
-	      bool protected)
+int send_auth(smtp_ctx_t *smtp, void *socket, bool protected)
 {
 	if (smtp->auth_caps & LOGIN)
 		return send_login(smtp, socket, protected);
