@@ -15,7 +15,7 @@ static char alphabet[] =
 base64_data_t *base64_encode(char *data, size_t len, bitmap_t opts)
 {
 	base64_data_t *result = NULL;
-	size_t out_len = 4 * (len / 3);
+	size_t out_len = 4 * (len / 3) + 1;
 	int lines_count = 0;
 	size_t c = len % 3;
 	char padding[3];
