@@ -15,7 +15,6 @@ INCLUDES += -I../libsys/
 INCLUDES += -I../libencoding/
 INCLUDES += $(OSX_FLAGS)
 
-LIB_SMTP_OBJS += smtpauth.o
 ifndef SSL_DISABLED
 LIB_SMTP_OBJS += starttls.o
 endif
@@ -28,6 +27,7 @@ LIB_SMTP_OBJS += data_msg.o
 LIB_SMTP_OBJS += body.o
 LIB_SMTP_OBJS += quit.o
 LIB_SMTP_OBJS += smtp.o
+LIB_SMTP_OBJS += smtpauth.o
 
 # some SMTP code uses libsys code
 LIB_SYS_OBJS += ../libsys/gethostname.o

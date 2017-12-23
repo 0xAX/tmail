@@ -1,0 +1,153 @@
+Usage: /usr/bin/dracut [OPTION]... [<initramfs> [<kernel-version>]]
+
+Version: 046-3.1.fc26
+
+Creates initial ramdisk images for preloading modules
+
+  --kver [VERSION]      Set kernel version to [VERSION].
+  -f, --force           Overwrite existing initramfs file.
+  -a, --add [LIST]      Add a space-separated list of dracut modules.
+  --rebuild         Append arguments to those of existing image and rebuild
+  -m, --modules [LIST]  Specify a space-separated list of dracut modules to
+                         call when building the initramfs. Modules are located
+                         in /usr/lib/dracut/modules.d.
+  -o, --omit [LIST]     Omit a space-separated list of dracut modules.
+  --force-add [LIST]    Force to add a space-separated list of dracut modules
+                         to the default set of modules, when -H is specified.
+  -d, --drivers [LIST]  Specify a space-separated list of kernel modules to
+                         exclusively include in the initramfs.
+  --add-drivers [LIST]  Specify a space-separated list of kernel
+                         modules to add to the initramfs.
+  --force-drivers [LIST] Specify a space-separated list of kernel
+                         modules to add to the initramfs and make sure they
+                         are tried to be loaded via modprobe same as passing
+                         rd.driver.pre=DRIVER kernel parameter.
+  --omit-drivers [LIST] Specify a space-separated list of kernel
+                         modules not to add to the initramfs.
+  --filesystems [LIST]  Specify a space-separated list of kernel filesystem
+                         modules to exclusively include in the generic
+                         initramfs.
+  -k, --kmoddir [DIR]   Specify the directory, where to look for kernel
+                         modules
+  --fwdir [DIR]         Specify additional directories, where to look for
+                         firmwares, separated by :
+  --kernel-only         Only install kernel drivers and firmware files
+  --no-kernel           Do not install kernel drivers and firmware files
+  --print-cmdline       Print the kernel command line for the given disk layout
+  --early-microcode     Combine early microcode with ramdisk
+  --no-early-microcode  Do not combine early microcode with ramdisk
+  --kernel-cmdline [PARAMETERS] Specify default kernel command line parameters
+  --strip               Strip binaries in the initramfs
+  --nostrip             Do not strip binaries in the initramfs
+  --prelink             Prelink binaries in the initramfs
+  --noprelink           Do not prelink binaries in the initramfs
+  --hardlink            Hardlink files in the initramfs
+  --nohardlink          Do not hardlink files in the initramfs
+  --prefix [DIR]        Prefix initramfs files with [DIR]
+  --noprefix            Do not prefix initramfs files
+  --mdadmconf           Include local /etc/mdadm.conf
+  --nomdadmconf         Do not include local /etc/mdadm.conf
+  --lvmconf             Include local /etc/lvm/lvm.conf
+  --nolvmconf           Do not include local /etc/lvm/lvm.conf
+  --fscks [LIST]        Add a space-separated list of fsck helpers.
+  --nofscks             Inhibit installation of any fsck helpers.
+  --ro-mnt              Mount / and /usr read-only by default.
+  -h, --help            This message
+  --debug               Output debug information of the build process
+  --profile             Output profile information of the build process
+  -L, --stdlog [0-6]    Specify logging level (to standard error)
+                         0 - suppress any messages
+                         1 - only fatal errors
+                         2 - all errors
+                         3 - warnings
+                         4 - info
+                         5 - debug info (here starts lots of output)
+                         6 - trace info (and even more)
+  -v, --verbose         Increase verbosity level
+  -q, --quiet           Decrease verbosity level
+  -c, --conf [FILE]     Specify configuration file to use.
+                         Default: /etc/dracut.conf
+  --confdir [DIR]       Specify configuration directory to use *.conf files
+                         from. Default: /etc/dracut.conf.d
+  --tmpdir [DIR]        Temporary directory to be used instead of default
+                         /var/tmp.
+  -l, --local           Local mode. Use modules from the current working
+                         directory instead of the system-wide installed in
+                         /usr/lib/dracut/modules.d.
+                         Useful when running dracut from a git checkout.
+  -H, --hostonly        Host-Only mode: Install only what is needed for
+                        booting the local host instead of a generic host.
+  -N, --no-hostonly     Disables Host-Only mode
+  --hostonly-cmdline    Store kernel command line arguments needed
+                        in the initramfs
+  --no-hostonly-cmdline Do not store kernel command line arguments needed
+                        in the initramfs
+  --hostonly-i18n       Install only needed keyboard and font files according
+                        to the host configuration (default).
+  --no-hostonly-i18n    Install all keyboard and font files available.
+  --persistent-policy [POLICY]
+                        Use [POLICY] to address disks and partitions.
+                        POLICY can be any directory name found in /dev/disk.
+                        E.g. "by-uuid", "by-label"
+  --fstab               Use /etc/fstab to determine the root device.
+  --add-fstab [FILE]    Add file to the initramfs fstab
+  --mount "[DEV] [MP] [FSTYPE] [FSOPTS]"
+                        Mount device [DEV] on mountpoint [MP] with filesystem
+                        [FSTYPE] and options [FSOPTS] in the initramfs
+  --mount "[MP]"	Same as above, but [DEV], [FSTYPE] and [FSOPTS] are
+			determined by looking at the current mounts.
+  --add-device "[DEV]"  Bring up [DEV] in initramfs
+  -i, --include [SOURCE] [TARGET]
+                        Include the files in the SOURCE directory into the
+                         Target directory in the final initramfs.
+                        If SOURCE is a file, it will be installed to TARGET
+                         in the final initramfs.
+  -I, --install [LIST]  Install the space separated list of files into the
+                         initramfs.
+  --install-optional [LIST]  Install the space separated list of files into the
+                         initramfs, if they exist.
+  --gzip                Compress the generated initramfs using gzip.
+                         This will be done by default, unless another
+                         compression option or --no-compress is passed.
+  --bzip2               Compress the generated initramfs using bzip2.
+                         Make sure your kernel has bzip2 decompression support
+                         compiled in, otherwise you will not be able to boot.
+  --lzma                Compress the generated initramfs using lzma.
+                         Make sure your kernel has lzma support compiled in,
+                         otherwise you will not be able to boot.
+  --xz                  Compress the generated initramfs using xz.
+                         Make sure that your kernel has xz support compiled
+                         in, otherwise you will not be able to boot.
+  --lzo                 Compress the generated initramfs using lzop.
+                         Make sure that your kernel has lzo support compiled
+                         in, otherwise you will not be able to boot.
+  --lz4                 Compress the generated initramfs using lz4.
+                         Make sure that your kernel has lz4 support compiled
+                         in, otherwise you will not be able to boot.
+  --compress [COMPRESSION] Compress the generated initramfs with the
+                         passed compression program.  Make sure your kernel
+                         knows how to decompress the generated initramfs,
+                         otherwise you will not be able to boot.
+  --no-compress         Do not compress the generated initramfs.  This will
+                         override any other compression options.
+  --list-modules        List all available dracut modules.
+  -M, --show-modules    Print included module's name to standard output during
+                         build.
+  --keep                Keep the temporary initramfs for debugging purposes
+  --printsize           Print out the module install size
+  --sshkey [SSHKEY]     Add ssh key to initramfs (use with ssh-client module)
+  --logfile [FILE]      Logfile to use (overrides configuration setting)
+  --reproducible        Create reproducible images
+  --no-reproducible     Do not create reproducible images
+  --loginstall [DIR]    Log all files installed from the host to [DIR]
+  --uefi                Create an UEFI executable with the kernel cmdline and
+                        kernel combined
+  --uefi-stub [FILE]    Use the UEFI stub [FILE] to create an UEFI executable
+  --kernel-image [FILE] location of the kernel image
+
+If [LIST] has multiple arguments, then you have to put these in quotes.
+
+For example:
+
+    # dracut --add-drivers "module1 module2"  ...
+
