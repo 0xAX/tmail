@@ -163,7 +163,9 @@
 				continue;                                      \
 			}                                                      \
 			end = strchr(SMTP_CAPS_STR, '\r');                     \
-			ARG = calloc(end - SMTP_CAPS_STR + 1, 1);              \
+			if (ARG)                                               \
+				continue;                                      \
+			ARG = calloc(end - SMTP_CAPS_STR + 2, 1);              \
 			memcpy(ARG, SMTP_CAPS_STR, end - SMTP_CAPS_STR + 1);   \
 			ARG[end - SMTP_CAPS_STR] = 0;                          \
 			continue;                                              \
