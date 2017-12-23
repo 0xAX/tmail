@@ -84,7 +84,8 @@ static int send_plain(smtp_ctx_t *smtp __attribute__((__unused__)),
 	return 1;
 }
 
-int send_auth(smtp_ctx_t *smtp, void *socket __attribute__((__unused__)),
+int send_auth(smtp_ctx_t *smtp,
+	      void *socket __attribute__((__unused__)),
 	      bool protected)
 {
 	if (smtp->auth_caps & PLAIN)
