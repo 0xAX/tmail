@@ -22,10 +22,11 @@ static int send_rcpt_to(void *socket, char *buffer, list_t *recipients,
 		 * 8      - length of 'RCPT TO' string
 		 * to_len - length of email address
 		 * 2      - length of \r\n
+		 * 2      - <>
 		 * 1      - \0 byte
 		 */
-		char *rcpt_to_msg = malloc(8 + to_len + 2 + 1);
-		memset(rcpt_to_msg, 0, 8 + to_len + 2 + 1);
+		char *rcpt_to_msg = malloc(8 + to_len + 2 + 2 + 1);
+		memset(rcpt_to_msg, 0, 8 + to_len + 2 + 2 + 1);
 		if (!rcpt_to_msg)
 		{
 			fprintf(stderr,
@@ -35,8 +36,8 @@ static int send_rcpt_to(void *socket, char *buffer, list_t *recipients,
 		}
 
 		/*send RCPT TO message */
-		snprintf(rcpt_to_msg, 8 + to_len + 2 + 1, "RCPT TO:%s\r\n",
-			 (char *)entry->item);
+		snprintf(rcpt_to_msg, 8 + to_len + 2 + 2 + 1,
+			 "RCPT TO:<%s>\r\n", (char *)entry->item);
 		tmail_sock_send(socket, rcpt_to_msg, strlen(rcpt_to_msg),
 				protected);
 

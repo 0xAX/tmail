@@ -163,7 +163,9 @@
 				continue;                                      \
 			}                                                      \
 			end = strchr(SMTP_CAPS_STR, '\r');                     \
-			ARG = calloc(end - SMTP_CAPS_STR + 1, 1);              \
+			if (ARG)                                               \
+				continue;                                      \
+			ARG = calloc(end - SMTP_CAPS_STR + 2, 1);              \
 			memcpy(ARG, SMTP_CAPS_STR, end - SMTP_CAPS_STR + 1);   \
 			ARG[end - SMTP_CAPS_STR] = 0;                          \
 			continue;                                              \
@@ -267,12 +269,8 @@ int send_message(void *socket, smtp_ctx_t *smtp, message_t *message,
 int send_help(void *socket, char *buffer, bool protected);
 
 /* smtpauth.c */
-int parse_auth_capabilities(char *capname,
-			    size_t capname_len,
-			    char *buf,
+int parse_auth_capabilities(char *capname, size_t capname_len, char *buf,
 			    bitmap_t *capbitmap);
-int send_auth(smtp_ctx_t *smtp,
-	      void *tls_client_ctx,
-	      bool protected);
+int send_auth(smtp_ctx_t *smtp, void *tls_client_ctx, bool protected);
 
 #endif /* __LIB_SMTP_H__ */

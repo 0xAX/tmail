@@ -92,13 +92,14 @@ static int send_login(smtp_ctx_t *smtp __attribute__((__unused__)),
 	    "Error: Something going wrong during PLAIN authentication\n",
 	    "Error: SMTP PLAIN auth response: %s\n", protected);
 
-	free(login_result);
-	free(password_result);
+	mfree(login_result->data);
+	mfree(login_result);
+	mfree(password_result->data);
+	mfree(password_result);
 	return 1;
 }
 
-int send_auth(smtp_ctx_t *smtp, void *socket,
-	      bool protected)
+int send_auth(smtp_ctx_t *smtp, void *socket, bool protected)
 {
 	if (smtp->auth_caps & LOGIN)
 		return send_login(smtp, socket, protected);

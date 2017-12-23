@@ -19,9 +19,10 @@ int send_mail_from_message(void *socket, message_t *message, char *buffer,
 	 * 10           - length of 'MAIL FROM:' string
 	 * from_len     - length of email address
 	 * 2            - length of \r\n
+	 * 2            - <>
 	 * 1            - \0 byte
 	 */
-	size_t msg_len = 10 + from_len + 2 + 1;
+	size_t msg_len = 10 + from_len + 2 + 2 + 1;
 	char *mail_from_msg = malloc(msg_len);
 	if (!mail_from_msg)
 	{
@@ -30,7 +31,7 @@ int send_mail_from_message(void *socket, message_t *message, char *buffer,
 		return 0;
 	}
 	memset(mail_from_msg, 0, msg_len);
-	snprintf(mail_from_msg, msg_len, "MAIL FROM:%s\r\n", message->from);
+	snprintf(mail_from_msg, msg_len, "MAIL FROM:<%s>\r\n", message->from);
 
 	/* send MAIL FROM clause */
 	tmail_sock_send(socket, mail_from_msg, msg_len - 1, protected);

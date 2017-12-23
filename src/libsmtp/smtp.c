@@ -67,6 +67,8 @@ void *send_email(smtp_ctx_t *smtp, message_t *message,
 		 SSL_CTX *tls_client_ctx __attribute__((__unused__)),
 		 bitmap_t opts)
 {
+	bool protected = false;
+	void *socket = NULL;
 #ifndef SSL_DISABLED
 	SSL *clienttls = NULL;
 #endif
@@ -103,6 +105,8 @@ void *send_email(smtp_ctx_t *smtp, message_t *message,
 	smtp->smtp_extension = parse_smtp_caps(response, smtp);
 	memset(response, 0, 1024);
 
+	socket = &smtp->conn->sd;
+
 #ifndef SSL_DISABLED
 	if (smtp->smtp_extension & SMTPTLS)
 	{
@@ -128,27 +132,32 @@ void *send_email(smtp_ctx_t *smtp, message_t *message,
 		/* Do not return this from here, it causes memory leak */
 		start_smtp_protected_session(smtp, clienttls, opts);
 
+	      protected
+		= true;
+		socket = clienttls;
+
 		/* TODO start tls negotiation */
-		goto ok;
+		// goto ok;
 	}
 #endif
-	if (!send_mail_from_message(&smtp->conn->sd, message, response, false))
+	memset(response, 0, 1024);
+	if (!send_mail_from_message(socket, message, response, protected))
 		goto fail;
 	memset(response, 0, 1024);
 
-	if (!send_rcpt_to_message(&smtp->conn->sd, message, response, false))
+	if (!send_rcpt_to_message(socket, message, response, protected))
 		goto fail;
 	memset(response, 0, 1024);
 
-	if (!send_data_message(&smtp->conn->sd, response, false))
+	if (!send_data_message(socket, response, protected))
 		goto fail;
 	memset(response, 0, 1024);
 
-	if (!send_message(&smtp->conn->sd, smtp, message, response, false))
+	if (!send_message(socket, smtp, message, response, protected))
 		goto fail;
 	memset(response, 0, 1024);
 
-	if (!send_quit_message(&smtp->conn->sd, response, false))
+	if (!send_quit_message(socket, response, protected))
 		goto fail;
 	goto ok;
 fail:

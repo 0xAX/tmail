@@ -65,8 +65,8 @@ static int send_message_body(void *socket, message_t *message, char *buffer,
 			protected);
 
 	memset(body, 0, 4096);
-	while ((n = tmail_sock_read(&message->body->message_fd, body, 4096,
-				    protected)) > 0)
+
+	while ((n = read(message->body->message_fd, body, 4096)) > 0)
 	{
 		tmail_sock_send(socket, body, n, protected);
 		memset(body, 0, 4096);
