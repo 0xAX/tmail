@@ -141,6 +141,7 @@ int main(int argc, char *argv[])
 	/* initialize openssl */
 	SSL_library_init();
 	SSL_load_error_strings();
+        ERR_load_crypto_strings();
 #ifdef SSL_V11
 	tls_method = TLS_method();
 #endif
