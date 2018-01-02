@@ -114,6 +114,8 @@ void *send_email(smtp_ctx_t *smtp, message_t *message,
 
 	if (smtp->tls == true)
 	{
+		int r = 0;
+
 		clienttls = SSL_new(tls_client_ctx);
 		if (!clienttls)
 		{
@@ -122,9 +124,13 @@ void *send_email(smtp_ctx_t *smtp, message_t *message,
 		}
 
 		SSL_set_fd(clienttls, smtp->conn->sd);
-		if (!SSL_connect(clienttls))
+		if ((r = SSL_connect(clienttls)) != 1)
 		{
-			/* TODO handle this */
+			SSL_get_error(clienttls, r);
+
+			fprintf(stderr, "TLS connect error: %s\n",
+				ERR_error_string(r, NULL));
+			goto fail;
 		}
 
 		/* Do not return this from here, it causes memory leak */
