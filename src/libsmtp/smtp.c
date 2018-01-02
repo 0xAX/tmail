@@ -75,9 +75,6 @@ void *send_email(smtp_ctx_t *smtp, message_t *message,
 	char request[1024];
 	char response[1024];
 
-	/* TODO remove this */
-	UNUSED(message);
-
 	smtp->conn = connect_to_service(smtp->smtp_server, smtp->smtp_port);
 	if (smtp->conn->error)
 	{
