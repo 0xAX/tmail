@@ -29,6 +29,7 @@
 
 #ifndef SSL_DISABLED
 #include <openssl/ssl.h>
+#include <openssl/err.h>
 #endif
 
 #define TO_CLAUSE "To: "

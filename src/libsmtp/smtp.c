@@ -117,7 +117,8 @@ void *send_email(smtp_ctx_t *smtp, message_t *message,
 		clienttls = SSL_new(tls_client_ctx);
 		if (!clienttls)
 		{
-			/* TODO handle this */
+			ERR_print_errors_fp(stderr);
+			goto fail;
 		}
 
 		SSL_set_fd(clienttls, smtp->conn->sd);
@@ -128,13 +129,8 @@ void *send_email(smtp_ctx_t *smtp, message_t *message,
 
 		/* Do not return this from here, it causes memory leak */
 		start_smtp_protected_session(smtp, clienttls, opts);
-
-	      protected
-		= true;
+		protected = true;
 		socket = clienttls;
-
-		/* TODO start tls negotiation */
-		// goto ok;
 	}
 #endif
 	memset(response, 0, 1024);
