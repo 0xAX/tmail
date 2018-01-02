@@ -67,7 +67,7 @@ void *send_email(smtp_ctx_t *smtp, message_t *message,
 		 SSL_CTX *tls_client_ctx __attribute__((__unused__)),
 		 bitmap_t opts)
 {
-	bool protected = false;
+	bool prot = false;
 	void *socket = NULL;
 #ifndef SSL_DISABLED
 	SSL *clienttls = NULL;
@@ -135,28 +135,28 @@ void *send_email(smtp_ctx_t *smtp, message_t *message,
 
 		/* Do not return this from here, it causes memory leak */
 		start_smtp_protected_session(smtp, clienttls, opts);
-		protected = true;
 		socket = clienttls;
+		prot = true;
 	}
 #endif
 	memset(response, 0, 1024);
-	if (!send_mail_from_message(socket, message, response, protected))
+	if (!send_mail_from_message(socket, message, response, prot))
 		goto fail;
 	memset(response, 0, 1024);
 
-	if (!send_rcpt_to_message(socket, message, response, protected))
+	if (!send_rcpt_to_message(socket, message, response, prot))
 		goto fail;
 	memset(response, 0, 1024);
 
-	if (!send_data_message(socket, response, protected))
+	if (!send_data_message(socket, response, prot))
 		goto fail;
 	memset(response, 0, 1024);
 
-	if (!send_message(socket, smtp, message, response, protected))
+	if (!send_message(socket, smtp, message, response, prot))
 		goto fail;
 	memset(response, 0, 1024);
 
-	if (!send_quit_message(socket, response, protected))
+	if (!send_quit_message(socket, response, prot))
 		goto fail;
 	goto ok;
 fail:

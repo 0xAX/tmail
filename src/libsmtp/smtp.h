@@ -28,8 +28,8 @@
 #include <time_utils.h>
 
 #ifndef SSL_DISABLED
-#include <openssl/ssl.h>
 #include <openssl/err.h>
+#include <openssl/ssl.h>
 #endif
 
 #define TO_CLAUSE "To: "
