@@ -90,7 +90,7 @@ static void load_config(void)
 	{
 		fprintf(stderr,
 			"Error occurs during tmail configuration parsing\n");
-		exit(EXIT_FAILURE);
+		return;
 	}
 
 	config_loaded = 1;
@@ -163,6 +163,11 @@ int main(int argc, char *argv[])
 		mime_loaded = 1;
 		/* the same for load_config() */
 		load_config();
+
+		if (!config_loaded)
+		{
+			goto fail;
+		}
 		send_email_cmd(--argc, ++argv, tls_client_ctx);
 	}
 	else if (strcmp(argv[1], SMTP_CAPS) == 0)
@@ -173,4 +178,10 @@ int main(int argc, char *argv[])
 		parse_argv(argc, argv);
 
 	exit(EXIT_SUCCESS);
+
+fail:
+#ifndef SSL_DISABLED
+	SSL_CTX_free(tls_client_ctx);
+#endif
+	exit(EXIT_FAILURE);
 }
