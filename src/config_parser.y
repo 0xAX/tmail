@@ -26,7 +26,7 @@ void yyerror(char const *s);
 
 /* parser internal API */
 void fill_smtp_conf(char *name, char *val);
-void set_val(char **key, char *val);
+void set_val(char **key, char *val, int state);
 
 /* internal parser data structures */
 smtp_ctx_t *smtp_conf;
@@ -49,6 +49,8 @@ int current_type;
 %token SET
 %token VARIABLE_NAME
 %token VARIABLE_VAL
+%token VARIABLE_VAL_PART
+%token VARIABLE_END
 %token ASSIGN
 
 %start configuration
@@ -59,13 +61,27 @@ int current_type;
 configuration:	/* emtpy */
 		| configuration conf_statement
 		;
-
 conf_statement:	set_stmt
 		;
 		/* set var = val */
 set_stmt:	SET set_expr { }
 	;
+
+set_stmt:	VARIABLE_END
+		{
+			if (current_type == SMTP_CONF)
+				fill_smtp_conf(yylval.var.variable_name,
+					       yylval.var.variable_val);
+		}
+	;
 set_expr:	VARIABLE_NAME ASSIGN VARIABLE_VAL
+		{
+			if (current_type == SMTP_CONF)
+				fill_smtp_conf(yylval.var.variable_name,
+					       yylval.var.variable_val);
+		}
+	;
+set_expr:	VARIABLE_NAME ASSIGN VARIABLE_VAL_PART
 		{
 			if (current_type == SMTP_CONF)
 				fill_smtp_conf(yylval.var.variable_name,
@@ -123,19 +139,19 @@ char *trim(const char *str)
 void fill_smtp_conf(char *name, char *val)
 {
 	if (strcmp(name, "smtp.realname") == 0)
-		set_val(&smtp_conf->realname, val);
+		set_val(&smtp_conf->realname, val, state);
 	else if (strcmp(name, "smtp.server") == 0)
-		set_val(&smtp_conf->smtp_server, val);
+		set_val(&smtp_conf->smtp_server, val, state);
 	else if (strcmp(name, "smtp.port") == 0)
 	{
-		set_val(&smtp_conf->smtp_port, val);
+		set_val(&smtp_conf->smtp_port, val, state);
 		if (strcmp(val, "578") == 0)
 			smtp_conf->tls = true;
 	}
 	else if (strcmp(name, "smtp.password") == 0)
-		set_val(&smtp_conf->password, val);
+		set_val(&smtp_conf->password, val, state);
 	else if (strcmp(name, "smtp.from") == 0)
-		set_val(&smtp_conf->from, val);
+		set_val(&smtp_conf->from, val, state);
 	else if (strcmp(name, "smtp.signature") == 0)
 	{
 		char *signature_path = NULL;
@@ -159,11 +175,12 @@ void fill_smtp_conf(char *name, char *val)
 		free(signature_path);
 	}
 
-	free(name);
+	if (state != VARIABLE_VAL_PART)
+		free(name);
 	free(val);
 }
 
-void set_val(char **key, char *val)
+void set_val(char **key, char *val, int state)
 {
 	char *value = strdup(val);
 
@@ -172,7 +189,35 @@ void set_val(char **key, char *val)
 		fprintf(stderr, "Error: can't allocate memory for trim\n");
 		exit(EXIT_FAILURE);
 	}
+
+	/* reset state */
+	if (state == VARIABLE_END)
+		state = 0;
+
+	if (*key != NULL)
+	{
+		char *k_bckp = strdup(*key);
+		size_t key_len = strlen(*key);
+		size_t val_len = strlen(value);
+		size_t total_size = key_len + val_len + 1;
+
+		*key = NULL;
+		*key = malloc(total_size);
+
+		memset(*key, 0, total_size);
+		printf("*key %s\n", *key);
+		memcpy(*key, k_bckp, key_len);
+		printf("*key %s\n", *key);
+		memcpy(*key, value, val_len);
+
+		printf("*key %s\n", *key);
+
+		free(k_bckp);
+
+	}
+	
 	*key = trim(value);
+
 	if (!key)
 	{
 		fprintf(stderr, "Error: trim failed for string - %s\n", value);

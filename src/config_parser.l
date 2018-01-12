@@ -39,11 +39,14 @@
 assign "="
 
 /* set var = variable_val*/
-variable_val [ 0-9\"\'A-Z@a-z\/\.]+$
+variable_val [ 0-9\"\'A-Z@a-z\/\.\\\\]+$
 %%
 
 		/* variable asignment */
-set		{ return SET; }
+set		{
+			state = SET;
+			return SET;
+		}
 
 		/* possible variable names in tmail */
 "smtp.realname"		|
@@ -53,16 +56,49 @@ set		{ return SET; }
 "smtp.password"		|
 "smtp.signature"	{
 				yylval.var.variable_name = strdup(yytext);
+				state = VARIABLE_NAME;
 				return VARIABLE_NAME;
 			}
 		/* variables values */
 {variable_val}		{
-				yylval.var.variable_val = strdup(yytext);
-				return VARIABLE_VAL;
+				int i, len = strlen(yytext);
+
+				i = len - 1;
+
+				while (i != 0)
+				{
+					if (!isspace(yytext[i]))
+					{
+						if (yytext[i] != '\\' && state != VARIABLE_VAL_PART)
+						{
+							yylval.var.variable_val = strdup(yytext);
+						        state = VARIABLE_VAL;
+							return VARIABLE_VAL;
+						}
+						else
+						{
+							/* match multiline configuration values */
+							if (state == VARIABLE_VAL_PART)
+							{
+                  						yylval.var.variable_val = strndup(yytext, len - 1);
+		    					        state = VARIABLE_VAL_PART;
+								return VARIABLE_END;
+							}
+
+							yylval.var.variable_val = strndup(yytext, len - 1);
+							state = VARIABLE_VAL_PART;
+							return VARIABLE_VAL_PART;
+						}
+					}
+					i--;
+				}
 			}
  
 		/* operators */
-{assign}	{ return ASSIGN; }
+{assign}	{
+			state = ASSIGN;
+			return ASSIGN;
+		}
 
 		/* comments */
 #.*		;
