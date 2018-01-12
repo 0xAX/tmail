@@ -60,6 +60,9 @@ This stuff should be implemented after `STARTTLS` support:
 
 ## config
 
+  * Free memory in a case of parsing of configuration file error.
+  * Replace `yylval.var.variable_name` with enum instead of string in `config_parser.l`.
+  * Rename `build_cofnig_name()` to something like `get_config_path()`.
   * Remake `get_config_entry()`:
 
 1. make it return `void*`.
@@ -70,6 +73,8 @@ without configuration.
   * Add `smpt.encoding` configuration parameter.
   * Release everything in `at_exit()` callback.
   * Support for multiline configuration items.
+  * check `state` during parsing of `smtp.signature`.
+  * add `smtp.signature_path` instead of current `smtp.signature`.
 
 ## libsmtp
 
@@ -150,6 +155,7 @@ and
   * Document 
   * Provide information about supported SMTP extensions to man and md pages.
   * Describe that `smtp.signature` is path to file with a signature.
+  * `smtp.signature` should be real signature.
 
 ## Testing
 
