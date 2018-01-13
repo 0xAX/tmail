@@ -121,7 +121,7 @@ char *trim(const char *str)
 
 	/* Trim trailing space */
 	end = str + strlen(str) - 1;
-	while(end > str && isspace((unsigned char)*end))
+	while (end > str && (isspace((unsigned char)*end) || (unsigned char)*end == '\\'))
 		end--;
 	end++;
 
