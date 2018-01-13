@@ -216,6 +216,8 @@ void set_val(char *name, char **key, char *val, int state)
 			exit(EXIT_FAILURE);
 		}
 	}
+
+	printf("*key %s\n", *key);
 	mfree(value);
 }
 
