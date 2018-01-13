@@ -72,8 +72,6 @@ set		{
 						if (yytext[i] != '\\' && state != VARIABLE_VAL_PART)
 						{
 							yylval.var.variable_val = strdup(yytext);
-							printf("yylval.var.variable_val 3 %s\n", yylval.var.variable_val);
-
 						        state = VARIABLE_VAL;
 							return VARIABLE_VAL;
 						}
@@ -82,19 +80,13 @@ set		{
 							/* match multiline configuration values */
 							if (state == VARIABLE_VAL_PART)
 							{
-
 								if (yytext[len - 1] == '\\')
 									yylval.var.variable_val = strndup(yytext, len - 1);
 								else
 									yylval.var.variable_val = strndup(yytext, len);
-
 		    					        state = VARIABLE_VAL_PART;
 								return VARIABLE_END;
 							}
-
-
-							yylval.var.variable_val = strndup(yytext, len - 1);
-							printf("yylval.var.variable_val 2 %s\n", yylval.var.variable_val);
 
 							state = VARIABLE_VAL_PART;
 							return VARIABLE_VAL_PART;
