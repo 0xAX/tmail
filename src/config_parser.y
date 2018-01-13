@@ -97,6 +97,32 @@ set_expr:	VARIABLE_NAME ASSIGN VARIABLE_VAL_PART
 	;
 %%
 
+static void destroy_smtp_conf()
+{
+	if (smtp_conf)
+	{
+		if (yylval.var.variable_name)
+			mfree(yylval.var.variable_name);
+		if (yylval.var.variable_val)
+			mfree(yylval.var.variable_val);
+
+		if (smtp_conf->realname)
+			mfree(smtp_conf->realname);
+		if (smtp_conf->smtp_server)
+			mfree(smtp_conf->smtp_server);
+		if (smtp_conf->smtp_port)
+			mfree(smtp_conf->smtp_port);
+		if (smtp_conf->password)
+			mfree(smtp_conf->password);
+		if (smtp_conf->from)
+			mfree(smtp_conf->from);
+		if (smtp_conf->signature_fd)
+			close(smtp_conf->signature_fd);
+
+		mfree(smtp_conf);
+	}
+}
+
 /**
  * trim - removes leading and trailing space characters
  * from the given string.
@@ -229,7 +255,7 @@ void set_val(char *name, char **key, char *val, int state)
 
 void yyerror(char const *s)
 {
-	fprintf(stderr, "Error: (yyerror) %s\n", s);
+	fprintf(stderr, "Error during parsing of configuration - %s\n", s);
 }
 
 int parse_tmail_configuration(char *filename,
@@ -274,6 +300,8 @@ int parse_tmail_configuration(char *filename,
 
 		if (ret == 1)
 		{
+			mfree(ep.key);
+			destroy_smtp_conf();
 			yylex_destroy();
 			fprintf(stderr, "Error: wrong configuration in %s configuration file\n",
 				filename);
@@ -282,6 +310,8 @@ int parse_tmail_configuration(char *filename,
 
 		if (ret == 2)
 		{
+			mfree(ep.key);
+			destroy_smtp_conf();
 			yylex_destroy();
 			fprintf(stderr, "Error: parsing of configuration file is failed"
 				"due to memory exhaustion\n");
