@@ -26,7 +26,7 @@ void yyerror(char const *s);
 
 /* parser internal API */
 void fill_smtp_conf(char *name, char *val);
-void set_val(char **key, char *val, int state);
+void set_val(char *name, char **key, char *val, int state);
 
 /* internal parser data structures */
 smtp_ctx_t *smtp_conf;
@@ -117,7 +117,10 @@ char *trim(const char *str)
 
 	/* if all spaces */
 	if(*str == 0)
+	{
+		mfree(out);
 		return NULL;
+	}
 
 	/* Trim trailing space */
 	end = str + strlen(str) - 1;
@@ -126,33 +129,30 @@ char *trim(const char *str)
 		end--;
 	end++;
 
-
 	/*
 	 * calculate and copy copy trimmed string
 	 * and add null terminator
 	 */
-	out_size = (end - str) < len-1 ? (end - str) : len-1;
-	memcpy(out, str, out_size);
-
+	memcpy(out, str, end - str);
 	return out;
 }
 
 void fill_smtp_conf(char *name, char *val)
 {
 	if (strcmp(name, "smtp.realname") == 0)
-		set_val(&smtp_conf->realname, val, state);
+		set_val(name, &smtp_conf->realname, val, state);
 	else if (strcmp(name, "smtp.server") == 0)
-		set_val(&smtp_conf->smtp_server, val, state);
+		set_val(name, &smtp_conf->smtp_server, val, state);
 	else if (strcmp(name, "smtp.port") == 0)
 	{
-		set_val(&smtp_conf->smtp_port, val, state);
+		set_val(name, &smtp_conf->smtp_port, val, state);
 		if (strcmp(val, "578") == 0)
 			smtp_conf->tls = true;
 	}
 	else if (strcmp(name, "smtp.password") == 0)
-		set_val(&smtp_conf->password, val, state);
+		set_val(name, &smtp_conf->password, val, state);
 	else if (strcmp(name, "smtp.from") == 0)
-		set_val(&smtp_conf->from, val, state);
+		set_val(name, &smtp_conf->from, val, state);
 	else if (strcmp(name, "smtp.signature") == 0)
 	{
 		char *signature_path = NULL;
@@ -174,14 +174,13 @@ void fill_smtp_conf(char *name, char *val)
 		}
 		smtp_conf->signature_fd = signature_fd;
 		free(signature_path);
+		free(name);
 	}
 
-	if (state != VARIABLE_VAL_PART)
-		free(name);
 	free(val);
 }
 
-void set_val(char **key, char *val, int state)
+void set_val(char *name, char **key, char *val, int state)
 {
 	char *value = strdup(val);
 
@@ -191,26 +190,21 @@ void set_val(char **key, char *val, int state)
 		exit(EXIT_FAILURE);
 	}
 
-	/* reset state */
-	if (state == VARIABLE_END)
-		state = 0;
-
 	if (*key != NULL)
 	{
 		char *k_bckp = strdup(*key);
 		size_t key_len = strlen(*key);
 		size_t val_len = strlen(value);
-		size_t total_size = key_len + val_len + 1;
+		size_t total_size = key_len + val_len + 2;
 
-		*key = NULL;
-		*key = malloc(total_size);
-
+		char *v = trim(value);
+		*key = realloc(*key, total_size);
 		memset(*key, 0, total_size);
 		memcpy(*key, k_bckp, key_len);
-		memcpy(*key + key_len, value, val_len);
+		memcpy(*key + key_len, v, val_len);
 
+		free(v);
 		free(k_bckp);
-
 	}
 	else
 	{
@@ -222,8 +216,7 @@ void set_val(char **key, char *val, int state)
 			exit(EXIT_FAILURE);
 		}
 	}
-
-	free(value);
+	mfree(value);
 }
 
 void yyerror(char const *s)
@@ -286,6 +279,9 @@ int parse_tmail_configuration(char *filename,
 				"due to memory exhaustion\n");
 			return 0;
 		}
+
+		/* last name will not be free in lexer, so we should do it here */
+		free(yylval.var.variable_name);
 
 		break;
 	}

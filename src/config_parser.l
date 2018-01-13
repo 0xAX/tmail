@@ -55,6 +55,8 @@ set		{
 "smtp.port"		|
 "smtp.password"		|
 "smtp.signature"	{
+				if (yylval.var.variable_name)
+					mfree(yylval.var.variable_name);
 				yylval.var.variable_name = strdup(yytext);
 				state = VARIABLE_NAME;
 				return VARIABLE_NAME;
@@ -72,8 +74,11 @@ set		{
 						if (yytext[i] != '\\' && state != VARIABLE_VAL_PART)
 						{
 							yylval.var.variable_val = strdup(yytext);
-						        state = VARIABLE_VAL;
-							return VARIABLE_VAL;
+							if (state != VARIABLE_END)
+								state = VARIABLE_VAL;
+							else
+								state = VARIABLE_END;
+							return state;
 						}
 						else
 						{
@@ -81,10 +86,15 @@ set		{
 							if (state == VARIABLE_VAL_PART)
 							{
 								if (yytext[len - 1] == '\\')
+								{
 									yylval.var.variable_val = strndup(yytext, len - 1);
+								        state = VARIABLE_VAL_PART;
+								}
 								else
+								{
 									yylval.var.variable_val = strndup(yytext, len);
-		    					        state = VARIABLE_VAL_PART;
+									state = VARIABLE_END;
+								}
 								return VARIABLE_END;
 							}
 
