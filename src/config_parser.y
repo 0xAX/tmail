@@ -211,13 +211,15 @@ void set_val(char **key, char *val, int state)
 		free(k_bckp);
 
 	}
-	
-	*key = trim(value);
-
-	if (!key)
+	else
 	{
-		fprintf(stderr, "Error: trim failed for string - %s\n", value);
-		exit(EXIT_FAILURE);
+		*key = trim(value);
+
+		if (!key)
+		{
+			fprintf(stderr, "Error: trim failed for string - %s\n", value);
+			exit(EXIT_FAILURE);
+		}
 	}
 
 	free(value);
