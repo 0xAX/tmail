@@ -195,8 +195,6 @@ static void process_send_email(SSL_CTX *tls_client_ctx)
 		goto fail;
 	}
 
-	/* TODO remove this one */
-	exit(0);
 	/* and finally send message */
 	send_email(smtp_opts, m, tls_client_ctx, 0);
 fail:
