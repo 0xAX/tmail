@@ -67,6 +67,13 @@ conf_statement:	set_stmt
 set_stmt:	SET set_expr { }
 	;
 
+set_stmt:	VARIABLE_VAL_PART
+		{
+			if (current_type == SMTP_CONF)
+				fill_smtp_conf(yylval.var.variable_name,
+					       yylval.var.variable_val);
+		}
+	;
 set_stmt:	VARIABLE_END
 		{
 			if (current_type == SMTP_CONF)
@@ -217,7 +224,6 @@ void set_val(char *name, char **key, char *val, int state)
 		}
 	}
 
-	printf("*key %s\n", *key);
 	mfree(value);
 }
 

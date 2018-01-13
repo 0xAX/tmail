@@ -75,40 +75,23 @@ set		{
 					i--;
 				}
 
-				/*
-				 * parse line which contains variable
-				 */
-				if (yytext[i] != '\\' && state != VARIABLE_VAL_PART)
+				if (yytext[i] == '\\')
 				{
-					yylval.var.variable_val = strdup(yytext);
-					if (state != VARIABLE_END)
-						state = VARIABLE_VAL;
-					else
-						state = VARIABLE_END;
-					return state;
-				}
-				else
-				{
-					/* match multiline configuration values */
-					if (state == VARIABLE_VAL_PART)
-					{
-						if (yytext[i] == '\\')
-						{
-							yylval.var.variable_val = strndup(yytext, i);
-						        state = VARIABLE_VAL_PART;
-						}
-						else
-						{
-							yylval.var.variable_val = strndup(yytext, len);
-							state = VARIABLE_END;
-						}
-						return VARIABLE_END;
-					}
-
-					yylval.var.variable_val = strndup(yytext, len - 1);
-					state = VARIABLE_VAL_PART;
+					yylval.var.variable_val = strndup(yytext, i);
+				        state = VARIABLE_VAL_PART;
 					return VARIABLE_VAL_PART;
 				}
+
+				if (state == VARIABLE_VAL_PART)
+				{
+					yylval.var.variable_val = strndup(yytext, i + 1);
+					state = VARIABLE_END;
+					return VARIABLE_END;
+				}
+
+				yylval.var.variable_val = strndup(yytext, i + 1);
+				state = VARIABLE_VAL;
+				return VARIABLE_VAL;
 
 			}
  
