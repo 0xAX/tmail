@@ -80,7 +80,7 @@ set		{
 							/* match multiline configuration values */
 							if (state == VARIABLE_VAL_PART)
 							{
-                  						yylval.var.variable_val = strndup(yytext, len - 1);
+								yylval.var.variable_val = strndup(yytext, len);
 		    					        state = VARIABLE_VAL_PART;
 								return VARIABLE_END;
 							}

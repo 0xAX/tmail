@@ -205,12 +205,8 @@ void set_val(char **key, char *val, int state)
 		*key = malloc(total_size);
 
 		memset(*key, 0, total_size);
-		printf("*key %s\n", *key);
 		memcpy(*key, k_bckp, key_len);
-		printf("*key %s\n", *key);
-		memcpy(*key, value, val_len);
-
-		printf("*key %s\n", *key);
+		memcpy(*key + key_len, value, val_len);
 
 		free(k_bckp);
 
