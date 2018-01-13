@@ -75,7 +75,9 @@ set		{
 					i--;
 				}
 
-				/* parse line */
+				/*
+				 * parse line which contains variable
+				 */
 				if (yytext[i] != '\\' && state != VARIABLE_VAL_PART)
 				{
 					yylval.var.variable_val = strdup(yytext);
@@ -90,9 +92,9 @@ set		{
 					/* match multiline configuration values */
 					if (state == VARIABLE_VAL_PART)
 					{
-						if (yytext[len - 1] == '\\')
+						if (yytext[i] == '\\')
 						{
-							yylval.var.variable_val = strndup(yytext, len - 1);
+							yylval.var.variable_val = strndup(yytext, i);
 						        state = VARIABLE_VAL_PART;
 						}
 						else
