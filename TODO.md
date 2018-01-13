@@ -72,7 +72,6 @@ This stuff should be implemented after `STARTTLS` support:
 without configuration.
   * Add `smpt.encoding` configuration parameter.
   * Release everything in `at_exit()` callback.
-  * Support for multiline configuration items.
   * check `state` during parsing of `smtp.signature`.
   * add `smtp.signature_path` instead of current `smtp.signature`.
 
