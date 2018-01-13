@@ -88,6 +88,7 @@ set		{
 								return VARIABLE_END;
 							}
 
+							yylval.var.variable_val = strndup(yytext, len - 1);
 							state = VARIABLE_VAL_PART;
 							return VARIABLE_VAL_PART;
 						}
