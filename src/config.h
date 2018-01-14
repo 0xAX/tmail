@@ -53,5 +53,7 @@ void release_config(void);
 
 /* configuration data from a configuration file. Used in lexer.*/
 char *configuration_data;
+/* state of parser */
+int state;
 
 #endif

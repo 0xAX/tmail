@@ -2,6 +2,7 @@
 
 ## General
 
+  * Unify error output. Should start from `Error:` or just `Error`.
   * Decrease number of header files in libraries, like in libsmtp.
   * Use `strncmp(3)` instead of `strcmp(3)` when we know a length of a string.
 
@@ -72,7 +73,6 @@ This stuff should be implemented after `STARTTLS` support:
 without configuration.
   * Add `smpt.encoding` configuration parameter.
   * Release everything in `at_exit()` callback.
-  * Support for multiline configuration items.
   * check `state` during parsing of `smtp.signature`.
   * add `smtp.signature_path` instead of current `smtp.signature`.
 
