@@ -2,7 +2,6 @@
 
 ## General
 
-  * Unify error output. Should start from `Error:` or just `Error`.
   * Use `strncmp(3)` instead of `strcmp(3)` when we know a length of a string.
 
 ## Build

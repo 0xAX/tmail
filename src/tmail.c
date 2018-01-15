@@ -89,7 +89,7 @@ static void load_config(void)
 	if (!init_config())
 	{
 		fprintf(stderr,
-			"Error occurs during tmail configuration parsing\n");
+			"Error: occurs during tmail configuration parsing\n");
 		return;
 	}
 

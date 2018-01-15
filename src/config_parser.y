@@ -255,7 +255,7 @@ void set_val(char *name, char **key, char *val, int state)
 
 void yyerror(char const *s)
 {
-	fprintf(stderr, "Error during parsing of configuration - %s\n", s);
+	fprintf(stderr, "Error: during parsing of configuration - %s\n", s);
 }
 
 int parse_tmail_configuration(char *filename,
