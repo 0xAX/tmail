@@ -1,5 +1,5 @@
 /*
- * base64_test.c - some tests for base64.c
+ * mime_test.c - some tests for MIME types
  *
  * Copyright (c) 2017, Alexander Kuleshov <kuleshovmail at gmail dot com>
  *
