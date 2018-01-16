@@ -86,7 +86,7 @@ static void load_config(void)
 {
 	/* create hash table for configuration */
 	hcreate(CONFIGURATION_HASHMAP_SIZE);
-	if (!init_config())
+	if (!init_config(NULL))
 	{
 		fprintf(stderr,
 			"Error: occurs during tmail configuration parsing\n");

@@ -43,7 +43,7 @@ typedef struct
 } conf_path_t;
 
 conf_path_t *get_tmail_conf_dir(void);
-int init_config(void);
+int init_config(conf_path_t *conf_path);
 ENTRY *get_config_entry(char *name);
 char *build_config_name(char *name, int conf_type);
 
