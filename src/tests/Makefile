@@ -29,7 +29,6 @@ mime_test:
 	$(TMAIL_CC) $(OSX_FLAGS) $(INCLUDE_DIR) $(DEBUG_FLAGS) ../mime.o mime_test.o -o mime_test
 
 config_test:
-	@echo $(shell pwd)
 	$(TMAIL_CC) $(LIB_DIR) $(OSX_FLAGS) $(INCLUDE_DIR) $(DEBUG_FLAGS) -c config_test.c
 	$(TMAIL_CC) $(LIB_DIR) $(OSX_FLAGS) $(INCLUDE_DIR) $(DEBUG_FLAGS) config_test.o -o config_test
 
