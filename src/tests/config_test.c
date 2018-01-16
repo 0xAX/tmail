@@ -9,6 +9,9 @@
 #include <smtp.h>
 #include <config.h>
 
+#define PATH_TO_CONF \
+	"../../contrib/config/.tmail/username@example.com.smtprc"
+
 int main(int argc, char *argv[])
 {
 	return 0;
