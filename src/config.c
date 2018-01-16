@@ -214,8 +214,10 @@ int init_config(conf_path_t *conf_path)
 	struct dirent *dent = NULL;
 	char *ext = NULL;
 
-	if (!conf_path)
-		conf_path = get_tmail_conf_dir();
+	if (conf_path)
+		config = conf_path;
+	else
+		config = get_tmail_conf_dir();
 
 	if (!config)
 	{
