@@ -21,7 +21,6 @@ int main(int argc, char *argv[])
 	{
 		fprintf(stderr,
 			"Error: Can't allocate memory for conf_path_t\n");
-		//	free(config_path);
 		return 1;
 	}
 	memset(conf, 0, sizeof(conf_path_t));
