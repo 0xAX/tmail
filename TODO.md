@@ -2,6 +2,8 @@
 
 ## General
 
+  * Check the same that in https://github.com/0xAX/tmail/commit/73df6849957ac65dcc46dd0a1c8fac7a5a7839bf
+for all libraries.
   * Use `strncmp(3)` instead of `strcmp(3)` when we know a length of a string.
   * Move all header files to `include/tmail` dir.
   * Install all header files to `INCLUDE_DIR/tmail`.
