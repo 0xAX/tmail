@@ -20,7 +20,7 @@ TEST_EXECUTABLES += hashmap_test
 TEST_OBJS = list_test.o stack_test.o hashmap_test.o
 
 $(TMAIL_UTILS_LIB): $(LIB_UTILS_OBJS)
-	$(QUIET_CC) $(TMAIL_CC) $(WARNINGS) $(OSX_FLAGS) $(CC_SHLIB_FLAGS) $@ $<
+	$(QUIET_CC) $(TMAIL_CC) $(WARNINGS) $(OSX_FLAGS) $(CC_SHLIB_FLAGS) $@ $(LIB_UTILS_OBJS)
 
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(WARNINGS) $(OSX_FLAGS) $(CFLAGS_LIBS) $<
