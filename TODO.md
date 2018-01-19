@@ -110,6 +110,7 @@ without configuration.
 
 ### hashmap_t
 
+  * Use it instead of hcreate(3)
   * Provide documentation.
 
 ## Scripts
@@ -163,3 +164,4 @@ and
   * Add tests for `fd_valid()`.
   * Add tests for `is_valid_ip_address()`.
   * Add tests for configuration parser.
+  * Use sed to replace signature path for `config_test`.
