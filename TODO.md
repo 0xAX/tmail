@@ -160,8 +160,8 @@ and
 
 ## Testing
 
+  * Add tests for configuration parser.
   * Add tests for `hostname()`.
   * Add tests for `fd_valid()`.
   * Add tests for `is_valid_ip_address()`.
-  * Add tests for configuration parser.
   * Use sed to replace signature path for `config_test`.
