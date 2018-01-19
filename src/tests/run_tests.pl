@@ -26,6 +26,7 @@ result_test_6 application/excel
 EOF
 
 my $config_test_result = <<EOF;
+username smtprc test 1
 EOF
 
 print "Running: tmail code tests \n";

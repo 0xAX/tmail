@@ -46,6 +46,17 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+	ENTRY *username_smtp_conf = get_config_entry("username@example.com.smtprc");
+	if (!username_smtp_conf)
+	{
+		fprintf(stderr, "username@example.com.smtprc is not in hash table \n");
+		free(conf->config_dir_path);
+		free(conf);
+		return 1;
+	}
+
+	printf("username smtprc test 1\n");
+
 	free(conf->config_dir_path);
 	free(conf);
 
