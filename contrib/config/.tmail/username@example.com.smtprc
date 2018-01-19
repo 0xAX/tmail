@@ -10,6 +10,3 @@ set smtp.password = password
 # SMTP server configuration
 set smtp.server = smtp.example.com
 set smtp.port = 587
-
-# Signature options
-set smtp.signature = mysignature.sig

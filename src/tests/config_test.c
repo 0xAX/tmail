@@ -33,6 +33,16 @@ int main(int argc, char *argv[])
 	{
 		fprintf(stderr, "Can't open directory with configuration %s\n",
 			conf->config_dir_path);
+		free(conf->config_dir_path);
+		free(conf);
+		return 1;
+	}
+
+	if (!init_config(conf))
+	{
+		fprintf(stderr, "init_config() failed\n");
+		free(conf->config_dir_path);
+		free(conf);
 		return 1;
 	}
 

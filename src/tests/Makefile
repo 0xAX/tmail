@@ -18,19 +18,29 @@ INCLUDE_DIR += -I../libsmtp
 INCLUDE_DIR += -I../libencoding
 INCLUDE_DIR += -I../libsys
 
-LIB_DIR = -L../libsmtp/
+# additional object files that are used for tests
+PARSER_OBJS = ../config_parser.tab.o ../lex.yy.o ../config.o config_test.o
+
+# libraries that are used for tests
+LIBS = -ltmail-smtp -lssl -lcrypto -ltmail-sys -ltmail-utils
+LIB_DIR = -L../libsmtp/ -L../libsys -L../libutils -L/home/alex/dev/tmail/src/libsmtp
+
+TEST_FLAGS = $(LIB_DIR) $(OSX_FLAGS) $(INCLUDE_DIR) $(DEBUG_FLAGS)
 
 $(TEST_TARGET): $(TEST_EXECUTABLES)
 	@exec ./run_tests.pl
 	@rm -rf $(TEST_EXECUTABLES)
 
 mime_test:
-	$(TMAIL_CC) $(OSX_FLAGS) $(INCLUDE_DIR) $(DEBUG_FLAGS) -c mime_test.c
-	$(TMAIL_CC) $(OSX_FLAGS) $(INCLUDE_DIR) $(DEBUG_FLAGS) ../mime.o mime_test.o -o mime_test
+	$(TMAIL_CC) $(TEST_FLAGS) -c mime_test.c
+	$(TMAIL_CC) $(TEST_FLAGS) ../mime.o mime_test.o -o mime_test
 
 config_test:
-	$(TMAIL_CC) $(LIB_DIR) $(OSX_FLAGS) $(INCLUDE_DIR) $(DEBUG_FLAGS) -c config_test.c
-	$(TMAIL_CC) $(LIB_DIR) $(OSX_FLAGS) $(INCLUDE_DIR) $(DEBUG_FLAGS) config_test.o -o config_test
+	$(TMAIL_CC) $(TEST_FLAGS) $(LIBS) -c config_test.c
+	$(TMAIL_CC) -Wl,-rpath,$(TOPDIR)/src/libsmtp \
+		-Wl,-rpath,$(TOPDIR)/src/libsys \
+		-Wl,-rpath,$(TOPDIR)/src/libutils \
+		$(TEST_FLAGS) $(PARSER_OBJS) -o config_test $(LIBS)
 
 $(CLEAN_TARGET):
 	@echo "./src/tests"

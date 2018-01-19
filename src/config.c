@@ -214,6 +214,9 @@ int init_config(conf_path_t *conf_path)
 	struct dirent *dent = NULL;
 	char *ext = NULL;
 
+	/* create hash table for configuration */
+	hcreate(CONFIGURATION_HASHMAP_SIZE);
+
 	if (conf_path)
 		config = conf_path;
 	else
