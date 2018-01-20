@@ -138,6 +138,6 @@ endif
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 	ifndef SSL_DISABLED
-		OSX_FLAGS=-I/usr/local/opt/openssl/include
+		OSX_FLAGS=-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib
 	endif
 endif
