@@ -78,6 +78,7 @@ git:
   depth: 1
 
 script:
+  - pwd
   - $TMAIL_CC -v
   - make TMAIL_CC=$TMAIL_CC DEBUG=1 V=1 all
   - make TMAIL_CC=$TMAIL_CC DEBUG=1 V=1 test
