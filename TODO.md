@@ -157,6 +157,7 @@ and
 
 ## Testing
 
+  * Compile tests in DEBUG mode.
   * Add tests for configuration parser.
   * Add tests for `hostname()`.
   * Add tests for `fd_valid()`.
