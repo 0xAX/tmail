@@ -17,9 +17,6 @@
   * Add stackprotector.
   * Build deb package.
   * Build rpm package.
-  * Add new macro to expand to source code dirs, like
-`$(SRC_DIR)/$(TMAIL_SMTP_LIB_DIR)` -> `$(TMAIL_SMPT_SRC_DIR)` or something
-like this.
   * Make `make install` and `make uninstall` more verbose.
   * Use sanitizers during build.
   * Support for [bsd make](https://www.freebsd.org/cgi/man.cgi?make(1)).

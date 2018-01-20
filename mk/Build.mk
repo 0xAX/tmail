@@ -28,23 +28,10 @@ ARCH=-ftree-vectorize
 endif
 
 # Default set of compiler warnings related flags
-WARNINGS+=-Wall
-WARNINGS+=-Werror
-WARNINGS+=-Wextra
-WARNINGS+=-Wshadow
-WARNINGS+=-Wfatal-errors
-WARNINGS+=-pedantic-errors
-WARNINGS+=-Wformat
-WARNINGS+=-Wformat-security
-WARNINGS+=-Werror=format-security
-WARNINGS+=-Wswitch-enum
-WARNINGS+=-Wswitch-default
-WARNINGS+=-Wdeclaration-after-statement
-WARNINGS+=-Wshadow
-WARNINGS+=-Wundef
-WARNINGS+=-Wbad-function-cast
-WARNINGS+=-Wstrict-prototypes
-WARNINGS+=-Winline
+WARNINGS += -Wall -Werror -Wextra -Wshadow -Wfatal-errors -pedantic-errors
+WARNINGS += -Wformat -Wformat-security -Werror=format-security
+WARNINGS += -Wdeclaration-after-statement -Wswitch-enum -Wswitch-default
+WARNINGS += -Wundef -Wbad-function-cast -Wstrict-prototypes -Winline
 
 ifeq ($(TMAIL_CC), gcc)
 $(call gcc-supports-flag,UNUSED_CONST_VAR_WARN,-Wunused-const-variable)
@@ -87,25 +74,18 @@ ifeq "$(EXPANSION_TO_DEFINED_WARN)" "1"
 endif
 
 # Optimization flags
-OPTIMIZATION+=-O2
+OPTIMIZATION += -O2
 
 # Debug flags
-DEBUG_FLAGS+=-O
-DEBUG_FLAGS+=-g3
-DEBUG_FLAGS+=-ggdb
-DEBUG_FLAGS+=-D_FORTIFY_SOURCE=2
+DEBUG_FLAGS += -O -g3 -ggdb -D_FORTIFY_SOURCE=2
 
 # Add compiler related warnings flags
 ifeq ($(findstring gcc, $(TMAIL_CC)), gcc)
-WARNINGS += -fmax-errors=2
-WARNINGS+=-Wswitch-bool
-WARNINGS+=-Wlogical-op
-WARNINGS+=-Wsuggest-attribute=noreturn
-WARNINGS+=-Wsuggest-final-types
-WARNINGS+=-Wduplicated-cond
+WARNINGS += -fmax-errors=2 -Wswitch-bool -Wlogical-op
+WARNINGS += -Wsuggest-attribute=noreturn -Wsuggest-final-types
+WARNINGS += -Wduplicated-cond
 else ifeq ($(findstring clang, $(TMAIL_CC)), clang)
-WARNINGS += -ferror-limit=2
-WARNINGS += -Qunused-arguments
+WARNINGS += -ferror-limit=2 -Qunused-arguments
 endif
 
 # Compile with debug info or optimization stuff
@@ -117,8 +97,6 @@ MISC_FLAGS=$(DEBUG_FLAGS)
 WARNINGS =
 endif
 
-# Compile a shared library
-CC_SHLIB_FLAGS=-shared -o
 # Compile an executable
 CC_EXEC_FLAGS=-o
 
@@ -153,7 +131,6 @@ else
 		LIBSMTP_DEFS = -DSSL_DISABLED=\"1\"
 	endif
 endif
-
 
 #
 # OS related stuff

@@ -11,8 +11,6 @@
 #
 # Define NON_NATIVE_BINARY to disable -march=native
 #
-# Define LIBDIR to specify where to install tmail shared libraries
-#
 # Define BINDIR to specify where to install tmail executables
 #
 # Define MANDIR to specify where to install tmail man pages
@@ -27,49 +25,39 @@ include ./mk/Build.mk
 # root directory
 TOPDIR=$(shell pwd)
 
-$(DEFAULT_TARGET): $(BUILD_LIBS_TARGET)
+$(DEFAULT_TARGET): $(BUILD_SUB_TARGET)
 	@cd $(SRC_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_EXECUTABLE) TOPDIR=$(TOPDIR)
 
-$(BUILD_LIBS_TARGET): $(BUILD_SYS_LIB_TARGET) \
-		      $(BUILD_UTILS_LIB_TARGET) \
-                      $(BUILD_ENCODING_LIB_TARGET) \
-                      $(BUILD_SMTP_LIB_TARGET)
+$(BUILD_SUB_TARGET): $(BUILD_SYS_TARGET) $(BUILD_UTILS_TARGET) \
+		     $(BUILD_ENCODING_TARGET) $(BUILD_SMTP_TARGET)
 
-$(BUILD_SYS_LIB_TARGET):
-	@cd $(SRC_DIR)$(TMAIL_SYS_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_SYS_LIB) TOPDIR=$(TOPDIR)
+$(BUILD_SYS_TARGET):
+	@cd $(SRC_DIR)$(TMAIL_SYS_DIR) && $(MAKE) $(MAKE_FLAGS) TOPDIR=$(TOPDIR)
 
-$(BUILD_ENCODING_LIB_TARGET):
-	@cd $(SRC_DIR)$(TMAIL_ENCODING_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_ENCODING_LIB) TOPDIR=$(TOPDIR)
+$(BUILD_ENCODING_TARGET):
+	@cd $(SRC_DIR)$(TMAIL_ENCODING_DIR) && $(MAKE) $(MAKE_FLAGS) TOPDIR=$(TOPDIR)
 
-$(BUILD_SMTP_LIB_TARGET):
-	@cd $(SRC_DIR)$(TMAIL_SMTP_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_SMTP_LIB) TOPDIR=$(TOPDIR)
+$(BUILD_SMTP_TARGET):
+	@cd $(SRC_DIR)$(TMAIL_SMTP_DIR) && $(MAKE) $(MAKE_FLAGS) TOPDIR=$(TOPDIR)
 
-$(BUILD_UTILS_LIB_TARGET):
-	@cd $(SRC_DIR)$(TMAIL_UTILS_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(TMAIL_UTILS_LIB) TOPDIR=$(TOPDIR)
+$(BUILD_UTILS_TARGET):
+	@cd $(SRC_DIR)$(TMAIL_UTILS_DIR) && $(MAKE) $(MAKE_FLAGS) TOPDIR=$(TOPDIR)
 
 $(TEST_TARGET): $(DEFAULT_TARGET)
-	@cd $(SRC_DIR)$(TMAIL_UTILS_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(TEST_TARGET)
-	@cd $(SRC_DIR)$(TMAIL_ENCODING_LIB_DIR) && $(MAKE) $(MAKE_FLAGS) $(TEST_TARGET)
+	@cd $(SRC_DIR)$(TMAIL_UTILS_DIR) && $(MAKE) $(MAKE_FLAGS) $(TEST_TARGET)
+	@cd $(SRC_DIR)$(TMAIL_ENCODING_DIR) && $(MAKE) $(MAKE_FLAGS) $(TEST_TARGET)
 	@cd $(SRC_DIR)tests && $(MAKE) $(MAKE_FLAGS) $(TEST_TARGET) TOPDIR=$(TOPDIR)
 
-$(INSTALL_TARGET): $(BUILD_LIBS_TARGET)
+$(INSTALL_TARGET): $(DEFAULT_TARGET)
 	@echo "Installing tmail..."
 	@$(INSTALL) $(TMAIL_EXECUTABLE) $(BIN_DIR)
-	@echo "Installing libraries..."
-	@$(INSTALL) $(SRC_DIR)$(TMAIL_UTILS_LIB_DIR)/$(TMAIL_UTILS_LIB) $(LIB_DIR)
-	@$(INSTALL) $(SRC_DIR)$(TMAIL_SYS_LIB_DIR)/$(TMAIL_SYS_LIB) $(LIB_DIR)
-	@$(INSTALL) $(SRC_DIR)$(TMAIL_SMTP_LIB_DIR)/$(TMAIL_SMTP_LIB) $(LIB_DIR)
-	@$(INSTALL) $(SRC_DIR)$(TMAIL_ENCODING_LIB_DIR)/$(TMAIL_ENCODING_LIB) $(LIB_DIR)
+	@echo "Installing man pages..."
 	@$(INSTALL) $(MAN_PAGES_1) $(MAN_DIR_1)
 	@$(INSTALL) $(MAN_PAGES_5) $(MAN_DIR_5)
 	@echo "Done."
 
 $(UNINSTALL_TARGET):
 	@rm -rf $(BIN_DIR)/$(TMAIL_EXECUTABLE)
-	@rm -rf $(LIB_DIR)/$(TMAIL_SMTP_LIB)
-	@rm -rf $(LIB_DIR)/$(TMAIL_SYS_LIB)
-	@rm -rf $(LIB_DIR)/$(TMAIL_UTILS_LIB)
-	@rm -rf $(LIB_DIR)/$(TMAIL_ENCODING_LIB)
 	@rm -rf $(MAN_DIR_1)/tmail*
 	@rm -rf $(MAN_DIR_5)/tmail*
 	@echo "Done."
@@ -85,9 +73,6 @@ $(HELP_TARGET):
 	@echo  '  * test      - Run all tests.'
 	@echo  '  * install   - Install tmail with tools and libraries.'
 	@echo  '  * uninstall - Uninstall tmail with tools and libraries.'
-	@echo  ''
-	@echo  'Libraries targets:'
-	@echo  '  * libs - build all shared libraries.'
 	@echo  ''
 	@echo  'Cleaning targets:'
 	@echo  '  * clean     - Remove most generated files like object files, executables and etc.'

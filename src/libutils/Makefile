@@ -3,15 +3,13 @@
 # Copyright (C) 2017 Alexander Kuleshov <kuleshovmail at gmail dot com>
 # This file is released under the BSD license, see the COPYING file
 
-default: $(TMAIL_UTILS_LIB)
-
 include ../../mk/Common.mk
 include ../../mk/Build.mk
 
-LIB_UTILS_OBJS += list.o
-LIB_UTILS_OBJS += stack.o
-LIB_UTILS_OBJS += hashmap.o
-LIB_UTILS_OBJS += string_utils.o
+UTILS_OBJS += list.o
+UTILS_OBJS += stack.o
+UTILS_OBJS += hashmap.o
+UTILS_OBJS += string_utils.o
 
 TEST_EXECUTABLES += list_test
 TEST_EXECUTABLES += stack_test
@@ -19,8 +17,7 @@ TEST_EXECUTABLES += hashmap_test
 
 TEST_OBJS = list_test.o stack_test.o hashmap_test.o
 
-$(TMAIL_UTILS_LIB): $(LIB_UTILS_OBJS)
-	$(QUIET_CC) $(TMAIL_CC) $(WARNINGS) $(OSX_FLAGS) $(CC_SHLIB_FLAGS) $@ $(LIB_UTILS_OBJS)
+all: $(UTILS_OBJS)
 
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(WARNINGS) $(OSX_FLAGS) $(CFLAGS_LIBS) $<
@@ -43,8 +40,7 @@ hashmap_test:
 
 $(CLEAN_TARGET):
 	@echo "./src/libutils"
-	$(QUIET_CLEAN_OBJECTS) $(RM) $(LIB_UTILS_OBJS)
-	$(QUIET_CLEAN_SHARED_LIBS) $(RM) $(TMAIL_UTILS_LIB)
+	$(QUIET_CLEAN_OBJECTS) $(RM) $(UTILS_OBJS)
 	@rm -rf $(TEST_EXECUTABLES)
 	@rm -rf $(TEST_OBJS)
 

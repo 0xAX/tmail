@@ -207,7 +207,6 @@ void fill_smtp_conf(char *name, char *val)
 		}
 		smtp_conf->signature_fd = signature_fd;
 		free(signature_path);
-		free(name);
 	}
 
 	free(val);
