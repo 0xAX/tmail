@@ -38,14 +38,22 @@ LIB_ENCODING_OBJS += ../libencoding/base64.o
 # Object files from tmail core
 MIME_OBJECT = ../mime.o
 
+# external libraries that are used by tmail
+ifndef SSL_DISABLED
+OPENSSL = -lssl -lcrypto
+endif
+
+LIBS += $(OPENSSL)
+
+
 # Set of object files that we need to build ltmail-smtp.so
 ALL_OBJS = $(LIB_SMTP_OBJS) $(LIB_SYS_OBJS) $(LIB_ENCODING_OBJS) $(MIME_OBJECT)
 
 $(TMAIL_SMTP_LIB): $(LIB_SMTP_OBJS) $(MIME_OBJECT)
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(WARNINGS) $(CC_SHLIB_FLAGS) $@ $(ALL_OBJS)
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(WARNINGS) $(CC_SHLIB_FLAGS) $@ $(ALL_OBJS) $(LIBS)
 
 $(MIME_OBJECT):
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(WARNINGS) $(CFLAGS_LIBS) ../mime.c -o $(MIME_OBJECT)
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(WARNINGS) $(CFLAGS_LIBS) ../mime.c -o $(MIME_OBJECT) $(LIBS)
 
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(LIBSMTP_DEFS) $(INCLUDES) $(CFLAGS_LIBS) $<
