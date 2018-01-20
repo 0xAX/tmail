@@ -204,6 +204,8 @@ failed:
  *
  * If conf_path is NULL, $HOME/.tmail will be used.
  *
+ * NOTE: conf_path will be freed by init_config()
+ *
  * Retruns `0` in a case of failure and `1` if everything
  * is ok.
  */
