@@ -26,9 +26,19 @@ int main(int argc, char *argv[])
 	memset(conf, 0, sizeof(conf_path_t));
 
 	conf->config_dir_path = malloc(strlen(PATH_TO_CONF) + 1);
-	snprintf(conf->config_dir_path, strlen(PATH_TO_CONF) + 1, "%s", PATH_TO_CONF);
-	conf->config_dir = opendir(conf->config_dir_path);
+	if (!conf->config_dir_path)
+	{
+		free(conf);
+		fprintf(
+		    stderr,
+		    "Error: Can't allocate memory for conf->config_dir_path\n");
+		return 1;
+	}
+	memset(conf->config_dir_path, 0, strlen(PATH_TO_CONF) + 1);
+	snprintf(conf->config_dir_path, strlen(PATH_TO_CONF) + 1, "%s",
+		 PATH_TO_CONF);
 
+	conf->config_dir = opendir(conf->config_dir_path);
 	if (!conf->config_dir)
 	{
 		fprintf(stderr, "Can't open directory with configuration %s\n",
@@ -46,19 +56,16 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	ENTRY *username_smtp_conf = get_config_entry("username@example.com.smtprc");
+	ENTRY *username_smtp_conf =
+	    get_config_entry("username@example.com.smtprc");
 	if (!username_smtp_conf)
 	{
-		fprintf(stderr, "username@example.com.smtprc is not in hash table \n");
-		free(conf->config_dir_path);
-		free(conf);
+		fprintf(stderr,
+			"username@example.com.smtprc is not in hash table \n");
 		return 1;
 	}
 
 	printf("username smtprc test 1\n");
-
-	free(conf->config_dir_path);
-	free(conf);
 
 	return 0;
 }
