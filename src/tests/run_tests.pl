@@ -27,6 +27,12 @@ EOF
 
 my $config_test_result = <<EOF;
 username smtprc test 1
+username SMTP server is - smtp.example.com
+username SMTP port is - 587
+username SMTP realname is - Name
+username SMTP from is - username\@server.com
+username SMTP password is - password
+username smtprc test is done
 EOF
 
 print "Running: tmail code tests \n";

@@ -16,6 +16,7 @@
 
 int main(int argc, char *argv[])
 {
+	smtp_ctx_t *smtp_opts = NULL;
 	conf_path_t *conf = malloc(sizeof(conf_path_t));
 	if (!conf)
 	{
@@ -66,6 +67,15 @@ int main(int argc, char *argv[])
 	}
 
 	printf("username smtprc test 1\n");
+	smtp_opts = (smtp_ctx_t *)username_smtp_conf->data;
+
+	printf("username SMTP server is - %s\n", smtp_opts->smtp_server);
+	printf("username SMTP port is - %s\n", smtp_opts->smtp_port);
+	printf("username SMTP realname is - %s\n", smtp_opts->realname);
+	printf("username SMTP from is - %s\n", smtp_opts->from);
+	printf("username SMTP password is - %s\n", smtp_opts->password);
+
+	printf("username smtprc test is done\n");
 
 	return 0;
 }
