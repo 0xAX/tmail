@@ -110,14 +110,6 @@ without configuration.
   * Use it instead of hcreate(3)
   * Provide documentation.
 
-## Scripts
-
-### apply-clang-format.sh
-
-  * Add `-f` option to pass a file to the script.
-  * If there are no given parameters, try to execute script on the
-current dir.
-
 ## libsys
 
   * add tests for is_valid_ip_address()
