@@ -24,8 +24,8 @@ $(TEST_TARGET): base64_test
 	@rm -rf $(TEST_EXECUTABLES)
 
 base64_test:
-	$(TMAIL_CC) $(INCLUDES) $(DEBUG_FLAGS) -c base64_test.c
-	$(TMAIL_CC) $(INCLUDES) $(DEBUG_FLAGS) base64.o base64_test.o -o base64_test
+	$(TMAIL_CC) -g $(INCLUDES) $(DEBUG_FLAGS) -c base64_test.c
+	$(TMAIL_CC) -g $(INCLUDES) $(DEBUG_FLAGS) base64.o base64_test.o -o base64_test
 
 $(CLEAN_TARGET):
 	@echo "./src/libencoding"

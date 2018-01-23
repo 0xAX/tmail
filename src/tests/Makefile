@@ -59,7 +59,7 @@ ENCODING_OBJS += ../libencoding/base64.o
 CONFIG_TEST_OBJS += $(ENCODING_OBJS) $(SYS_OBJS) $(UTILS_OBJS) $(SMTP_OBJS)
 CONFIG_TEST_OBJS += ../config_parser.tab.o ../lex.yy.o ../config.o ../mime.o config_test.o
 
-TEST_FLAGS = $(OSX_FLAGS) $(INCLUDE_DIR) $(DEBUG_FLAGS)
+TEST_FLAGS = -g $(OSX_FLAGS) $(INCLUDE_DIR) $(DEBUG_FLAGS)
 
 $(TEST_TARGET): $(TEST_EXECUTABLES)
 	@exec ./run_tests.pl
