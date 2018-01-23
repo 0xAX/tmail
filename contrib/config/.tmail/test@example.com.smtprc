@@ -1,0 +1,19 @@
+##
+# Example of SMTP configuration for <test@example.com>
+##
+
+# user name
+set smtp.realname = Name1 Name2
+# user email address
+set smtp.from = test@server.com
+ # user password
+        set smtp.password = my_test_pass
+
+#
+###SMTP server configuration###
+#
+set smtp.server = test.smtp.exa      \
+m\
+ple.com
+
+        set smtp.port = 25 # smtp server port
