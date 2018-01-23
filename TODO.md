@@ -157,9 +157,6 @@ and
 
 ## Testing
 
-  * Compile tests in DEBUG mode.
-  * Add tests for configuration parser.
   * Add tests for `hostname()`.
   * Add tests for `fd_valid()`.
   * Add tests for `is_valid_ip_address()`.
-  * Use sed to replace signature path for `config_test`.
