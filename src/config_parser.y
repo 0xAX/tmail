@@ -25,8 +25,8 @@ int yylex_destroy(void);
 void yyerror(char const *s);
 
 /* parser internal API */
-void fill_smtp_conf(char *name, char *val);
-void set_val(char *name, char **key, char *val, int state);
+void fill_smtp_conf(int name, char *val);
+void set_val(char **key, char *val, int state);
 
 /* internal parser data structures */
 smtp_ctx_t *smtp_conf;
@@ -35,7 +35,7 @@ int current_type;
 
 %code requires {
 	struct var {
-		char *variable_name;
+		int   variable_name;
 		char *variable_val;
 	};
 }
@@ -101,8 +101,8 @@ static void destroy_smtp_conf()
 {
 	if (smtp_conf)
 	{
-		if (yylval.var.variable_name)
-			mfree(yylval.var.variable_name);
+		//if (yylval.var.variable_name)
+		//	mfree(yylval.var.variable_name);
 		if (yylval.var.variable_val)
 			mfree(yylval.var.variable_val);
 
@@ -170,23 +170,23 @@ char *trim(const char *str)
 	return out;
 }
 
-void fill_smtp_conf(char *name, char *val)
+void fill_smtp_conf(int name, char *val)
 {
-	if (strcmp(name, "smtp.realname") == 0)
-		set_val(name, &smtp_conf->realname, val, state);
-	else if (strcmp(name, "smtp.server") == 0)
-		set_val(name, &smtp_conf->smtp_server, val, state);
-	else if (strcmp(name, "smtp.port") == 0)
+	if (name == SMTP_REALNAME) //strcmp(name, "smtp.realname") == 0)
+		set_val(&smtp_conf->realname, val, state);
+	else if (name == SMTP_SERVER)//(strcmp(name, "smtp.server") == 0)
+		set_val(&smtp_conf->smtp_server, val, state);
+	else if (name == SMTP_PORT)//(strcmp(name, "smtp.port") == 0)
 	{
-		set_val(name, &smtp_conf->smtp_port, val, state);
+		set_val(&smtp_conf->smtp_port, val, state);
 		if (strcmp(val, "578") == 0)
 			smtp_conf->tls = true;
 	}
-	else if (strcmp(name, "smtp.password") == 0)
-		set_val(name, &smtp_conf->password, val, state);
-	else if (strcmp(name, "smtp.from") == 0)
-		set_val(name, &smtp_conf->from, val, state);
-	else if (strcmp(name, "smtp.signature") == 0)
+	else if (name == SMTP_PASSWORD)//(strcmp(name, "smtp.password") == 0)
+		set_val(&smtp_conf->password, val, state);
+	else if (name == SMTP_FROM)//(strcmp(name, "smtp.from") == 0)
+		set_val(&smtp_conf->from, val, state);
+	else if (name == SMTP_SIGNATURE)//(strcmp(name, "smtp.signature") == 0)
 	{
 		char *signature_path = NULL;
 		fd_t signature_fd = 0;
@@ -212,7 +212,7 @@ void fill_smtp_conf(char *name, char *val)
 	free(val);
 }
 
-void set_val(char *name, char **key, char *val, int state)
+void set_val(char **key, char *val, int state)
 {
 	char *value = strdup(val);
 
@@ -295,7 +295,15 @@ int parse_tmail_configuration(char *filename,
 		/* store result */
 		ep.key = strdup(basename(filename));
 		ep.data = (void *)smtp_conf;
-		hsearch(ep, ENTER);
+		if (!hsearch(ep, ENTER))
+		{
+			mfree(ep.key);
+			destroy_smtp_conf();
+			yylex_destroy();
+			fprintf(stderr, "Error: during store of %s key in hash table\n",
+				filename);
+			return 0;
+		}
 
 		if (ret == 1)
 		{
@@ -316,9 +324,6 @@ int parse_tmail_configuration(char *filename,
 				"due to memory exhaustion\n");
 			return 0;
 		}
-
-		/* last name will not be free in lexer, so we should do it here */
-		free(yylval.var.variable_name);
 
 		break;
 	}

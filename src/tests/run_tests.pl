@@ -26,13 +26,20 @@ result_test_6 application/excel
 EOF
 
 my $config_test_result = <<EOF;
-username smtprc test 1
+username smtprc test
 username SMTP server is - smtp.example.com
 username SMTP port is - 587
 username SMTP realname is - Name
 username SMTP from is - username\@server.com
 username SMTP password is - password
 username smtprc test is done
+test smtprc test
+test SMTP server is - test.smtp.example.com
+test SMTP port is - 25
+test SMTP realname is - Name1 Name2
+test SMTP from is - test\@server.com
+test SMTP password is - my_test_pass
+test smtprc test is done
 EOF
 
 print "Running: tmail code tests \n";

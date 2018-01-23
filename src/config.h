@@ -42,6 +42,16 @@ typedef struct
 	char *config_dir_path;
 } conf_path_t;
 
+enum SMTP_CONF_VAR
+{
+	SMTP_REALNAME,
+	SMTP_SERVER,
+	SMTP_PORT,
+	SMTP_FROM,
+	SMTP_PASSWORD,
+	SMTP_SIGNATURE
+};
+
 conf_path_t *get_tmail_conf_dir(void);
 int init_config(conf_path_t *conf_path);
 ENTRY *get_config_entry(char *name);
