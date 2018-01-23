@@ -44,9 +44,6 @@
 #define SUBJECT_CLAUSE_LEN 9
 #define REPLY_TO_CLAUSE_LEN 13
 
-#define SMTP_PORT 25
-#define SMTP_PORT_TLS 587
-
 #define CR 0x0D
 #define LF 0x0A
 #define CRLF 0x0D0A
