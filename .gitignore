@@ -62,6 +62,7 @@ list_test
 stack_test
 base64_test
 mime_test
+config_test
 
 # log files
 log.*
