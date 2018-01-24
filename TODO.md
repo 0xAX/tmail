@@ -2,6 +2,8 @@
 
 ## General
 
+  * use `exit(2)` only from the `main(argc, argv)` and subcommands.
+Everywhere else should be `return` used.
   * Use `strncmp(3)` instead of `strcmp(3)` when we know a length of a string.
   * Move all header files to `include/tmail` dir.
   * Install all header files to `INCLUDE_DIR/tmail`.
@@ -81,7 +83,11 @@ without configuration.
   * Check message size if `SIZE` capability is supported.
   * Implement SMTP extensions.
 
-## smtp-server-info
+## tmail smtp-caps
+
+  * support for caps after starttls
+
+## tmail smtp-server-info
 
   * Add support for help argument
 (See https://tools.ietf.org/html/rfc5321#section-4.1.1.8)
