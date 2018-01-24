@@ -13,6 +13,12 @@ use File::Find;
 
 my $argc = @ARGV;
 
+if (! -e "/var/run/docker.sock") {
+    print PUSHCOLOR RED "test-smtp-relay.pl: Docker daemon should be started\n";
+    print POPCOLOR;
+    exit 1;
+}
+
 if ($argc != 2) {
     print PUSHCOLOR RED "test-smtp-relay.pl: You should pas you GMAIL email as the first parameter and password as second.\n";
     print POPCOLOR;
