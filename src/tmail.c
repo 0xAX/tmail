@@ -136,8 +136,14 @@ int main(int argc, char *argv[])
 	/* should be called for random */
 	srand(time(NULL));
 
+	/* parse command line arguments and execute commands early */
+	if (strcmp(argv[1], SMTP_CAPS) == 0)
+		smtp_caps_cmd(--argc, ++argv);
+	if (strcmp(argv[1], SMTP_SERVER_INFO) == 0)
+		smtp_server_info_cmd(--argc, ++argv);
+
+	/* initialize openssl stuff */
 #ifndef SSL_DISABLED
-	/* initialize openssl */
 	SSL_library_init();
 	SSL_load_error_strings();
 	ERR_load_crypto_strings();
@@ -154,7 +160,8 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 #endif
-	/* parse command line arguments */
+
+	/* execute complex tmail commands */
 	if (strcmp(argv[1], SEND_EMAIL) == 0)
 	{
 		/* no need to check this, because of early exit */
@@ -169,10 +176,6 @@ int main(int argc, char *argv[])
 		}
 		send_email_cmd(--argc, ++argv, tls_client_ctx);
 	}
-	else if (strcmp(argv[1], SMTP_CAPS) == 0)
-		smtp_caps_cmd(--argc, ++argv);
-	else if (strcmp(argv[1], SMTP_SERVER_INFO) == 0)
-		smtp_server_info_cmd(--argc, ++argv);
 	else
 		parse_argv(argc, argv);
 
