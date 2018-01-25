@@ -13,6 +13,8 @@ ifndef SSL_DISABLED
 LIBS += -lssl -lcrypto
 endif
 
+LIBS += -lpthread
+
 # lexer and parser source code
 CONFIG_PARSER = config_parser.y
 CONFIG_LEXER = config_parser.l
