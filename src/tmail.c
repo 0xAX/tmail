@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 	if (strcmp(argv[1], SMTP_SERVER_INFO) == 0)
 		smtp_server_info_cmd(--argc, ++argv);
 
-	/* initialize openssl stuff */
+		/* initialize openssl stuff */
 #ifndef SSL_DISABLED
 	SSL_library_init();
 	SSL_load_error_strings();
@@ -165,15 +165,14 @@ int main(int argc, char *argv[])
 	if (strcmp(argv[1], SEND_EMAIL) == 0)
 	{
 		/* no need to check this, because of early exit */
-		load_mime_file("contrib/mime.types");
+		if (load_mime_file("contrib/mime.types") == 0)
+			goto fail;
 		mime_loaded = 1;
 		/* the same for load_config() */
 		load_config();
 
 		if (!config_loaded)
-		{
 			goto fail;
-		}
 		send_email_cmd(--argc, ++argv, tls_client_ctx);
 	}
 	else

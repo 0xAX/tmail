@@ -24,7 +24,7 @@
 #define DEFAULT_MIME_TYPE_LEN 10
 
 char *get_mime_type(char *filename);
-void load_mime_file(const char *filename);
+int load_mime_file(const char *filename);
 void mime_free(void);
 
 #endif /* MIME_H */

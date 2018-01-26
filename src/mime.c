@@ -18,7 +18,7 @@ char *mime_file_content = NULL;
  * application, because it will exit if something
  * going wrong.
  */
-void load_mime_file(const char *filepath)
+int load_mime_file(const char *filepath)
 {
 	int n = 0;
 	struct stat st;
@@ -27,23 +27,27 @@ void load_mime_file(const char *filepath)
 
 	if (mime_file == -1)
 	{
-		fprintf(stderr, "%s\n", strerror(errno));
-		exit(EXIT_FAILURE);
+		fprintf(stderr, "Error: during opening of a mime file - %s\n",
+			strerror(errno));
+		return 0;
 	}
 
 	if (stat(filepath, &st) != 0)
 	{
 		close(mime_file);
-		fprintf(stderr, "%s\n", strerror(errno));
-		exit(EXIT_FAILURE);
+		fprintf(stderr, "Error: during stat of a mime file - %s\n",
+			strerror(errno));
+		return 0;
 	}
 
 	mime_file_content = malloc(st.st_size + 1);
 	if (!mime_file_content)
 	{
 		close(mime_file);
-		fprintf(stderr, "%s\n", strerror(errno));
-		exit(EXIT_FAILURE);
+		fprintf(stderr,
+			"Error: during allocation memory for a mime file -%s\n",
+			strerror(errno));
+		return 0;
 	}
 	memset(mime_file_content, 0, st.st_size);
 
@@ -54,6 +58,7 @@ void load_mime_file(const char *filepath)
 	}
 
 	close(mime_file);
+	return 1;
 }
 
 /*
