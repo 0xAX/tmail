@@ -156,7 +156,8 @@ int main(int argc, char *argv[])
 	tls_client_ctx = SSL_CTX_new(tls_method);
 	if (!tls_client_ctx)
 	{
-		fprintf(stderr, "%s\n", "Can't initialize TLS context");
+		fprintf(stderr, "Error: during initialization of TLS context - ");
+		ERR_print_errors_fp(stderr);
 		exit(EXIT_FAILURE);
 	}
 #endif
