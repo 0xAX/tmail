@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 	/* it is not good idea to run tmail via root */
 	if (!getuid())
 	{
-		fprintf(stderr, "%s\n", "Run tmail with non-root user");
+		fprintf(stderr, "Run tmail with non-root user\n");
 		exit(EXIT_FAILURE);
 	}
 
