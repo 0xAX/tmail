@@ -95,6 +95,30 @@ static void load_config(void)
 	config_loaded = 1;
 }
 
+static void crypto_init(SSL_CTX **tls_client_ctx)
+{
+#ifndef SSL_DISABLED
+	const SSL_METHOD *tls_method = NULL;
+
+	SSL_library_init();
+	SSL_load_error_strings();
+	ERR_load_crypto_strings();
+#ifdef SSL_V11
+	tls_method = TLS_method();
+#endif
+#ifdef SSL_V10
+	tls_method = TLSv1_2_method();
+#endif
+	*tls_client_ctx = SSL_CTX_new(tls_method);
+	if (!*tls_client_ctx)
+	{
+		fprintf(stderr, "Error: during initialization of TLS context - ");
+		ERR_print_errors_fp(stderr);
+		exit(EXIT_FAILURE);
+	}
+#endif
+}
+
 void exit_cb(void)
 {
 	/* release memory under mime data */
@@ -113,7 +137,6 @@ void exit_cb(void)
 int main(int argc, char *argv[])
 {
 #ifndef SSL_DISABLED
-	const SSL_METHOD *tls_method = NULL;
 	SSL_CTX *tls_client_ctx = NULL;
 #else
 	void *tls_client_ctx = NULL;
@@ -142,25 +165,8 @@ int main(int argc, char *argv[])
 	if (strcmp(argv[1], SMTP_SERVER_INFO) == 0)
 		smtp_server_info_cmd(--argc, ++argv);
 
-		/* initialize openssl stuff */
-#ifndef SSL_DISABLED
-	SSL_library_init();
-	SSL_load_error_strings();
-	ERR_load_crypto_strings();
-#ifdef SSL_V11
-	tls_method = TLS_method();
-#endif
-#ifdef SSL_V10
-	tls_method = TLSv1_2_method();
-#endif
-	tls_client_ctx = SSL_CTX_new(tls_method);
-	if (!tls_client_ctx)
-	{
-		fprintf(stderr, "Error: during initialization of TLS context - ");
-		ERR_print_errors_fp(stderr);
-		exit(EXIT_FAILURE);
-	}
-#endif
+	/* initialize openssl stuff */
+	crypto_init(&tls_client_ctx);
 
 	/* execute complex tmail commands */
 	if (strcmp(argv[1], SEND_EMAIL) == 0)
