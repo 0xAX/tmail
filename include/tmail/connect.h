@@ -9,8 +9,9 @@
 #ifndef SYS_CONNECT_H
 #define SYS_CONNECT_H
 
-#include <basic.h>
 #include <string.h>
+
+#include <tmail/basic.h>
 
 #define TCP_PROTO 6
 

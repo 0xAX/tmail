@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "hashmap.h"
+#include <tmail/hashmap.h>
 
 #include <limits.h>
 

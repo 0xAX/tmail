@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "smtp-caps.h"
+#include <tmail/smtp-caps.h>
 
 static char *smtp_server = NULL;
 static char *smtp_server_port = NULL;

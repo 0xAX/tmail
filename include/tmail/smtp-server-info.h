@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <smtp.h>
+#include <tmail/smtp.h>
 
 #define SMTP_SERVER_INFO "smtp-server-info"
 

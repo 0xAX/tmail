@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "string_utils.h"
+#include <tmail/string_utils.h>
 
 /**
  * skip_cl_rl skips all characters before \r\n from the given string

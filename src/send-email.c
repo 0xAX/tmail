@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "send-email.h"
+#include <tmail/send-email.h>
 
 static char *message_id = NULL;
 static char *from = NULL;

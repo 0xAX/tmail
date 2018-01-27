@@ -10,9 +10,7 @@
 #define LIB_SMTP_H
 
 #include <assert.h>
-#include <basic.h>
 #include <libgen.h>
-#include <message.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
@@ -20,12 +18,14 @@
 #include <time.h>
 #include <unistd.h>
 
-#include <base64.h>
-#include <connect.h>
-#include <gethostname.h>
-#include <mime.h>
-#include <string_utils.h>
-#include <time_utils.h>
+#include <tmail/basic.h>
+#include <tmail/message.h>
+#include <tmail/base64.h>
+#include <tmail/connect.h>
+#include <tmail/gethostname.h>
+#include <tmail/mime.h>
+#include <tmail/string_utils.h>
+#include <tmail/time_utils.h>
 
 #ifndef SSL_DISABLED
 #include <openssl/err.h>

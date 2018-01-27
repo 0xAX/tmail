@@ -9,9 +9,10 @@
 #ifndef SYS_FCNTL_H
 #define SYS_FCNTL_H
 
-#include <basic.h>
 #include <fcntl.h>
 #include <stdbool.h>
+
+#include <tmail/basic.h>
 
 bool fd_valid(fd_t fd);
 

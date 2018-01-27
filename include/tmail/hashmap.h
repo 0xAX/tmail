@@ -13,7 +13,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "basic.h"
+#include <tmail/basic.h>
 
 #define HASH_KEY_SIZE 32
 #define INITIAL_HASHMAP_SIZE 64 // should be 64

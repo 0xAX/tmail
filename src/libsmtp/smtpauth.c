@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "smtp.h"
+#include <tmail/smtp.h>
 
 #ifndef SSL_DISABLED
 #include <openssl/ssl.h>

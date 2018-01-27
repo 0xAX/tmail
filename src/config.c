@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "config.h"
+#include <tmail/config.h>
 
 /**
  * build_config_name() - builds configuration file name based on

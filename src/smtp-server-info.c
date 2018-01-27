@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include <smtp-server-info.h>
+#include <tmail/smtp-server-info.h>
 
 static char *smtp_server = NULL;
 static char *smtp_server_port = NULL;

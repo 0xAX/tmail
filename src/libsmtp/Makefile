@@ -6,6 +6,7 @@
 include ../../mk/Common.mk
 include ../../mk/Build.mk
 
+INCLUDES += -I../../include
 INCLUDES += -I../
 INCLUDES += -I../libtls/
 INCLUDES += -I../libutils/

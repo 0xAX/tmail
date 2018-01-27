@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "smtp.h"
+#include <tmail/smtp.h>
 
 static int read_smtp_greetings(void *socket, char *buffer)
 {

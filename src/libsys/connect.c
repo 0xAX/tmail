@@ -17,8 +17,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "connect.h"
-#include "inet.h"
+#include <tmail/connect.h>
+#include <tmail/inet.h>
 
 static connection_t *connect_to_ip(const char *addr, connection_t *conn,
 				   const char *service)

@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "gethostname.h"
+#include <tmail/gethostname.h>
 
 #include <limits.h>
 #include <stdlib.h>

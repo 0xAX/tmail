@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "mime.h"
+#include <tmail/mime.h>
 
 char *mime_file_content = NULL;
 

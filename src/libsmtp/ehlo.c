@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "smtp.h"
+#include <tmail/smtp.h>
 
 __attribute__((pure, unused)) char *smtp_cap_to_str(unsigned long cap)
 {

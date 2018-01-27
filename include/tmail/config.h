@@ -9,7 +9,6 @@
 #ifndef TMAIL_CONFIG_H
 #define TMAIL_CONFIG_H
 
-#include <basic.h>
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -22,8 +21,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <hashmap.h>
-#include <smtp.h>
+#include <tmail/basic.h>
+#include <tmail/hashmap.h>
+#include <tmail/smtp.h>
 
 /* types of configuration */
 #define TMAIL_CORE_CONF (1 << 0)

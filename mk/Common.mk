@@ -43,6 +43,8 @@ OBJECT_FILES=*.o
 
 # Main source directory
 SRC_DIR=src/
+# tmail headers path
+TMAIL_HEADERS_DIR=./include/tmail
 # Directory with makefile auxiliary scripts
 MK_DIR=mk/
 # Directory with system library
@@ -60,6 +62,8 @@ BIN_DIR ?= /usr/local/bin
 MAN_DIR_1 ?= /usr/share/man/man1
 # Path to man dir for configuration files
 MAN_DIR_5 ?= /usr/share/man/man5
+# path to install tmail headers
+HEADERS_DIR ?= /usr/include
 
 # use it for cleanups
 RM ?= rm -rf
@@ -77,6 +81,8 @@ STRIP ?= strip
 BISON ?= bison
 # default lexer
 FLEX ?= flex
+# default copy command
+CP ?= cp
 
 # Make flags
 # Supress Entering/Leaving messages

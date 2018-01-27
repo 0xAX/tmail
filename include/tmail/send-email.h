@@ -21,15 +21,15 @@
 #include <sys/select.h>
 #include <unistd.h>
 
-#include <at_exit.h>
-#include <basic.h>
-#include <config.h>
-#include <connect.h>
-#include <gethostname.h>
-#include <list.h>
-#include <message.h>
-#include <send-email.h>
-#include <smtp.h>
+#include <tmail/at_exit.h>
+#include <tmail/basic.h>
+#include <tmail/config.h>
+#include <tmail/connect.h>
+#include <tmail/gethostname.h>
+#include <tmail/list.h>
+#include <tmail/message.h>
+#include <tmail/send-email.h>
+#include <tmail/smtp.h>
 
 #define SEND_EMAIL "send-email"
 

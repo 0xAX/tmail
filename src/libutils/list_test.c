@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "list.h"
+#include <tmail/list.h>
 
 int main(int argc, char *argv[])
 {

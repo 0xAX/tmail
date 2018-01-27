@@ -12,7 +12,7 @@ TEST_EXECUTABLES += base64_test
 
 TEST_OBJS += base64_test.o
 
-INCLUDES = -I../libutils $(OSX_FLAGS)
+INCLUDES = -I../../include -I../libutils $(OSX_FLAGS)
 
 all: $(ENCODING_OBJS)
 

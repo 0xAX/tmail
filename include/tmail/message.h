@@ -12,8 +12,8 @@
 #include <sys/select.h>
 #include <unistd.h>
 
-#include <basic.h>
-#include <list.h>
+#include <tmail/basic.h>
+#include <tmail/list.h>
 
 typedef enum { STDIN = 0, EXTERNAL_FILE = 1 } message_source_t;
 

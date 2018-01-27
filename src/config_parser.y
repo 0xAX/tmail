@@ -15,9 +15,9 @@
 #include <search.h>
 
 /* headers from tmail */
-#include <smtp.h>
-#include <config.h>
-#include <hashmap.h>
+#include <tmail/smtp.h>
+#include <tmail/config.h>
+#include <tmail/hashmap.h>
 
 /* bison API */
 extern int yylex(void);

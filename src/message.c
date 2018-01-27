@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "message.h"
+#include <tmail/message.h>
 
 static bool check_stdin(message_t *message)
 {

@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "inet.h"
+#include <tmail/inet.h>
 
 /**
  * is_valid_ip_address - tries to understand is given

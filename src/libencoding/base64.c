@@ -7,7 +7,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "base64.h"
+#include <tmail/base64.h>
 
 static char alphabet[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

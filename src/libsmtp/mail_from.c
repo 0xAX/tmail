@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "smtp.h"
+#include <tmail/smtp.h>
 
 int send_mail_from_message(void *socket, message_t *message, char *buffer,
 			   bool protected)

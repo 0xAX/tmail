@@ -18,7 +18,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <basic.h>
+#include <tmail/basic.h>
 
 #define DEFAULT_MIME_TYPE "text/plain"
 #define DEFAULT_MIME_TYPE_LEN 10

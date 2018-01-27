@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "fcntl_utils.h"
+#include <tmail/fcntl_utils.h>
 
 /**
  * fd_valid - check the given file descriptor.

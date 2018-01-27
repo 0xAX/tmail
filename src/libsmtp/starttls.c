@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "smtp.h"
+#include <tmail/smtp.h>
 
 int send_starttls(void *socket, char *buffer)
 {

@@ -6,7 +6,7 @@
 include ../../mk/Common.mk
 include ../../mk/Build.mk
 
-INCLUDES += -I../libutils/ $(OSX_FLAGS)
+INCLUDES += -I../libutils/ -I../../include $(OSX_FLAGS)
 
 SYS_OBJS += at_exit.o
 SYS_OBJS += connect.o

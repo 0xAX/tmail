@@ -3,7 +3,6 @@
 ## General
 
   * Use `strncmp(3)` instead of `strcmp(3)` when we know a length of a string.
-  * Install all header files to `INCLUDE_DIR/tmail`.
 
 ## Build
 

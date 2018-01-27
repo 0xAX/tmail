@@ -7,7 +7,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "smtp.h"
+#include <tmail/smtp.h>
 
 /* this size is convinient for MIME base64 encoding */
 #define BUFFER_SIZE 4560

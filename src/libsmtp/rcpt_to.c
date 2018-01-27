@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "smtp.h"
+#include <tmail/smtp.h>
 
 static int send_rcpt_to(void *socket, char *buffer, list_t *recipients,
 			list_t *entry, bool protected)

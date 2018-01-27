@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "smtp.h"
+#include <tmail/smtp.h>
 
 static int send_message_header(void *socket, char *cmd, int cmd_len, char *data,
 			       bool protected)

@@ -14,13 +14,12 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <at_exit.h>
-#include <config.h>
-#include <mime.h>
-
-#include <send-email.h>
-#include <smtp-caps.h>
-#include <smtp-server-info.h>
+#include <tmail/mime.h>
+#include <tmail/config.h>
+#include <tmail/at_exit.h>
+#include <tmail/send-email.h>
+#include <tmail/smtp-caps.h>
+#include <tmail/smtp-server-info.h>
 
 #ifndef SSL_DISABLED
 #include <openssl/ssl.h>

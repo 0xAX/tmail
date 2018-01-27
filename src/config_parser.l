@@ -9,7 +9,7 @@
 %{
 #define YY_DECL int yylex()
 
-#include <config.h>
+#include <tmail/config.h>
 #include <config_parser.tab.h>
 
 #undef YY_INPUT

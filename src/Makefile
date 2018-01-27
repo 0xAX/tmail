@@ -69,6 +69,8 @@ INCLUDES+=-Ilibsmtp/
 INCLUDES+=-Ilibencoding/
 INCLUDES+=-I./
 
+INCLUDES+=-I../include
+
 # tmail binary should know where to find openssl
 ifdef OSX_FLAGS
 	COMPILER_FLAGS += -L/usr/local/opt/openssl/lib
