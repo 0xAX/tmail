@@ -33,8 +33,7 @@ static void print_version(void) __attribute__((noreturn));
 
 /* tmail core command line arguments */
 static const struct option options[] = {
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'v'},
+    {"help", no_argument, NULL, 'h'}, {"version", no_argument, NULL, 'v'},
 };
 
 static void print_help()
@@ -111,7 +110,8 @@ static void crypto_init(SSL_CTX **tls_client_ctx)
 	*tls_client_ctx = SSL_CTX_new(tls_method);
 	if (!*tls_client_ctx)
 	{
-		fprintf(stderr, "Error: during initialization of TLS context - ");
+		fprintf(stderr,
+			"Error: during initialization of TLS context - ");
 		ERR_print_errors_fp(stderr);
 		exit(EXIT_FAILURE);
 	}
