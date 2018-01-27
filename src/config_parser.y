@@ -195,15 +195,16 @@ void fill_smtp_conf(int name, char *val)
 		if (!signature_path)
 		{
 			fprintf(stderr, "Error: Can't allocate memory for trimming of %s\n", val);
-			exit(EXIT_FAILURE);
+			return;
 		}
 
 		signature_fd = open(signature_path, O_RDONLY);
 		if (signature_fd == -1)
 		{
 			free(signature_path);
-			fprintf(stderr, "Error: Can't open signature file %s\n", val);
-			exit(EXIT_FAILURE);
+			fprintf(stderr, "Error: Can't open signature "
+				"file %s\n", val);
+			return;
 		}
 		smtp_conf->signature_fd = signature_fd;
 		free(signature_path);
@@ -218,8 +219,9 @@ void set_val(char **key, char *val, int state)
 
 	if (!value)
 	{
-		fprintf(stderr, "Error: can't allocate memory for trim\n");
-		exit(EXIT_FAILURE);
+		fprintf(stderr, "Error: can't allocate memory"
+			"for triming %s configuration option\n", *key);
+		return;
 	}
 
 	if (*key != NULL)
@@ -242,11 +244,11 @@ void set_val(char **key, char *val, int state)
 	{
 		*key = trim(value);
 
-		if (!key)
-		{
-			fprintf(stderr, "Error: trim failed for string - %s\n", value);
-			exit(EXIT_FAILURE);
+		if (!*key) {
+			fprintf(stderr, "Error: trim failed for configuration"
+				" value - %s\n", value);
 		}
+			return;
 	}
 
 	mfree(value);
@@ -285,7 +287,7 @@ int parse_tmail_configuration(char *filename,
 		if (!smtp_conf)
 		{
 			fprintf(stderr, "Error: Can't allocate space for a smtp_conf\n");
-			exit(EXIT_FAILURE);
+			return 0;
 		}
 		memset(smtp_conf, 0, sizeof(smtp_ctx_t));
 
