@@ -27,7 +27,6 @@
 #endif
 
 static int config_loaded = 0;
-static int mime_loaded = 0;
 
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
@@ -122,8 +121,7 @@ static void crypto_init(SSL_CTX **tls_client_ctx)
 void exit_cb(void)
 {
 	/* release memory under mime data */
-	if (mime_loaded)
-		mime_free();
+	mime_free();
 
 	/* release memory under `send-email` data */
 	if (config_loaded)
@@ -174,7 +172,6 @@ int main(int argc, char *argv[])
 		/* no need to check this, because of early exit */
 		if (load_mime_file("contrib/mime.types") == 0)
 			goto fail;
-		mime_loaded = 1;
 		/* the same for load_config() */
 		load_config();
 
