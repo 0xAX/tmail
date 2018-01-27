@@ -6,11 +6,11 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include <config.h>
-#include <smtp.h>
-
 #include <stdio.h>
 #include <unistd.h>
+
+#include <tmail/config.h>
+#include <tmail/smtp.h>
 
 #define PATH_TO_CONF "../../contrib/config/.tmail"
 

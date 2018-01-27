@@ -12,6 +12,7 @@ TEST_OBJS += config_test.o
 TEST_EXECUTABLES += mime_test
 TEST_EXECUTABLES += config_test
 
+INCLUDE_DIR += -I../../include
 INCLUDE_DIR += -I../
 INCLUDE_DIR += -I../libutils
 INCLUDE_DIR += -I../libsmtp

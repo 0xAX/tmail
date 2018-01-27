@@ -6,7 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include <mime.h>
+#include <tmail/mime.h>
 #include <stdio.h>
 
 int main(int argc, char *argv[])
