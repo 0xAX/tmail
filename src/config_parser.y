@@ -172,21 +172,21 @@ char *trim(const char *str)
 
 void fill_smtp_conf(int name, char *val)
 {
-	if (name == SMTP_REALNAME) //strcmp(name, "smtp.realname") == 0)
+	if (name == SMTP_REALNAME)
 		set_val(&smtp_conf->realname, val, state);
-	else if (name == SMTP_SERVER)//(strcmp(name, "smtp.server") == 0)
+	else if (name == SMTP_SERVER)
 		set_val(&smtp_conf->smtp_server, val, state);
-	else if (name == SMTP_PORT)//(strcmp(name, "smtp.port") == 0)
+	else if (name == SMTP_PORT)
 	{
 		set_val(&smtp_conf->smtp_port, val, state);
 		if (strcmp(val, "578") == 0)
 			smtp_conf->tls = true;
 	}
-	else if (name == SMTP_PASSWORD)//(strcmp(name, "smtp.password") == 0)
+	else if (name == SMTP_PASSWORD)
 		set_val(&smtp_conf->password, val, state);
-	else if (name == SMTP_FROM)//(strcmp(name, "smtp.from") == 0)
+	else if (name == SMTP_FROM)
 		set_val(&smtp_conf->from, val, state);
-	else if (name == SMTP_SIGNATURE)//(strcmp(name, "smtp.signature") == 0)
+	else if (name == SMTP_SIGNATURE)
 	{
 		char *signature_path = NULL;
 		fd_t signature_fd = 0;
