@@ -14,9 +14,9 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <tmail/mime.h>
-#include <tmail/config.h>
 #include <tmail/at_exit.h>
+#include <tmail/config.h>
+#include <tmail/mime.h>
 #include <tmail/send-email.h>
 #include <tmail/smtp-caps.h>
 #include <tmail/smtp-server-info.h>

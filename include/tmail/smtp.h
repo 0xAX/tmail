@@ -18,11 +18,11 @@
 #include <time.h>
 #include <unistd.h>
 
-#include <tmail/basic.h>
-#include <tmail/message.h>
 #include <tmail/base64.h>
+#include <tmail/basic.h>
 #include <tmail/connect.h>
 #include <tmail/gethostname.h>
+#include <tmail/message.h>
 #include <tmail/mime.h>
 #include <tmail/string_utils.h>
 #include <tmail/time_utils.h>

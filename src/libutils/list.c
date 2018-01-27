@@ -9,8 +9,8 @@
  * iterated in one direction.
  */
 
-#include <tmail/list.h>
 #include <tmail/basic.h>
+#include <tmail/list.h>
 
 /**
  * list_new - allocates new list.

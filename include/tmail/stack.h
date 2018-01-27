@@ -9,8 +9,8 @@
 #ifndef LIB_UTILS_STACK_H
 #define LIB_UTILS_STACK_H
 
-#include <tmail/list.h>
 #include <stdbool.h>
+#include <tmail/list.h>
 
 /*
  * Darwin already provides stack_t type, so here

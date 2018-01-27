@@ -247,8 +247,8 @@ void set_val(char **key, char *val, int state)
 		if (!*key) {
 			fprintf(stderr, "Error: trim failed for configuration"
 				" value - %s\n", value);
-		}
 			return;
+		}
 	}
 
 	mfree(value);
