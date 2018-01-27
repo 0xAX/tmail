@@ -15,8 +15,8 @@ char *mime_file_content = NULL;
  * at startup.
  *
  * NOTE: it should be used at the start of an
- * application, because it will exit if something
- * going wrong.
+ * application, because it will return with 0
+ * if something going wrong.
  */
 int load_mime_file(const char *filepath)
 {
