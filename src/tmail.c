@@ -26,8 +26,6 @@
 #include <openssl/ssl.h>
 #endif
 
-static int config_loaded = 0;
-
 static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
 
@@ -82,16 +80,16 @@ static void parse_argv(int argc, char *argv[])
 	print_help();
 }
 
-static void load_config(void)
+static int load_config(void)
 {
 	if (!init_config(NULL))
 	{
 		fprintf(stderr,
 			"Error: occurs during tmail configuration parsing\n");
-		return;
+		return 0;
 	}
 
-	config_loaded = 1;
+	return 1;
 }
 
 static void crypto_init(SSL_CTX **tls_client_ctx)
@@ -122,14 +120,10 @@ void exit_cb(void)
 {
 	/* release memory under mime data */
 	mime_free();
-
 	/* release memory under `send-email` data */
-	if (config_loaded)
-		release_send_email_data();
-
+	release_send_email_data();
 	/* release memory related to configuration */
-	if (config_loaded)
-		release_config();
+	release_config();
 }
 
 int main(int argc, char *argv[])
@@ -173,9 +167,7 @@ int main(int argc, char *argv[])
 		if (load_mime_file("contrib/mime.types") == 0)
 			goto fail;
 		/* the same for load_config() */
-		load_config();
-
-		if (!config_loaded)
+		if (load_config() == 0)
 			goto fail;
 		send_email_cmd(--argc, ++argv, tls_client_ctx);
 	}
