@@ -17,7 +17,7 @@ INCLUDES = -I../../include $(OSX_FLAGS)
 all: $(ENCODING_OBJS)
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(WARNINGS) $(CFLAGS_LIBS) $<
+	$(QUIET_CC) $(TMAIL_CC) $(DEFS) $(INCLUDES) $(WARNINGS) $(CFLAGS_LIBS) $<
 
 $(TEST_TARGET): base64_test
 	@exec ./run_tests.pl

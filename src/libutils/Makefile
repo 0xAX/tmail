@@ -11,7 +11,7 @@ UTILS_OBJS += stack.o
 UTILS_OBJS += hashmap.o
 UTILS_OBJS += string_utils.o
 
-INCLUDES += -I../../include
+INCLUDES += -I../../include $(OSX_FLAGS)
 
 TEST_EXECUTABLES += list_test
 TEST_EXECUTABLES += stack_test
@@ -22,7 +22,7 @@ TEST_OBJS = list_test.o stack_test.o hashmap_test.o
 all: $(UTILS_OBJS)
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(WARNINGS) $(OSX_FLAGS) $(CFLAGS_LIBS) $<
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(DEFS) $(WARNINGS) $(CFLAGS_LIBS) $<
 
 $(TEST_TARGET): $(TEST_EXECUTABLES)
 	@exec ./run_tests.pl

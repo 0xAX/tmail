@@ -17,7 +17,7 @@ SYS_OBJS += inet.o
 all: $(SYS_OBJS)
 
 %.o: %.c
-	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(WARNINGS) $(CFLAGS_LIBS) $<
+	$(QUIET_CC) $(TMAIL_CC) $(INCLUDES) $(DEFS) $(WARNINGS) $(CFLAGS_LIBS) $<
 
 $(CLEAN_TARGET):
 	@echo "./src/libsys"

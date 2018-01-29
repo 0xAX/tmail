@@ -86,11 +86,11 @@ $(TMAIL_EXECUTABLE): $(PARSER_OBJECTS) $(TMAIL_OBJS)
 
 config_parser.tab.o: $(CONFIG_PARSER)
 	$(BISON) -d -v $(CONFIG_PARSER)
-	$(QUIET_CC) $(TMAIL_CC) $(OSX_FLAGS) $(INCLUDES) -c config_parser.tab.c
+	$(QUIET_CC) $(TMAIL_CC) $(DEFS) $(OSX_FLAGS) $(INCLUDES) -c config_parser.tab.c
 
 lex.yy.o: $(CONFIG_LEXER)
 	$(FLEX) $(CONFIG_LEXER)
-	$(QUIET_CC) $(TMAIL_CC) $(OSX_FLAGS) $(INCLUDES) -c lex.yy.c
+	$(QUIET_CC) $(TMAIL_CC) $(DEFS) $(OSX_FLAGS) $(INCLUDES) -c lex.yy.c
 
 %.o: %.c
 	$(QUIET_CC) $(TMAIL_CC) $(DEFS) $(OSX_FLAGS) $(INCLUDES) $(CFLAGS_OBJS) $@ $<
