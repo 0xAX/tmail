@@ -80,5 +80,7 @@ git:
 script:
   - pwd
   - $TMAIL_CC -v
+  - make TMAIL_CC=$TMAIL_CC DEBUG=1 V=1 SSL_DISABLED=1 all
+  - make clean
   - make TMAIL_CC=$TMAIL_CC DEBUG=1 V=1 all
   - make TMAIL_CC=$TMAIL_CC DEBUG=1 V=1 test
