@@ -7,8 +7,7 @@
 
 my $argc = @ARGV;
 
-if ($argc == 0)
-{
+if ($argc == 0) {
     print "0.0.1";
 }
 
