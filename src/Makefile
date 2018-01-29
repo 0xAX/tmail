@@ -63,13 +63,7 @@ PARSER_OBJECTS = config_parser.tab.o lex.yy.o
 ENCODING_OBJS += libencoding/base64.o
 
 # set of directories with C headers needed for tmail
-INCLUDES+=-Ilibsys/
-INCLUDES+=-Ilibutils/                    
-INCLUDES+=-Ilibsmtp/
-INCLUDES+=-Ilibencoding/
-INCLUDES+=-I./
-
-INCLUDES+=-I../include
+INCLUDES+=-I../include -I./
 
 # tmail binary should know where to find openssl
 ifdef OSX_FLAGS

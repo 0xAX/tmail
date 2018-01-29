@@ -7,11 +7,6 @@ include ../../mk/Common.mk
 include ../../mk/Build.mk
 
 INCLUDES += -I../../include
-INCLUDES += -I../
-INCLUDES += -I../libtls/
-INCLUDES += -I../libutils/
-INCLUDES += -I../libsys/
-INCLUDES += -I../libencoding/
 INCLUDES += $(OSX_FLAGS)
 
 ifndef SSL_DISABLED
