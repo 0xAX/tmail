@@ -14,6 +14,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <tmail/basic.h>
 #include <tmail/at_exit.h>
 #include <tmail/config.h>
 #include <tmail/mime.h>
@@ -92,9 +93,9 @@ static void load_config(void)
 	config_loaded = 1;
 }
 
+#ifndef SSL_DISABLED
 static void crypto_init(SSL_CTX **tls_client_ctx)
 {
-#ifndef SSL_DISABLED
 	const SSL_METHOD *tls_method = NULL;
 
 	SSL_library_init();
@@ -114,8 +115,13 @@ static void crypto_init(SSL_CTX **tls_client_ctx)
 		ERR_print_errors_fp(stderr);
 		exit(EXIT_FAILURE);
 	}
-#endif
 }
+#else
+static void crypto_init(void **tls_client_ctx)
+{
+	UNUSED(tls_client_ctx);
+}
+#endif
 
 void exit_cb(void)
 {

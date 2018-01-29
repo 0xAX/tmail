@@ -46,12 +46,13 @@ And of course compilers
 
 Additionally following flags can be passed to make:
 
-  * `TMAIL_CC` to override default compiler (by default `gcc` is used)
-  * `V=1` for a more verbose build
+  * `TMAIL_CC` to override default compiler (by default `gcc` is used).
+  * `V=1` for a more verbose build.
   * `DEBUG=1` to build tmail with debug info.
-  * `NON_NATIVE_BINARY` to disable -march=native
-  * `BINDIR` to specify where to install tmail executables
-  * `MANDIR` to specify where to install tmail man pages
+  * `NON_NATIVE_BINARY` to disable -march=native.
+  * `BINDIR` to specify where to install tmail executables.
+  * `MANDIR` to specify where to install tmail man pages.
+  * `SSL_DISABLED=1` to build tmail without openssl.
 
 For example:
 

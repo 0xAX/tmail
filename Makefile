@@ -15,6 +15,8 @@
 #
 # Define MANDIR to specify where to install tmail man pages
 #
+# Define SSL_DISABLED=1 to build tmail without openssl.
+#
 # Following flags can be passed too, but they are mostly CI,
 # containerization and testing stuff
 .DEFAULT_GOAL: $(DEFAULT_TARGET)
