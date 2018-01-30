@@ -139,11 +139,8 @@ void exit_cb(void)
 
 int main(int argc, char *argv[])
 {
-#ifndef SSL_DISABLED
 	SSL_CTX *tls_client_ctx = NULL;
-#else
-	void *tls_client_ctx = NULL;
-#endif
+
 	/* it is not good idea to run tmail via root */
 	if (!getuid())
 	{
