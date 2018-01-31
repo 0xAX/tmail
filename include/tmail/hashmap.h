@@ -16,7 +16,7 @@
 #include <tmail/basic.h>
 
 #define HASH_KEY_SIZE 32
-#define INITIAL_HASHMAP_SIZE 64 // should be 64
+#define INITIAL_HASHMAP_SIZE 64
 
 typedef struct
 {
