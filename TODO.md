@@ -7,6 +7,7 @@
 
 ## Build
 
+  * Handle LibreSSL in the system (for example for OpenBSD).
   * Add header files as prerequisites in make files.
   * Strip libraries and executables if the `DEBUG` flag wasn't passed.
   * Disable `asserts` from `assert.h` for non-debug builds.
