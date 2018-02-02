@@ -42,7 +42,16 @@ hashmap_get test 1 OK
 hashmap_get test 2 OK
 hashmap_get test 5 OK
 hashmap_get test 6 OK
+remove key_test_1
 hashmap_remove test 1 OK
+put key_test_1 again
+hashmap_get test 7 OK
+hashmap_get test 8 OK
+hashmap_get test 9 OK
+val of user2\@server.com is val_9
+val of user3\@server.com is val_10
+removing user2\@server.com
+hashmap_remove test 2 OK
 EOF
 
 print "Running: libutils tests:\n";

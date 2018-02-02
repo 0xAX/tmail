@@ -14,8 +14,8 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <tmail/basic.h>
 #include <tmail/at_exit.h>
+#include <tmail/basic.h>
 #include <tmail/config.h>
 #include <tmail/mime.h>
 #include <tmail/send-email.h>
@@ -33,7 +33,8 @@ static void print_version(void) __attribute__((noreturn));
 
 /* tmail core command line arguments */
 static const struct option options[] = {
-    {"help", no_argument, NULL, 'h'}, {"version", no_argument, NULL, 'v'},
+    {"help", no_argument, NULL, 'h'},
+    {"version", no_argument, NULL, 'v'},
 };
 
 static void print_help()
@@ -117,10 +118,7 @@ static void crypto_init(SSL_CTX **tls_client_ctx)
 	}
 }
 #else
-static void crypto_init(void **tls_client_ctx)
-{
-	UNUSED(tls_client_ctx);
-}
+static void crypto_init(void **tls_client_ctx) { UNUSED(tls_client_ctx); }
 #endif
 
 void exit_cb(void)

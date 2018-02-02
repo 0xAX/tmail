@@ -111,7 +111,6 @@ without configuration.
 ### hashmap_t
 
   * Use it instead of hcreate(3)
-  * Provide documentation.
 
 ## libsys
 
