@@ -24,6 +24,8 @@
 
 #include <tmail/hashmap.h>
 
+#include <limits.h>
+
 __attribute__((pure)) static int hash_function(hashmap_t *map, char *key)
 {
 	unsigned long hashval = 0;
