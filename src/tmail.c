@@ -94,7 +94,7 @@ static void load_config(void)
 }
 
 #ifndef SSL_DISABLED
-static void crypto_init(SSL_CTX **tls_client_ctx)
+static void crypto_init(CRYPTO_CTX_PTR *tls_client_ctx)
 {
 	const SSL_METHOD *tls_method = NULL;
 
@@ -136,7 +136,7 @@ void exit_cb(void)
 
 int main(int argc, char *argv[])
 {
-	SSL_CTX *tls_client_ctx = NULL;
+	CRYPTO_CTX_PTR tls_client_ctx = NULL;
 
 	/* it is not good idea to run tmail via root */
 	if (!getuid())

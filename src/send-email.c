@@ -142,7 +142,7 @@ static message_t *fill_message(void)
 	return m;
 }
 
-static void process_send_email(SSL_CTX *tls_client_ctx)
+static void process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
 {
 	message_t *m = NULL;
 	char *smtp_config = NULL;
@@ -213,7 +213,7 @@ void release_send_email_data(void)
 }
 
 __attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
-					      SSL_CTX *tls_client_ctx)
+					      CRYPTO_CTX_PTR tls_client_ctx)
 {
 	int c = 0;
 
