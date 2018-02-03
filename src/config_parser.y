@@ -294,11 +294,11 @@ int parse_tmail_configuration(char *filename,
 		/* store result */
 		config_key = strdup(basename(filename));
 		hashmap_put(config_map, config_key, (void *)smtp_conf);
-		free(config_key);
+		/* data will be stored in hashmap, we don't need here anymore*/
+		mfree(config_key);
 
 		if (ret == 1)
 		{
-			mfree(config_key);
 			destroy_smtp_conf();
 			yylex_destroy();
 			fprintf(stderr, "Error: wrong configuration in %s configuration file\n",
@@ -308,7 +308,6 @@ int parse_tmail_configuration(char *filename,
 
 		if (ret == 2)
 		{
-			mfree(config_key);
 			destroy_smtp_conf();
 			yylex_destroy();
 			fprintf(stderr, "Error: parsing of configuration file is failed"
