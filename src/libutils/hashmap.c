@@ -173,8 +173,6 @@ void hashmap_remove(hashmap_t *map, char *key)
 
 			while (true)
 			{
-				if (!curr->key)
-					continue;
 				if (strcmp(curr->key, key) == 0)
 				{
 					prev->next = curr->next;
