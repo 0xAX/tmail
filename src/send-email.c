@@ -145,9 +145,8 @@ static message_t *fill_message(void)
 static void process_send_email(SSL_CTX *tls_client_ctx)
 {
 	message_t *m = NULL;
-	ENTRY *ep = NULL;
-	smtp_ctx_t *smtp_opts = NULL;
 	char *smtp_config = NULL;
+	smtp_ctx_t *smtp_ctx = NULL;
 
 	if (interactive)
 		goto finish;
@@ -178,8 +177,9 @@ static void process_send_email(SSL_CTX *tls_client_ctx)
 			"Error: Can't build configuration file entry\n");
 		exit(EXIT_FAILURE);
 	}
-	ep = get_config_entry(smtp_config);
-	if (!ep)
+
+	smtp_ctx = hashmap_get(config_map, smtp_config);
+	if (!smtp_ctx)
 	{
 		fprintf(stderr,
 			"Error: Configuration is not found for %s account\n",
@@ -187,8 +187,8 @@ static void process_send_email(SSL_CTX *tls_client_ctx)
 		exit(EXIT_FAILURE);
 	}
 	free(smtp_config);
-	smtp_opts = (smtp_ctx_t *)ep->data;
-	if (!smtp_opts->smtp_server || !smtp_opts->smtp_port)
+
+	if (!smtp_ctx->smtp_server || !smtp_ctx->smtp_port)
 	{
 		fprintf(stderr, "Error: Can't find SMTP server address/port "
 				"configuration\n");
@@ -196,7 +196,7 @@ static void process_send_email(SSL_CTX *tls_client_ctx)
 	}
 
 	/* and finally send message */
-	send_email(smtp_opts, m, tls_client_ctx, 0);
+	send_email(smtp_ctx, m, tls_client_ctx, 0);
 fail:
 	free_message(m);
 finish:

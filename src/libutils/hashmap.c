@@ -80,7 +80,7 @@ int hashmap_put(hashmap_t *map, char *key, void *val)
 	if (map->elements[index] == NULL)
 	{
 		map->elements[index] = malloc(sizeof(hashmap_el_t));
-		memset(map->elements[index], 0, sizeof(hashmap_t));
+		memset(map->elements[index], 0, sizeof(hashmap_el_t));
 
 		map->elements[index]->val = val;
 		map->elements[index]->next = NULL;

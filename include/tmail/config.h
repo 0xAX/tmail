@@ -14,7 +14,6 @@
 #include <fcntl.h>
 #include <libgen.h>
 #include <pwd.h>
-#include <search.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -54,7 +53,6 @@ enum SMTP_CONF_VAR
 
 conf_path_t *get_tmail_conf_dir(void);
 int init_config(conf_path_t *conf_path);
-ENTRY *get_config_entry(char *name);
 char *build_config_name(char *name, int conf_type);
 
 /* config_parser.y */
@@ -65,5 +63,7 @@ void release_config(void);
 char *configuration_data;
 /* state of parser */
 int state;
+/* hashmap with configuration */
+hashmap_t *config_map;
 
 #endif

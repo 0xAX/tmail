@@ -108,10 +108,6 @@ without configuration.
 
   * Add initial implementation.
 
-### hashmap_t
-
-  * Use it instead of hcreate(3)
-
 ## libsys
 
   * add tests for is_valid_ip_address()

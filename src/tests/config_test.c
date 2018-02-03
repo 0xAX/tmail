@@ -13,12 +13,11 @@
 #include <tmail/smtp.h>
 
 #define PATH_TO_CONF "../../contrib/config/.tmail"
+#define TEST_SMTPRC "test@example.com.smtprc"
+#define USER_SMTPRC "username@example.com.smtprc"
 
 int main(int argc, char *argv[])
 {
-	smtp_ctx_t *smtp_username = NULL;
-	smtp_ctx_t *smtp_test = NULL;
-
 	conf_path_t *conf = malloc(sizeof(conf_path_t));
 	if (!conf)
 	{
@@ -58,16 +57,14 @@ int main(int argc, char *argv[])
 	}
 
 	printf("username smtprc test\n");
-	ENTRY *username_smtp_conf =
-	    get_config_entry("username@example.com.smtprc");
-	if (!username_smtp_conf)
+	smtp_ctx_t *smtp_username = hashmap_get(config_map, USER_SMTPRC);
+	if (!smtp_username)
 	{
 		fprintf(stderr,
 			"username@example.com.smtprc is not in hash table\n");
 		return 1;
 	}
 
-	smtp_username = (smtp_ctx_t *)username_smtp_conf->data;
 	printf("username SMTP server is - %s\n", smtp_username->smtp_server);
 	printf("username SMTP port is - %s\n", smtp_username->smtp_port);
 	printf("username SMTP realname is - %s\n", smtp_username->realname);
@@ -76,15 +73,14 @@ int main(int argc, char *argv[])
 	printf("username smtprc test is done\n");
 
 	printf("test smtprc test\n");
-	ENTRY *test_smtp_conf = get_config_entry("test@example.com.smtprc");
-	if (!test_smtp_conf)
+	smtp_ctx_t *smtp_test = hashmap_get(config_map, TEST_SMTPRC);
+	if (!smtp_test)
 	{
 		fprintf(stderr,
 			"test@example.com.smtprc is not in hash table\n");
 		return 1;
 	}
 
-	smtp_test = (smtp_ctx_t *)test_smtp_conf->data;
 	printf("test SMTP server is - %s\n", smtp_test->smtp_server);
 	printf("test SMTP port is - %s\n", smtp_test->smtp_port);
 	printf("test SMTP realname is - %s\n", smtp_test->realname);
@@ -95,8 +91,7 @@ int main(int argc, char *argv[])
 	release_smtp_ctx(smtp_username);
 	release_smtp_ctx(smtp_test);
 
-	mfree(username_smtp_conf->key);
-	mfree(test_smtp_conf->key);
+	release_config();
 
 	return 0;
 }

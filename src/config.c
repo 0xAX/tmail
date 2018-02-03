@@ -217,7 +217,8 @@ int init_config(conf_path_t *conf_path)
 	char *ext = NULL;
 
 	/* create hash table for configuration */
-	hcreate(CONFIGURATION_HASHMAP_SIZE);
+	if (!config_map)
+		config_map = hashmap_new();
 
 	if (conf_path)
 		config = conf_path;
@@ -278,19 +279,6 @@ failure:
 }
 
 /**
- * get_config_entry() - tries to search and return a structure
- * associated with the given `name` in a global configuration
- * hash table.
- */
-ENTRY *get_config_entry(char *name)
-{
-	ENTRY e;
-
-	e.key = name;
-	return hsearch(e, FIND);
-}
-
-/**
  * release_config() is a function to release all memory
  * occupied by configuration related data.
  *
@@ -303,22 +291,19 @@ void release_config(void)
 
 	if (!config)
 	{
-		hdestroy();
+		hashmap_release(config_map);
 		return;
 	}
 
 	while ((dent = readdir(config->config_dir)) != NULL)
 	{
 		char *ext = strrchr(dent->d_name, '.');
-		ENTRY *ep = get_config_entry(dent->d_name);
+		smtp_ctx_t *smtp_ctx = (smtp_ctx_t *)hashmap_get(config_map, dent->d_name);
 
-		if (ep)
+		if (smtp_ctx)
 		{
 			if (ext && strcmp(ext, ".smtprc") == 0)
-			{
-				mfree(ep->key);
-				release_smtp_ctx((smtp_ctx_t *)ep->data);
-			}
+				release_smtp_ctx(smtp_ctx);
 		}
 	}
 
@@ -327,5 +312,5 @@ void release_config(void)
 	mfree(config);
 
 	/* destroy global configuration hashtable */
-	hdestroy();
+	hashmap_release(config_map);
 }

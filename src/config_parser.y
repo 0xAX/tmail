@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
-#include <search.h>
 
 /* headers from tmail */
 #include <tmail/smtp.h>
@@ -101,8 +100,6 @@ static void destroy_smtp_conf()
 {
 	if (smtp_conf)
 	{
-		//if (yylval.var.variable_name)
-		//	mfree(yylval.var.variable_name);
 		if (yylval.var.variable_val)
 			mfree(yylval.var.variable_val);
 
@@ -264,7 +261,7 @@ int parse_tmail_configuration(char *filename,
 			      int type)
 {
 	int ret = 0;
-	ENTRY ep;
+	char *config_key = NULL;
 
 	/*
 	 * Here we are adding `\n` as the last symbol of configuration.
@@ -295,21 +292,13 @@ int parse_tmail_configuration(char *filename,
 		ret = yyparse();
 
 		/* store result */
-		ep.key = strdup(basename(filename));
-		ep.data = (void *)smtp_conf;
-		if (!hsearch(ep, ENTER))
-		{
-			mfree(ep.key);
-			destroy_smtp_conf();
-			yylex_destroy();
-			fprintf(stderr, "Error: during store of %s key in hash table\n",
-				filename);
-			return 0;
-		}
+		config_key = strdup(basename(filename));
+		hashmap_put(config_map, config_key, (void *)smtp_conf);
+		free(config_key);
 
 		if (ret == 1)
 		{
-			mfree(ep.key);
+			mfree(config_key);
 			destroy_smtp_conf();
 			yylex_destroy();
 			fprintf(stderr, "Error: wrong configuration in %s configuration file\n",
@@ -319,7 +308,7 @@ int parse_tmail_configuration(char *filename,
 
 		if (ret == 2)
 		{
-			mfree(ep.key);
+			mfree(config_key);
 			destroy_smtp_conf();
 			yylex_destroy();
 			fprintf(stderr, "Error: parsing of configuration file is failed"

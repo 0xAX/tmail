@@ -13,7 +13,6 @@
 #include <fcntl.h>
 #include <getopt.h>
 #include <locale.h>
-#include <search.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
