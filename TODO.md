@@ -58,8 +58,7 @@ This stuff should be implemented after `STARTTLS` support:
 ## config
 
   * Free memory in a case of parsing of configuration file error.
-  * Replace `yylval.var.variable_name` with enum instead of string in `config_parser.l`.
-  * Rename `build_cofnig_name()` to something like `get_config_path()`.
+  * Rename `build_config_name()` to something like `get_config_path()`.
   * Remake `get_config_entry()`:
 
 1. make it return `void*`.
