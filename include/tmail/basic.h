@@ -18,9 +18,9 @@
 
 #ifndef SSL_DISABLED
 #include <openssl/ssl.h>
-typedef SSL_CTX* CRYPTO_CTX_PTR;
+typedef SSL_CTX *CRYPTO_CTX_PTR;
 #else
-typedef void* CRYPTO_CTX_PTR;
+typedef void *CRYPTO_CTX_PTR;
 #endif
 
 /* Help us to suppress unused errors/warnings during compilation */

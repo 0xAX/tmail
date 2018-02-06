@@ -298,7 +298,8 @@ void release_config(void)
 	while ((dent = readdir(config->config_dir)) != NULL)
 	{
 		char *ext = strrchr(dent->d_name, '.');
-		smtp_ctx_t *smtp_ctx = (smtp_ctx_t *)hashmap_get(config_map, dent->d_name);
+		smtp_ctx_t *smtp_ctx =
+		    (smtp_ctx_t *)hashmap_get(config_map, dent->d_name);
 
 		if (smtp_ctx)
 		{
