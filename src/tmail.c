@@ -33,14 +33,19 @@ static void print_version(void) __attribute__((noreturn));
 /* tmail core command line arguments */
 static const struct option options[] = {
     {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'v'},
+    {"version", no_argument, NULL, 'v'}
 };
 
 static void print_help()
 {
-	printf("Usage: tmail [--version] [--help]\n");
+	printf("Usage: tmail <options> command <command_options>\n");
 	printf("\n");
-	printf("tmail provides following commands:\n");
+	printf("tmail supports following options:");
+	printf("\n");
+	printf("    -v/--version\t\tprint tmail version\n");
+	printf("    -h/--help\t\t\tprint this help message\n");
+	printf("\n");
+	printf("tmail supports following commands:\n");
 	printf("\n");
 	printf("Outgoing mail related:\n");
 	printf("    send-email\t\t\tsend an email\n");
