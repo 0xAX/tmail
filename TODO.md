@@ -97,11 +97,8 @@ without configuration.
 
 ### list_t
 
-  * Replace it with `slist` from `libands`.
-
-### stack_t
-
-  * Remove it as we don't use it.
+  * add implementation `list_insert(list_t*, void*, int position)`
+  * add implementation `list_last(list_t *)`
 
 ### bitmap_t
 
