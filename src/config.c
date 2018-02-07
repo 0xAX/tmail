@@ -41,7 +41,7 @@ char *build_config_name(char *name, int conf_type)
 		return NULL;
 	}
 
-	len = strlen(name) + len + 1;
+	len += strlen(name) + 1;
 	config = malloc(len);
 
 	if (!config)
