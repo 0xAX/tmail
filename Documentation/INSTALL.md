@@ -35,7 +35,7 @@ You may need to install following dependencies:
   * [bison](https://www.gnu.org/software/bison/)
   * [flex](https://www.gnu.org/software/flex/)
   * [make](https://www.gnu.org/software/make/)
-  * [openssl 1.1.X](https://www.openssl.org/)
+  * [openssl 1.1.X](https://www.openssl.org/) or [libressl 2.6.X](http://www.libressl.org/)
 
 And of course compilers
 
