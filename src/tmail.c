@@ -21,10 +21,6 @@
 #include <tmail/smtp-caps.h>
 #include <tmail/smtp-server-info.h>
 
-#ifndef SSL_DISABLED
-#include <openssl/ssl.h>
-#endif
-
 static int config_loaded = 0;
 
 static void print_help(void) __attribute__((noreturn));
