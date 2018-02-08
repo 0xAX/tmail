@@ -8,9 +8,9 @@
 
 #include <tmail/smtp.h>
 
-#ifndef SSL_DISABLED
-#include <openssl/ssl.h>
-#endif
+//#ifndef SSL_DISABLED
+//#include <openssl/ssl.h>
+//#endif
 
 #define PLAIN (1 << 0)
 #define LOGIN (1 << 1)
