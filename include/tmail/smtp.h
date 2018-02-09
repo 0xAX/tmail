@@ -27,11 +27,6 @@
 #include <tmail/string_utils.h>
 #include <tmail/time_utils.h>
 
-#ifndef SSL_DISABLED
-#include <openssl/err.h>
-#include <openssl/ssl.h>
-#endif
-
 #define TO_CLAUSE "To: "
 #define CC_CLAUSE "Cc: "
 #define FROM_CLAUSE "From: "
