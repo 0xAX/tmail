@@ -27,10 +27,8 @@ static void print_help(void) __attribute__((noreturn));
 static void print_version(void) __attribute__((noreturn));
 
 /* tmail core command line arguments */
-static const struct option options[] = {
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'v'}
-};
+static const struct option options[] = {{"help", no_argument, NULL, 'h'},
+					{"version", no_argument, NULL, 'v'}};
 
 static void print_help()
 {
@@ -105,7 +103,8 @@ static void crypto_init(CRYPTO_CTX_PTR *tls_client_ctx)
 	ERR_load_crypto_strings();
 #else
 	OPENSSL_init_ssl(OPENSSL_INIT_LOAD_SSL_STRINGS |
-			 OPENSSL_INIT_LOAD_CRYPTO_STRINGS, NULL);
+			     OPENSSL_INIT_LOAD_CRYPTO_STRINGS,
+			 NULL);
 #endif
 
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
