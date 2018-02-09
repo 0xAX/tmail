@@ -99,14 +99,19 @@ static void crypto_init(CRYPTO_CTX_PTR *tls_client_ctx)
 {
 	const SSL_METHOD *tls_method = NULL;
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
 	SSL_library_init();
 	SSL_load_error_strings();
 	ERR_load_crypto_strings();
-#ifdef SSL_V11
-	tls_method = TLS_method();
+#else
+	OPENSSL_init_ssl(OPENSSL_INIT_LOAD_SSL_STRINGS |
+			 OPENSSL_INIT_LOAD_CRYPTO_STRINGS, NULL);
 #endif
-#ifdef SSL_V10
+
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 	tls_method = TLSv1_2_method();
+#else
+	tls_method = TLS_method();
 #endif
 	*tls_client_ctx = SSL_CTX_new(tls_method);
 	if (!*tls_client_ctx)

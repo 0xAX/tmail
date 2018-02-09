@@ -18,6 +18,8 @@
 
 #ifndef SSL_DISABLED
 #include <openssl/ssl.h>
+#include <openssl/err.h>
+#include <openssl/opensslv.h>
 typedef SSL_CTX *CRYPTO_CTX_PTR;
 #else
 typedef void *CRYPTO_CTX_PTR;
