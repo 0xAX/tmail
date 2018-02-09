@@ -59,7 +59,7 @@ static int send_login(smtp_ctx_t *smtp __attribute__((__unused__)),
 	base64_data_t *login_result = NULL;
 	base64_data_t *password_result = NULL;
 
-	// send AUTH command and read a response
+	/* send AUTH command and read a response */
 	memset(buffer, 0, 1024);
 	tmail_sock_send(socket, "AUTH LOGIN\r\n", 12, protected);
 	READ_SMTP_RESPONSE(socket, buffer, 1024, "334",
@@ -68,6 +68,7 @@ static int send_login(smtp_ctx_t *smtp __attribute__((__unused__)),
 			   protected);
 	memset(buffer, 0, 1024);
 
+	/* send base64 encoded login data */
 	login_result = base64_encode(smtp->from, strlen(smtp->from), NOT_MIME);
 	tmail_sock_send(socket, login_result->data, login_result->out_len,
 			protected);
@@ -78,6 +79,7 @@ static int send_login(smtp_ctx_t *smtp __attribute__((__unused__)),
 	    "Error: SMTP PLAIN auth response: %s\n", protected);
 	memset(buffer, 0, 1024);
 
+	/* send base64 encoded password data */
 	password_result =
 	    base64_encode(smtp->password, strlen(smtp->password), NOT_MIME);
 	tmail_sock_send(socket, password_result->data, password_result->out_len,
