@@ -194,6 +194,21 @@
 		return 0;                                                      \
 	}
 
+/* the same that READ_SMTP_RESPONSE, but go to `fail` label instead of return */
+#define READ_SMTP_RESPONSE_AND_GOTO(SOCKET, BUFFER, BUFSIZ, EXP_CODE,          \
+				    READ_ERR_MSG, ERR_CODE_MSG, PROTECTED)     \
+	if ((n = tmail_sock_recv(SOCKET, BUFFER, BUFSIZ, PROTECTED)) == -1)    \
+	{                                                                      \
+		fprintf(stderr, READ_ERR_MSG);                                 \
+		goto fail;                                                     \
+	}                                                                      \
+	if (!(BUFFER[0] == EXP_CODE[0] && BUFFER[1] == EXP_CODE[1] &&          \
+	      BUFFER[2] == EXP_CODE[2]))                                       \
+	{                                                                      \
+		fprintf(stderr, ERR_CODE_MSG, BUFFER);                         \
+		goto fail;                                                     \
+	}
+
 /* SMTP context describes a server configuration client connected to */
 typedef struct
 {
