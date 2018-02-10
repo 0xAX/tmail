@@ -73,7 +73,7 @@ static int send_login(smtp_ctx_t *smtp __attribute__((__unused__)),
 	tmail_sock_send(socket, login_result->data, login_result->out_len,
 			protected);
 	tmail_sock_send(socket, "\r\n", 2, protected);
-	READ_SMTP_RESPONSE(
+	READ_SMTP_RESPONSE_AND_GOTO(
 	    socket, buffer, 1024, "334",
 	    "Error: Something going wrong during PLAIN authentication\n",
 	    "Error: SMTP PLAIN auth response: %s\n", protected);
@@ -85,15 +85,27 @@ static int send_login(smtp_ctx_t *smtp __attribute__((__unused__)),
 	tmail_sock_send(socket, password_result->data, password_result->out_len,
 			protected);
 	tmail_sock_send(socket, "\r\n", 2, protected);
-	READ_SMTP_RESPONSE(
+	READ_SMTP_RESPONSE_AND_GOTO(
 	    socket, buffer, 1024, "235",
 	    "Error: Something going wrong during PLAIN authentication\n",
 	    "Error: SMTP PLAIN auth response: %s\n", protected);
+	goto success;
+fail:
+	if (login_result)
+	{
+		if (login_result->data)
+			mfree(login_result->data);
+		mfree(login_result);
+	}
 
-	mfree(login_result->data);
-	mfree(login_result);
-	mfree(password_result->data);
-	mfree(password_result);
+	if (password_result)
+	{
+		if (password_result->data)
+			mfree(password_result->data);
+		mfree(password_result);
+		return 0;
+	}
+success:
 	return 1;
 }
 
