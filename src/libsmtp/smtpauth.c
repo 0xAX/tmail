@@ -55,6 +55,7 @@ static int send_login(smtp_ctx_t *smtp __attribute__((__unused__)),
 		      void *socket __attribute__((__unused__)), bool protected)
 {
 	int n = 0;
+	int ret = 0;
 	char buffer[1024];
 	base64_data_t *login_result = NULL;
 	base64_data_t *password_result = NULL;
@@ -89,7 +90,8 @@ static int send_login(smtp_ctx_t *smtp __attribute__((__unused__)),
 	    socket, buffer, 1024, "235",
 	    "Error: Something going wrong during PLAIN authentication\n",
 	    "Error: SMTP PLAIN auth response: %s\n", protected);
-	goto success;
+
+	ret = 1;
 fail:
 	if (login_result)
 	{
@@ -103,10 +105,9 @@ fail:
 		if (password_result->data)
 			mfree(password_result->data);
 		mfree(password_result);
-		return 0;
 	}
-success:
-	return 1;
+
+	return ret;
 }
 
 int send_auth(smtp_ctx_t *smtp, void *socket, bool protected)
