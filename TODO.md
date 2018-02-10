@@ -74,7 +74,6 @@ without configuration.
 
 ## libsmtp
 
-  * introduce `READ_SMTP_RESPONSE_GOTO_IF_FAIL`.
   * specify `MAX_ATTACHMENT_SIZE` during build.
   * Add send message in the separate thread.
   * Check message size if `SIZE` capability is supported.
