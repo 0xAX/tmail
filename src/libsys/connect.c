@@ -6,17 +6,6 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include <arpa/inet.h>
-#include <assert.h>
-#include <errno.h>
-#include <netdb.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <unistd.h>
-
 #include <tmail/connect.h>
 #include <tmail/inet.h>
 

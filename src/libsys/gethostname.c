@@ -8,11 +8,6 @@
 
 #include <tmail/gethostname.h>
 
-#include <limits.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
 /**
  * hostname - gets hostname of the system.
  *

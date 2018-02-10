@@ -6,12 +6,7 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
-#include <sys/param.h>
-#endif
+#include <tmail/at_exit.h>
 
 /**
  * register_exit_cb - register `atext(3)` callback.
