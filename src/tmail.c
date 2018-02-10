@@ -6,13 +6,6 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include <getopt.h>
-#include <locale.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
 #include <tmail/at_exit.h>
 #include <tmail/basic.h>
 #include <tmail/config.h>
