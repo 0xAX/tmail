@@ -11,6 +11,7 @@
 
 #include <netdb.h>
 #include <assert.h>
+#include <errno.h>
 #include <string.h>
 
 #include <tmail/basic.h>
