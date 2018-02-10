@@ -9,6 +9,13 @@
 #ifndef SYS_AT_EXIT_H
 #define SYS_AT_EXIT_H
 
+#include <stdio.h>
+#include <stdlib.h>
+
+#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
+#include <sys/param.h>
+#endif
+
 void register_exit_cb(void (*cb)(void));
 
 #endif /* SYS_AT_EXIT_H */
