@@ -51,6 +51,28 @@ int parse_auth_capabilities(char *capname, size_t capname_len, char *buf,
 	return 0;
 }
 
+static int send_auth_plain_data(void *socket, base64_data_t **res,
+				char *data, bool protected,
+				char *message_code)
+{
+	int n = 0;
+	char buffer[1024];
+
+	memset(buffer, 0, 1024);
+	*res = base64_encode(data, strlen(data), NOT_MIME);
+	tmail_sock_send(socket, (*res)->data, (*res)->out_len, protected);
+	tmail_sock_send(socket, "\r\n", 2, protected);
+	READ_SMTP_RESPONSE_AND_GOTO(
+	    socket, buffer, 1024, message_code,
+	    "Error: Something going wrong during PLAIN authentication\n",
+	    "Error: SMTP PLAIN auth response: %s\n", protected);
+	memset(buffer, 0, 1024);
+
+	return 1;
+fail:
+	return 0;
+}
+
 static int send_login(smtp_ctx_t *smtp __attribute__((__unused__)),
 		      void *socket __attribute__((__unused__)), bool protected)
 {
@@ -61,35 +83,18 @@ static int send_login(smtp_ctx_t *smtp __attribute__((__unused__)),
 	base64_data_t *password_result = NULL;
 
 	/* send AUTH command and read a response */
-	memset(buffer, 0, 1024);
 	tmail_sock_send(socket, "AUTH LOGIN\r\n", 12, protected);
 	READ_SMTP_RESPONSE(socket, buffer, 1024, "334",
 			   "Error: Can\'t read SMTP AUTH PLAIN response\n",
 			   "Error: SMTP PLAIN auth wrong response: %s\n",
 			   protected);
-	memset(buffer, 0, 1024);
 
 	/* send base64 encoded login data */
-	login_result = base64_encode(smtp->from, strlen(smtp->from), NOT_MIME);
-	tmail_sock_send(socket, login_result->data, login_result->out_len,
-			protected);
-	tmail_sock_send(socket, "\r\n", 2, protected);
-	READ_SMTP_RESPONSE_AND_GOTO(
-	    socket, buffer, 1024, "334",
-	    "Error: Something going wrong during PLAIN authentication\n",
-	    "Error: SMTP PLAIN auth response: %s\n", protected);
-	memset(buffer, 0, 1024);
-
+	if (!send_auth_plain_data(socket, &login_result, smtp->from, protected, "334"))
+		goto fail;
 	/* send base64 encoded password data */
-	password_result =
-	    base64_encode(smtp->password, strlen(smtp->password), NOT_MIME);
-	tmail_sock_send(socket, password_result->data, password_result->out_len,
-			protected);
-	tmail_sock_send(socket, "\r\n", 2, protected);
-	READ_SMTP_RESPONSE_AND_GOTO(
-	    socket, buffer, 1024, "235",
-	    "Error: Something going wrong during PLAIN authentication\n",
-	    "Error: SMTP PLAIN auth response: %s\n", protected);
+	if (!send_auth_plain_data(socket, &password_result, smtp->password, protected, "235"))
+		goto fail;
 
 	ret = 1;
 fail:
