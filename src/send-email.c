@@ -19,7 +19,7 @@ static list_t *bcc = NULL;
 static bool use_editor = false;
 static bool interactive = false;
 
-static int collect_list_args(list_t **list, char *arg)
+static int collect_list_args(list_t **list, void *arg)
 {
 	assert(arg);
 
@@ -117,7 +117,14 @@ static message_t *fill_message(void)
 
 			attachment->path = strdup(entry->item);
 			attachment->attachment_fd = fd;
-			list_append(m->attachments, attachment);
+
+			if (!attachment->path ||
+			    !collect_list_args(&m->attachments, attachment))
+			{
+				fprintf(stderr, "%s\n", strerror(errno));
+				free_message(m);
+				return NULL;
+			}
 		}
 	}
 
