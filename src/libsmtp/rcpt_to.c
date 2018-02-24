@@ -26,7 +26,6 @@ static int send_rcpt_to(void *socket, char *buffer, list_t *recipients,
 		 * 1      - \0 byte
 		 */
 		char *rcpt_to_msg = malloc(8 + to_len + 2 + 2 + 1);
-		memset(rcpt_to_msg, 0, 8 + to_len + 2 + 2 + 1);
 		if (!rcpt_to_msg)
 		{
 			fprintf(stderr,
@@ -34,6 +33,7 @@ static int send_rcpt_to(void *socket, char *buffer, list_t *recipients,
 				"TO command\n");
 			return 0;
 		}
+		memset(rcpt_to_msg, 0, 8 + to_len + 2 + 2 + 1);
 
 		/*send RCPT TO message */
 		snprintf(rcpt_to_msg, 8 + to_len + 2 + 2 + 1,
