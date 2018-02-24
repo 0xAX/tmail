@@ -51,9 +51,8 @@ int parse_auth_capabilities(char *capname, size_t capname_len, char *buf,
 	return 0;
 }
 
-static int send_auth_plain_data(void *socket, base64_data_t **res,
-				char *data, bool protected,
-				char *message_code)
+static int send_auth_plain_data(void *socket, base64_data_t **res, char *data,
+				bool protected, char *message_code)
 {
 	int n = 0;
 	char buffer[1024];
@@ -90,10 +89,12 @@ static int send_login(smtp_ctx_t *smtp __attribute__((__unused__)),
 			   protected);
 
 	/* send base64 encoded login data */
-	if (!send_auth_plain_data(socket, &login_result, smtp->from, protected, "334"))
+	if (!send_auth_plain_data(socket, &login_result, smtp->from, protected,
+				  "334"))
 		goto fail;
 	/* send base64 encoded password data */
-	if (!send_auth_plain_data(socket, &password_result, smtp->password, protected, "235"))
+	if (!send_auth_plain_data(socket, &password_result, smtp->password,
+				  protected, "235"))
 		goto fail;
 
 	ret = 1;

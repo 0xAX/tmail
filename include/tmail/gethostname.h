@@ -9,8 +9,8 @@
 #ifndef SYS_GET_HOST_NAME_H
 #define SYS_GET_HOST_NAME_H
 
-#include <unistd.h>
 #include <string.h>
+#include <unistd.h>
 
 #ifndef HOST_NAME_MAX
 #define HOST_NAME_MAX 255

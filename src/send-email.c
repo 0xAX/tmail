@@ -104,18 +104,11 @@ static message_t *fill_message(void)
 
 		for_each_list_item(attachments, entry)
 		{
-			message_attachment_t *attachment = NULL;
+			message_attachment_t *attachment =
+			    malloc(sizeof(message_attachment_t));
 			fd_t fd = open((char *)entry->item, O_RDONLY);
 
-			if (fd == -1)
-			{
-				fprintf(stderr, "%s\n", strerror(errno));
-				free_message(m);
-				return NULL;
-			}
-
-			attachment = malloc(sizeof(message_attachment_t));
-			if (!attachment)
+			if (!attachment || fd == -1)
 			{
 				fprintf(stderr, "%s\n", strerror(errno));
 				free_message(m);

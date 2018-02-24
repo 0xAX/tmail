@@ -9,9 +9,9 @@
 #ifndef SYS_CONNECT_H
 #define SYS_CONNECT_H
 
-#include <netdb.h>
 #include <assert.h>
 #include <errno.h>
+#include <netdb.h>
 #include <string.h>
 
 #include <tmail/basic.h>
