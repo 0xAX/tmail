@@ -11,9 +11,6 @@
 int send_mail_from_message(void *socket, message_t *message, char *buffer,
 			   bool protected)
 {
-	int n = 0;
-	size_t from_len = strlen(message->from);
-
 	/*
 	 * build MAIL FROM expression.
 	 * 10           - length of 'MAIL FROM:' string
@@ -23,7 +20,10 @@ int send_mail_from_message(void *socket, message_t *message, char *buffer,
 	 * 1            - \0 byte
 	 */
 	size_t msg_len = 10 + from_len + 2 + 2 + 1;
+	int n = 0;
+	size_t from_len = strlen(message->from);
 	char *mail_from_msg = malloc(msg_len);
+
 	if (!mail_from_msg)
 	{
 		fprintf(stderr, "Error: Can't allocate memory for SMTP MAIL "
