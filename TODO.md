@@ -76,6 +76,7 @@ without configuration.
 
 ## libsmtp
 
+  * Add `smtp.default_subject` configuration item.
   * specify `MAX_ATTACHMENT_SIZE` during build.
   * Add send message in the separate thread.
   * Check message size if `SIZE` capability is supported.
