@@ -81,7 +81,7 @@ void free_message(message_t *message)
 		{
 			fd_t fd = ((message_attachment_t *)(entry->item))
 				      ->attachment_fd;
-			if (fd)
+			if (fd && fd > 3)
 				close(fd);
 			free(((message_attachment_t *)(entry->item))->path);
 		}
