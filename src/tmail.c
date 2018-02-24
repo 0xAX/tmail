@@ -175,8 +175,9 @@ int main(int argc, char *argv[])
 
 		send_email_cmd(--argc, ++argv, tls_client_ctx);
 	}
-	else
-		parse_argv(argc, argv);
+
+	/* we didn't meet any builting command */
+	parse_argv(argc, argv);
 
 	exit(EXIT_SUCCESS);
 
