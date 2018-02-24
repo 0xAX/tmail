@@ -53,7 +53,7 @@ $(TEST_TARGET): $(DEFAULT_TARGET)
 $(INSTALL_TARGET): $(DEFAULT_TARGET)
 	@echo "Installing tmail..."
 	@$(INSTALL) $(TMAIL_EXECUTABLE) $(BIN_DIR)
-	@echo "Installing tmail headers"
+	@echo "Installing tmail headers..."
 	@$(CP) -r $(TMAIL_HEADERS_DIR) $(HEADERS_DIR)
 	@echo "Installing man pages..."
 	@$(INSTALL) $(MAN_PAGES_1) $(MAN_DIR_1)
@@ -61,9 +61,12 @@ $(INSTALL_TARGET): $(DEFAULT_TARGET)
 	@echo "Done."
 
 $(UNINSTALL_TARGET):
+	@echo "Uninstalling tmail..."
 	@rm -rf $(BIN_DIR)/$(TMAIL_EXECUTABLE)
+	@echo "Uninstalling man pages..."
 	@rm -rf $(MAN_DIR_1)/tmail*
 	@rm -rf $(MAN_DIR_5)/tmail*
+	@echo "Uninstalling tmail headers..."
 	@rm -rf $(HEADERS_DIR)/tmail
 	@echo "Done."
 
