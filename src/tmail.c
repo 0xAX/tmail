@@ -166,14 +166,13 @@ int main(int argc, char *argv[])
 	/* execute complex tmail commands */
 	if (strcmp(argv[1], SEND_EMAIL) == 0)
 	{
-		/* no need to check this, because of early exit */
 		if (load_mime_file("contrib/mime.types") == 0)
 			goto fail;
-		/* the same for load_config() */
-		load_config();
 
+		load_config();
 		if (!config_loaded)
 			goto fail;
+
 		send_email_cmd(--argc, ++argv, tls_client_ctx);
 	}
 	else
