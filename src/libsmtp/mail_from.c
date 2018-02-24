@@ -19,9 +19,8 @@ int send_mail_from_message(void *socket, message_t *message, char *buffer,
 	 * 2            - <>
 	 * 1            - \0 byte
 	 */
-	size_t msg_len = 10 + from_len + 2 + 2 + 1;
+	size_t msg_len = 10 + strlen(message->from) + 2 + 2 + 1;
 	int n = 0;
-	size_t from_len = strlen(message->from);
 	char *mail_from_msg = malloc(msg_len);
 
 	if (!mail_from_msg)
