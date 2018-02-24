@@ -75,3 +75,4 @@ log.*
 *.tab.c
 *.tab.h
 *.yy.c
+*.out
