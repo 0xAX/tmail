@@ -85,13 +85,9 @@ static message_t *fill_message(void)
 	m->realname = realname;
 	m->subject = subject;
 	m->message_id = message_id;
-
-	if (rcps)
-		m->to = rcps;
-	if (cc)
-		m->cc = cc;
-	if (bcc)
-		m->bcc = bcc;
+	m->to = rcps;
+	m->cc = cc;
+	m->bcc = bcc;
 
 	/* open file descriptors for attachments */
 	if (attachments)
