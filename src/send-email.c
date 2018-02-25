@@ -289,12 +289,12 @@ __attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
 			subject = optarg;
 			break;
 		default:
-			/* unknown option. exit */
-			exit(EXIT_SUCCESS);
+			goto exit;
 		}
 	}
 
 	process_send_email(tls_client_ctx);
+exit:
 #ifndef SSL_DISABLED
 	SSL_CTX_free(tls_client_ctx);
 #endif
