@@ -136,7 +136,7 @@ static message_t *fill_message(void)
 	return m;
 }
 
-static void process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
+static int process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
 {
 	message_t *m = NULL;
 	char *smtp_config = NULL;
@@ -152,7 +152,7 @@ static void process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
 	{
 		fprintf(stderr,
 			"Error: at least one recipient must be given\n");
-		exit(EXIT_FAILURE);
+		return -1;
 	}
 
 	/* compose email message */
@@ -160,7 +160,7 @@ static void process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
 	if (!m)
 	{
 		fprintf(stderr, "Erorr: during fill_message()\n");
-		exit(EXIT_FAILURE);
+		return -1;
 	}
 
 	/* get smtp configuration for current user */
@@ -169,7 +169,8 @@ static void process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
 	{
 		fprintf(stderr,
 			"Error: Can't build configuration file entry\n");
-		exit(EXIT_FAILURE);
+		free_message(m);
+		return -1;
 	}
 
 	smtp_ctx = hashmap_get(config_map, smtp_config);
@@ -178,7 +179,9 @@ static void process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
 		fprintf(stderr,
 			"Error: Configuration is not found for %s account\n",
 			m->from);
-		exit(EXIT_FAILURE);
+		free_message(m);
+		free(smtp_config);
+		return -1;
 	}
 	free(smtp_config);
 
@@ -186,15 +189,15 @@ static void process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
 	{
 		fprintf(stderr, "Error: Can't find SMTP server address/port "
 				"configuration\n");
-		goto fail;
+		free_message(m);
+		return -1;
 	}
 
 	/* and finally send message */
-	send_email(smtp_ctx, m, tls_client_ctx, 0);
-fail:
+	//send_email(smtp_ctx, m, tls_client_ctx, 0);
 	free_message(m);
 finish:
-	return;
+	return 1;
 }
 
 /* release memory allocated under command line arguments */
@@ -210,6 +213,7 @@ __attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
 					      CRYPTO_CTX_PTR tls_client_ctx)
 {
 	int c = 0;
+	int ret = 0;
 
 	static const struct option options[] = {
 	    {"attachment", no_argument, NULL, 'a'},
@@ -241,7 +245,7 @@ __attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
 			{
 				fprintf(stderr, "%s\n",
 					"attachment list can't be allocated");
-				goto allocation_failed;
+				goto error;
 			}
 			break;
 		case 'b':
@@ -249,7 +253,7 @@ __attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
 			{
 				fprintf(stderr, "%s\n",
 					"bcc list can't be allocated");
-				goto allocation_failed;
+				goto error;
 			}
 			break;
 		case 'c':
@@ -257,7 +261,7 @@ __attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
 			{
 				fprintf(stderr, "%s\n",
 					"cc list can't be allocated");
-				goto allocation_failed;
+				goto error;
 			}
 			break;
 		case 'e':
@@ -283,7 +287,7 @@ __attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
 			{
 				fprintf(stderr, "%s\n",
 					"recepient list can't be allocated");
-				goto allocation_failed;
+				goto error;
 			}
 			break;
 		case 's':
@@ -294,12 +298,15 @@ __attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
 		}
 	}
 
-	process_send_email(tls_client_ctx);
+	ret = process_send_email(tls_client_ctx);
+
 exit:
 #ifndef SSL_DISABLED
 	SSL_CTX_free(tls_client_ctx);
 #endif
+	if (ret < 0)
+		goto error;
 	exit(EXIT_SUCCESS);
-allocation_failed:
+error:
 	exit(EXIT_FAILURE);
 }
