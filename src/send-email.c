@@ -194,7 +194,7 @@ static int process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
 	}
 
 	/* and finally send message */
-	//send_email(smtp_ctx, m, tls_client_ctx, 0);
+	send_email(smtp_ctx, m, tls_client_ctx, 0);
 	free_message(m);
 finish:
 	return 1;
