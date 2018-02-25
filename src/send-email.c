@@ -58,8 +58,6 @@ static void print_help(void)
 	printf("  -e, --use-editor         use editor to compose a message\n");
 	printf("  -i, --interactive        compose an email in interactive "
 	       "mode\n");
-
-	exit(EXIT_SUCCESS);
 }
 
 static message_t *fill_message(void)
@@ -228,7 +226,10 @@ __attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
 	};
 
 	if (argc <= 1)
+	{
 		print_help();
+		goto exit;
+	}
 
 	while ((c = getopt_long(argc, argv, "a:b:hif:n:t:s:c:", options,
 				NULL)) >= 0)
@@ -270,7 +271,7 @@ __attribute__((noreturn)) void send_email_cmd(int argc, char *argv[],
 			break;
 		case 'h':
 			print_help();
-			break;
+			goto exit;
 		case 'n':
 			realname = optarg;
 			break;
