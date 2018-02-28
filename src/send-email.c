@@ -148,6 +148,12 @@ static int process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
 	if (use_editor)
 		goto finish;
 
+	if (!from)
+	{
+		fprintf(stderr, "Error: sender is missed.\n");
+		return -1;
+	}
+
 	if (!rcps && !cc)
 	{
 		fprintf(stderr,
@@ -155,21 +161,12 @@ static int process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
 		return -1;
 	}
 
-	/* compose email message */
-	m = fill_message();
-	if (!m)
-	{
-		fprintf(stderr, "Erorr: during fill_message()\n");
-		return -1;
-	}
-
 	/* get smtp configuration for current user */
-	smtp_config = build_config_name(m->from, SMTP_CONF);
+	smtp_config = build_config_name(from, SMTP_CONF);
 	if (!smtp_config)
 	{
 		fprintf(stderr,
 			"Error: Can't build configuration file entry\n");
-		free_message(m);
 		return -1;
 	}
 
@@ -178,8 +175,7 @@ static int process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
 	{
 		fprintf(stderr,
 			"Error: Configuration is not found for %s account\n",
-			m->from);
-		free_message(m);
+			from);
 		free(smtp_config);
 		return -1;
 	}
@@ -189,7 +185,14 @@ static int process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
 	{
 		fprintf(stderr, "Error: Can't find SMTP server address/port "
 				"configuration\n");
-		free_message(m);
+		return -1;
+	}
+
+	/* compose email message */
+	m = fill_message();
+	if (!m)
+	{
+		fprintf(stderr, "Erorr: during fill_message()\n");
 		return -1;
 	}
 
