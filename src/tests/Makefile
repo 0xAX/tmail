@@ -12,12 +12,7 @@ TEST_OBJS += config_test.o
 TEST_EXECUTABLES += mime_test
 TEST_EXECUTABLES += config_test
 
-INCLUDE_DIR += -I../../include
-INCLUDE_DIR += -I../
-INCLUDE_DIR += -I../libutils
-INCLUDE_DIR += -I../libsmtp
-INCLUDE_DIR += -I../libencoding
-INCLUDE_DIR += -I../libsys
+INCLUDE_DIR += -I../ -I../../include
 
 # object files for smtp lib
 ifndef SSL_DISABLED
@@ -27,9 +22,9 @@ SMTP_OBJS += ../libsmtp/attachment.o
 SMTP_OBJS += ../libsmtp/help.o
 SMTP_OBJS += ../libsmtp/ehlo.o
 SMTP_OBJS += ../libsmtp/smtpauth.o
-SMTP_OBJS += ../libsmtp/mail_from.o
-SMTP_OBJS += ../libsmtp/rcpt_to.o
-SMTP_OBJS += ../libsmtp/data_msg.o
+SMTP_OBJS += ../libsmtp/mailfrom.o
+SMTP_OBJS += ../libsmtp/rcpts.o
+SMTP_OBJS += ../libsmtp/data.o
 SMTP_OBJS += ../libsmtp/body.o
 SMTP_OBJS += ../libsmtp/quit.o
 SMTP_OBJS += ../libsmtp/smtp.o
