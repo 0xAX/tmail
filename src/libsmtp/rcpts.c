@@ -8,7 +8,6 @@
 
 #include <tmail/smtp.h>
 
-
 /*
  * build RCPT TO expression.
  * 8      - length of 'RCPT TO' string
@@ -17,8 +16,7 @@
  * 2      - <>
  * 1      - \0 byte
  */
-#define RCPT_TO_LEN(to_len) \
-	8 + to_len + 2 + 2 + 1
+#define RCPT_TO_LEN(to_len) 8 + to_len + 2 + 2 + 1
 
 static int send_rcpt_to(void *socket, char *buffer, list_t *recipients,
 			list_t *entry, bool protected)
@@ -39,8 +37,8 @@ static int send_rcpt_to(void *socket, char *buffer, list_t *recipients,
 		memset(rcpt_to_msg, 0, RCPT_TO_LEN(to_len));
 
 		/*send RCPT TO message */
-		snprintf(rcpt_to_msg, RCPT_TO_LEN(to_len),
-			 "RCPT TO:<%s>\r\n", (char *)entry->item);
+		snprintf(rcpt_to_msg, RCPT_TO_LEN(to_len), "RCPT TO:<%s>\r\n",
+			 (char *)entry->item);
 		tmail_sock_send(socket, rcpt_to_msg, strlen(rcpt_to_msg),
 				protected);
 

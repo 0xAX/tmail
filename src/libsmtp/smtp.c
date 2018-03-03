@@ -136,7 +136,8 @@ void *send_email(smtp_ctx_t *smtp, message_t *message,
 		/* Do not return this from here, it causes memory leak */
 		start_smtp_protected_session(smtp, clienttls, opts);
 		socket = clienttls;
-		protected = true;
+	      protected
+		= true;
 	}
 #endif
 	memset(response, 0, 1024);
