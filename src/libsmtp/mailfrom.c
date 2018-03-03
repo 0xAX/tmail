@@ -1,5 +1,5 @@
 /*
- * mail_from.c - provides auxiliary routines for SMTP 'MAIL FROM' message.
+ * mailfrom.c - provides auxiliary routines for SMTP 'MAIL FROM' message.
  *
  * Copyright (c) 2017, Alexander Kuleshov <kuleshovmail at gmail dot com>
  *

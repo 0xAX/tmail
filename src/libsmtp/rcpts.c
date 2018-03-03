@@ -1,5 +1,5 @@
 /*
- * rcpt_to.c - provides auxiliary routines for RCPT TO message.
+ * rcpts.c - provides auxiliary routines for RCPT TO message.
  *
  * Copyright (c) 2017, Alexander Kuleshov <kuleshovmail at gmail dot com>
  *

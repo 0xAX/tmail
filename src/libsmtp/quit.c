@@ -1,5 +1,5 @@
 /*
- * quit..c - provides auxiliary routines for SMTP 'QUIT' message.
+ * quit.c - provides auxiliary routines for SMTP 'QUIT' message.
  *
  * Copyright (c) 2017, Alexander Kuleshov <kuleshovmail at gmail dot com>
  *
