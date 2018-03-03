@@ -15,7 +15,7 @@ endif
 SMTP_OBJS += attachment.o
 SMTP_OBJS += ehlo.o
 SMTP_OBJS += help.o
-SMTP_OBJS += rcpt_to.o
+SMTP_OBJS += rcpts.o
 SMTP_OBJS += mail_from.o
 SMTP_OBJS += data.o
 SMTP_OBJS += body.o
