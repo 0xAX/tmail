@@ -37,7 +37,7 @@ ifndef SSL_DISABLED
 SMTP_OBJS += libsmtp/starttls.o
 endif
 SMTP_OBJS += libsmtp/attachment.o libsmtp/help.o libsmtp/ehlo.o
-SMTP_OBJS += libsmtp/smtpauth.o libsmtp/mail_from.o libsmtp/rcpts.o
+SMTP_OBJS += libsmtp/smtpauth.o libsmtp/mailfrom.o libsmtp/rcpts.o
 SMTP_OBJS += libsmtp/data.o libsmtp/body.o libsmtp/quit.o
 SMTP_OBJS += libsmtp/smtp.o
 
