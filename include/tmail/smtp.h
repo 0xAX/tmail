@@ -184,12 +184,16 @@
 			   ERR_CODE_MSG, PROTECTED)                            \
 	if ((n = tmail_sock_recv(SOCKET, BUFFER, BUFSIZ, PROTECTED)) == -1)    \
 	{                                                                      \
+		fprintf(stderr, "Error: during reading of response"            \
+			" from SMTP server \n");			       \
 		fprintf(stderr, READ_ERR_MSG);                                 \
 		return 0;                                                      \
 	}                                                                      \
 	if (!(BUFFER[0] == EXP_CODE[0] && BUFFER[1] == EXP_CODE[1] &&          \
 	      BUFFER[2] == EXP_CODE[2]))                                       \
 	{                                                                      \
+                fprintf(stderr, "Error: getting wrong SMTP code"               \
+			" from SMTP server");   			       \
 		fprintf(stderr, ERR_CODE_MSG, BUFFER);                         \
 		return 0;                                                      \
 	}
@@ -199,13 +203,16 @@
 				    READ_ERR_MSG, ERR_CODE_MSG, PROTECTED)     \
 	if ((n = tmail_sock_recv(SOCKET, BUFFER, BUFSIZ, PROTECTED)) == -1)    \
 	{                                                                      \
+		fprintf(stderr, "Error: during reading of response"            \
+			" from SMTP server \n");			       \
 		fprintf(stderr, READ_ERR_MSG);                                 \
 		goto fail;                                                     \
 	}                                                                      \
 	if (!(BUFFER[0] == EXP_CODE[0] && BUFFER[1] == EXP_CODE[1] &&          \
 	      BUFFER[2] == EXP_CODE[2]))                                       \
 	{                                                                      \
-		fprintf(stderr, ERR_CODE_MSG, BUFFER);                         \
+                fprintf(stderr, "Error: getting wrong SMTP code"               \
+			" from SMTP server");   			       \
 		goto fail;                                                     \
 	}
 

@@ -78,7 +78,9 @@ void *send_email(smtp_ctx_t *smtp, message_t *message,
 	smtp->conn = connect_to_service(smtp->smtp_server, smtp->smtp_port);
 	if (smtp->conn->error)
 	{
-		fprintf(stderr, "Error: %s\n", smtp->conn->error);
+		fprintf(stderr,
+			"Error: during establishment of connection %s\n",
+			smtp->conn->error);
 		mfree((char *)smtp->conn->error);
 		goto fail_smtp;
 	}
