@@ -111,6 +111,7 @@ static message_t *fill_message(void)
 				fprintf(stderr,
 					"Can't open attachment file: %s\n",
 					strerror(errno));
+				free(attachment);
 				free_message(m);
 				return NULL;
 			}
