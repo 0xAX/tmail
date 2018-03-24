@@ -2,7 +2,7 @@
  * base64.h - implementation of base64 encoding scheme (MIME).
  * From RFC 2045 (https://tools.ietf.org/html/rfc2045)
  *
- * Copyright (c) 2017, Alexander Kuleshov <kuleshovmail at gmail dot com>
+ * Copyright (c) 2017-2018, Alexander Kuleshov <kuleshovmail at gmail dot com>
  *
  * This file is released under the BSD license, see the COPYING file
  */
