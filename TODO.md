@@ -35,7 +35,6 @@
 
 ## send-email
 
-  * Memory leak because of wrong attachment should be fixed.
   * More verbose error when attachment is not found.
   * Implement `-i/--interactive`.
   * Implement `-e/--use-editor`.
