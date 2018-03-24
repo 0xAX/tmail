@@ -108,7 +108,9 @@ static message_t *fill_message(void)
 
 			if (!attachment || fd == -1)
 			{
-				fprintf(stderr, "%s\n", strerror(errno));
+				fprintf(stderr,
+					"Can't open attachment file: %s\n",
+					strerror(errno));
 				free_message(m);
 				return NULL;
 			}
