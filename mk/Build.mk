@@ -97,6 +97,15 @@ else ifeq ($(findstring clang, $(TMAIL_CC)), clang)
 WARNINGS += -ferror-limit=2 -Qunused-arguments
 endif
 
+# workaround for gcc-8
+ifeq ($(findstring gcc, $(TMAIL_CC)), gcc)
+$(call gcc-major-version)
+ifeq ("$(GCC_MAJOR_VERSION)", "8")
+WARNINGS += -Wno-stringop-overflow
+WARNINGS += -Wno-stringop-truncation
+endif
+endif
+
 # Compile with debug info or optimization stuff
 # depends on `DEBUG` flags
 ifndef DEBUG
