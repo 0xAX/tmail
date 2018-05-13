@@ -81,11 +81,13 @@ void free_message(message_t *message)
 		{
 			for_each_list_item(message->attachments, entry)
 			{
-				fd_t fd = ((message_attachment_t *)(entry->item))
+				fd_t fd =
+				    ((message_attachment_t *)(entry->item))
 					->attachment_fd;
 				if (fd && fd > 3)
 					close(fd);
-				free(((message_attachment_t *)(entry->item))->path);
+				free(((message_attachment_t *)(entry->item))
+					 ->path);
 			}
 			list_free_full(message->attachments);
 			message->attachments = NULL;

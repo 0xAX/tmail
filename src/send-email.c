@@ -65,7 +65,7 @@ static message_t *fill_message(void)
 	message_t *m = malloc(sizeof(message_t));
 	if (!m)
 	{
-		fprintf(stderr, "%s\n", strerror(errno));
+		fprintf(stderr, "Error: Can't allocate memory for message %s\n", strerror(errno));
 		return NULL;
 	}
 	memset(m, 0, sizeof(message_t));
@@ -73,7 +73,7 @@ static message_t *fill_message(void)
 	m->body = malloc(sizeof(message_body_t));
 	if (!m->body)
 	{
-		fprintf(stderr, "%s\n", strerror(errno));
+		fprintf(stderr, "Can't allocate memory for message body - %s\n", strerror(errno));
 		free_message(m);
 		return NULL;
 	}
@@ -95,7 +95,7 @@ static message_t *fill_message(void)
 		m->attachments = list_new();
 		if (!m->attachments)
 		{
-			fprintf(stderr, "%s\n", strerror(errno));
+			fprintf(stderr, "Error: Can't allocate memory for attachment list '%s\n", strerror(errno));
 			free_message(m);
 			return NULL;
 		}
@@ -122,7 +122,7 @@ static message_t *fill_message(void)
 			if (!attachment->path ||
 			    !collect_list_args(&m->attachments, attachment))
 			{
-				fprintf(stderr, "%s\n", strerror(errno));
+				fprintf(stderr, "Error: can't alllocate memory for attachment path - %s\n", strerror(errno));
 				free_message(m);
 				return NULL;
 			}
@@ -194,10 +194,7 @@ static int process_send_email(CRYPTO_CTX_PTR tls_client_ctx)
 	/* compose email message */
 	m = fill_message();
 	if (!m)
-	{
-		fprintf(stderr, "Erorr: during fill_message()\n");
 		return -1;
-	}
 
 	/* and finally send message */
 	send_email(smtp_ctx, m, tls_client_ctx, 0);
