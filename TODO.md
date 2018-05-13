@@ -7,6 +7,7 @@
 
 ## Build
 
+  * Move multiple compiler related ifeq(s) to `mk/clang.mk` and `mk/gcc.mk`.
   * Add header files as prerequisites in make files.
   * Strip libraries and executables if the `DEBUG` flag wasn't passed.
   * Disable `asserts` from `assert.h` for non-debug builds.
