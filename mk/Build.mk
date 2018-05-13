@@ -20,6 +20,15 @@ define clang-supports-flag
 	$(eval $1 = $(shell echo "" | clang -E -c -Wfd - 2>&1 | grep -q unknown; echo "$$?"))
 endef
 
+define gcc-version
+	$(eval GCC_VERSION = $(shell gcc --version | sed -n -e 's/.*\([0-9]\.[0-9]\.[0-9]\).*/\1/p'))
+endef
+
+define gcc-major-version
+	$(gcc-version)
+	$(eval GCC_MAJOR_VERSION = $(shell echo $(GCC_VERSION) | cut -c 1 -z))
+endef
+
 # an architecture flags
 ifndef NON_NATIVE_BINARY
 ARCH=-march=native -mtune=native -ftree-vectorize
