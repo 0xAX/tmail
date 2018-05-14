@@ -26,7 +26,7 @@ endef
 
 define gcc-major-version
 	$(gcc-version)
-	$(eval GCC_MAJOR_VERSION = $(shell echo $(GCC_VERSION) | cut -c 1 -z))
+	$(eval GCC_MAJOR_VERSION = $(shell echo -n $(GCC_VERSION) | cut -c 1))
 endef
 
 # an architecture flags
