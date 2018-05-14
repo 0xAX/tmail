@@ -43,6 +43,7 @@ WARNINGS += -Wdeclaration-after-statement -Wswitch-enum -Wswitch-default
 WARNINGS += -Wundef -Wbad-function-cast -Wstrict-prototypes -Winline
 
 ifeq ($(TMAIL_CC), gcc)
+$(call gcc-major-version)
 $(call gcc-supports-flag,UNUSED_CONST_VAR_WARN,-Wunused-const-variable)
 $(call gcc-supports-flag,EXPANSION_TO_DEFINED_WARN,-Wexpansion-to-defined)
 $(call gcc-supports-flag,SIZOF_ARRAY_WARN,-Wsizeof-array-argument)
@@ -99,7 +100,6 @@ endif
 
 # workaround for gcc-8
 ifeq ($(findstring gcc, $(TMAIL_CC)), gcc)
-$(call gcc-major-version)
 ifeq ("$(GCC_MAJOR_VERSION)", "8")
 WARNINGS += -Wno-stringop-overflow
 WARNINGS += -Wno-stringop-truncation
