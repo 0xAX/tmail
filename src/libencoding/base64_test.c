@@ -29,6 +29,8 @@ int main(int argc, char *argv[])
 		base64_data_t *result = base64_encode_test(argv[1]);
 
 		printf("%s", result->data);
+		mfree(result->data);
+		mfree(result);
 	}
 	else
 	{
@@ -52,6 +54,17 @@ int main(int argc, char *argv[])
 			"bit longer than seventy six bytes length";
 		base64_data_t *result_test_5 = base64_encode(test_5, strlen(test_5), 0);
 		printf("result_test_encoding_5 %s\n", result_test_5->data);
+
+		mfree(result_test_1->data);
+		mfree(result_test_1);
+		mfree(result_test_2->data);
+		mfree(result_test_2);
+		mfree(result_test_3->data);
+		mfree(result_test_3);
+		mfree(result_test_4->data);
+		mfree(result_test_4);
+		mfree(result_test_5->data);
+		mfree(result_test_5);
 	}
 
 	return 0;
