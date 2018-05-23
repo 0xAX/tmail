@@ -130,7 +130,7 @@ void fill_smtp_conf(int name, char *val)
 	else if (name == SMTP_PORT)
 	{
 		set_val(&smtp_conf->smtp_port, val, state);
-		if (strcmp(val, "578") == 0)
+		if (strncmp(val, "578", 3) == 0)
 			smtp_conf->tls = true;
 	}
 	else if (name == SMTP_PASSWORD)
