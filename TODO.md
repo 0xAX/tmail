@@ -3,7 +3,6 @@
 ## General
 
   * Add info about build (openssl version and etc..) to help output
-  * Use `strncmp(3)` instead of `strcmp(3)` when we know a length of a string.
 
 ## Build
 
