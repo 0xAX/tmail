@@ -54,13 +54,13 @@ for my $test (@libencoding_tests) {
 #
 print "Running libencoding fuzzing tests:\n";
 my @chars = ("A".."Z", "a".."z");
-for (my $i=0; $i <= 9; $i++) {
+for (my $i=0; $i <= 100; $i++) {
     my $result = '';
     my $orig_str = '';
     my $base64_str = '';
 
     # Generate random string
-    $orig_str .= $chars[rand @chars] for 1..int(rand(200));
+    $orig_str .= $chars[rand @chars] for 1..int(rand(200) + 1);
     # Encode it with base64
     $base64_str .= encode_base64($orig_str, "\r\n");
 
@@ -72,6 +72,11 @@ for (my $i=0; $i <= 9; $i++) {
     # pass them to base64_test
     $result = `./base64_test $orig_str \'$base64_str\'`;
     chomp $result;
+
+    # skip empty lines
+    if (length($orig_str) == 0) {
+	next;
+    }
 
     if ($result ne $base64_str) {
 	print "Pass string: $orig_str\n";
