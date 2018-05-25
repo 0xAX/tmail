@@ -59,7 +59,7 @@ This stuff should be implemented after `STARTTLS` support:
 
   * Free memory in a case of parsing of configuration file error.
   * Rename `build_config_name()` to something like `get_config_path()`.
-  * Remake `get_config_entry()`:
+  * Refactor configuration parsing.
 
 1. make it return `void*`.
 2. add second parameter to append extension like `.smtprc` and etc.
@@ -73,6 +73,7 @@ without configuration.
 
 ## libsmtp
 
+  * Refactor body.c source code file
   * Add `smtp.default_subject` configuration item.
   * specify `MAX_ATTACHMENT_SIZE` during build.
   * Add send message in the separate thread.
