@@ -116,13 +116,12 @@ without configuration.
 
   * Add valgrind script.
   * Add bash completion.
-  * Add scripts to do auto-commit of:
+  * Add scripts to do auto-commit for:
 
-`git commit -S -s -v -m "general: apply-clang-format"`
+    git commit -S -s -v -m "general: apply-clang-format
+    git commit -S -s -v -m "general: update TODO.md
 
-and
-
-`git commit -S -s -v -m "general: update TODO.md"`
+cases.
 
 ## contrib
 
