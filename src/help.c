@@ -6,8 +6,8 @@
  * This file is released under the BSD license, see the COPYING file
  */
 
-#include "tmail/help.h"
 #include "tmail/basic.h"
+#include "tmail/help.h"
 
 /**
  * Print list of external libraries linked to tmail.

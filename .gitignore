@@ -76,3 +76,6 @@ log.*
 *.tab.h
 *.yy.c
 *.out
+
+# do not ignore some stuff
+!help.h
