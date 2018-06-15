@@ -20,9 +20,8 @@ CONFIG_PARSER = config_parser.y
 CONFIG_LEXER = config_parser.l
 
 # object files for tmail
-TMAIL_OBJS += config.o mime.o message.o
-TMAIL_OBJS += send-email.o smtp-caps.o
-TMAIL_OBJS += smtp-server-info.o tmail.o
+TMAIL_OBJS += config.o mime.o message.o send-email.o smtp-caps.o
+TMAIL_OBJS += smtp-server-info.o help.o tmail.o
 
 # object files for sys lib
 SYS_OBJS += libsys/at_exit.o libsys/connect.o libsys/fcntl_utils.o

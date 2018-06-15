@@ -1,9 +1,5 @@
 # TODO
 
-## General
-
-  * Add info about build (openssl version and etc..) to help output
-
 ## Build
 
   * Move multiple compiler related ifeq(s) to `mk/clang.mk` and `mk/gcc.mk`.
@@ -28,6 +24,7 @@
   * Return from tmail's `main()` in a `*_cmd(argc, argv)`
   * Move compiler attributes to the `src/libutils/basic.h` as macros.
   * Support for colorful error messages.
+  * Add Support for GNUTLS
 
 ## tmail daemon
 

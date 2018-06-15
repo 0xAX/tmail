@@ -10,6 +10,7 @@
 #include <tmail/basic.h>
 #include <tmail/config.h>
 #include <tmail/mime.h>
+#include <tmail/help.h>
 #include <tmail/send-email.h>
 #include <tmail/smtp-caps.h>
 #include <tmail/smtp-server-info.h>
@@ -44,6 +45,8 @@ static void print_help()
 	printf("\n");
 	printf("Each command has own set of command line arguments.\n");
 	printf("Use: tmail command -h/--help to get help\n");
+
+	print_libs();
 
 	exit(EXIT_SUCCESS);
 }
