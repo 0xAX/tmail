@@ -53,6 +53,7 @@ dkms.conf
 # tmail executables
 tmail
 smtp-caps
+!*/tmail
 
 # valgrind core files
 vgcore.*
@@ -76,6 +77,3 @@ log.*
 *.tab.h
 *.yy.c
 *.out
-
-# do not ignore some stuff
-!help.h
