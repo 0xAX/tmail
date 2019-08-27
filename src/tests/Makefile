@@ -1,6 +1,6 @@
 # tmail core tests
 #
-# Copyright (C) 2017-2018 Alexander Kuleshov <kuleshovmail at gmail dot com>
+# Copyright (C) 2017-2019 Alexander Kuleshov <kuleshovmail at gmail dot com>
 # This file is released under the BSD license, see the COPYING file
 
 include ../../mk/Common.mk
